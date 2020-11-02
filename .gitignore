@@ -1,0 +1,9 @@
+bin/
+bin-int/
+Brbanje.sln
+**.vcxproj**
+.vs/
+Sandbox/Runtime-profiling.json
+Sandbox/Shutdown-profiling.json
+Sandbox/Startup-profiling.json
+!Vendor/bin

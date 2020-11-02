@@ -1,0 +1,3 @@
+[submodule "Hazel/Vendor/imgui"]
+	path = Hazel/Vendor/imgui
+	url = https://github.com/TheCherno/imgui
