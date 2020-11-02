@@ -16,6 +16,9 @@ void Sandbox2D::OnAttach()
 	
 	m_Texture = Brbanje::Texture2D::Create("Assets/Textures/zeldusana.png");
 	m_Texture1 = Brbanje::Texture2D::Create("Assets/Textures/beer.png");
+	m_SpriteSheet = Brbanje::Texture2D::Create("Assets/game/Spritesheet/spriteSheet.png");
+	m_SubTex = Brbanje::SubTexture2D::CreateFromCoords(m_SpriteSheet, { 0.0f,1.0f }, { 128.0f, 128.0f }, {1.0f,2.0f});
+
 
 	m_Particle.ColorBegin = { 254 / 255.0f, 212 / 255.0f, 123 / 255.0f, 1.0f };
 	m_Particle.ColorEnd = { 254 / 255.0f, 109 / 255.0f, 41 / 255.0f, 1.0f };
@@ -52,6 +55,7 @@ void Sandbox2D::OnUpdate(Brbanje::Timestep ts)
 	}
 	{
 		BR_PROFILE_SCOPE("Renderer Draw");
+#if 0
 		Brbanje::Renderer2D::BeginScene(m_CameraController.GetCamera());
 
 		static float rotation = 0.0f;
@@ -99,6 +103,11 @@ void Sandbox2D::OnUpdate(Brbanje::Timestep ts)
 		m_ParticleSystem.OnUpdate(ts);
 		m_ParticleSystem.OnRender(m_CameraController.GetCamera());
 
+		Brbanje::Renderer2D::EndScene();
+#endif
+
+		Brbanje::Renderer2D::BeginScene(m_CameraController.GetCamera());
+		Brbanje::Renderer2D::DrawQuad({ 0.0f,0.0f}, { 1.0f,2.0f }, m_SubTex);
 		Brbanje::Renderer2D::EndScene();
 	}
 
