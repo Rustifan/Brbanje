@@ -7,7 +7,8 @@ namespace Brbanje
 {
 	OrtographicCameraController::OrtographicCameraController(float aspectRatio, bool rotation):
 		m_AspectRatio(aspectRatio), m_Rotation(rotation),
-		m_Camera(-m_AspectRatio*m_Zoom, m_AspectRatio* m_Zoom, -m_Zoom, m_Zoom)
+		m_Bounds({ -m_AspectRatio * m_Zoom, m_AspectRatio * m_Zoom, -m_Zoom, m_Zoom }),
+		m_Camera(m_Bounds.Left, m_Bounds.Right, m_Bounds.Bottom, m_Bounds.Top)
 	{
 		BR_PROFILE_FUNCTION;
 	}
@@ -66,7 +67,8 @@ namespace Brbanje
 		m_Zoom -= e.GetYOffset() * 0.25f;
 		m_Zoom = std::max(m_Zoom,0.25f);
 		m_CameraSpeed = m_Zoom;
-		m_Camera.SetProjection(-m_AspectRatio * m_Zoom, m_AspectRatio * m_Zoom, -m_Zoom, m_Zoom);
+		m_Bounds = { -m_AspectRatio * m_Zoom, m_AspectRatio * m_Zoom, -m_Zoom, m_Zoom };
+		m_Camera.SetProjection(m_Bounds.Left, m_Bounds.Right, m_Bounds.Bottom, m_Bounds.Top);
 	
 		
 		return false;
@@ -77,8 +79,8 @@ namespace Brbanje
 		BR_PROFILE_FUNCTION;
 
 		m_AspectRatio = (float)e.GetWidth() / (float)e.GetHeight();
-		
-		m_Camera.SetProjection(-m_AspectRatio * m_Zoom, m_AspectRatio * m_Zoom, -m_Zoom, m_Zoom);
+		m_Bounds = { -m_AspectRatio * m_Zoom, m_AspectRatio * m_Zoom, -m_Zoom, m_Zoom };
+		m_Camera.SetProjection(m_Bounds.Left,m_Bounds.Right,m_Bounds.Bottom, m_Bounds.Top);
 		return false;
 
 	}

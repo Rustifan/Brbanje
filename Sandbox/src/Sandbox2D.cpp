@@ -3,6 +3,7 @@
 #include "Platform/OpenGl/OpenGlShader.h"
 #include "Brbanje/Renderer/Shader.h"
 
+
 Sandbox2D::Sandbox2D(): Layer("Sandbox2D"), m_CameraController(1280.0f/720.0f, true)
 {
 
@@ -15,6 +16,14 @@ void Sandbox2D::OnAttach()
 	
 	m_Texture = Brbanje::Texture2D::Create("Assets/Textures/zeldusana.png");
 	m_Texture1 = Brbanje::Texture2D::Create("Assets/Textures/beer.png");
+
+	m_Particle.ColorBegin = { 254 / 255.0f, 212 / 255.0f, 123 / 255.0f, 1.0f };
+	m_Particle.ColorEnd = { 254 / 255.0f, 109 / 255.0f, 41 / 255.0f, 1.0f };
+	m_Particle.SizeBegin = 0.5f, m_Particle.SizeVariation = 0.3f, m_Particle.SizeEnd = 0.0f;
+	m_Particle.LifeTime = 1.0f;
+	m_Particle.Velocity = { 0.0f, 0.0f };
+	m_Particle.VelocityVariation = { 3.0f, 1.0f };
+	m_Particle.Position = { 0.0f, 0.0f };
 	
 }
 
@@ -48,16 +57,16 @@ void Sandbox2D::OnUpdate(Brbanje::Timestep ts)
 		static float rotation = 0.0f;
 		rotation++;
 		if (rotation > 360) rotation = 0.0f;
-		Brbanje::Renderer2D::DrawRotatedQuad({ 0.5f,-0.5f,-0.1 }, glm::vec2(1.0f, 1.0f), rotation, m_Texture, 2, {0.5,0.5,1,1});
+		Brbanje::Renderer2D::DrawRotatedQuad({ 0.5f,-0.5f,-0.1 }, glm::vec2(1.0f, 1.0f), glm::radians(rotation), m_Texture, 2, {0.5,0.5,1,1});
 		
 
 		for (int i = 0; i < 10; i++)
 		{
 			Brbanje::Renderer2D::DrawQuad({ i,i+1,0.0f }, { 1.0f,1.0f }, { 1.0f,1.0f,0.0f,1.0f });
-			Brbanje::Renderer2D::DrawRotatedQuad({ i,i,}, glm::vec2(1.0f, 1.0f), 95.0f, m_Texture, 2, { 0.5,0.5,1,1 });
+			Brbanje::Renderer2D::DrawRotatedQuad({ i,i,}, glm::vec2(1.0f, 1.0f), glm::radians(92.0f), m_Texture, 2, { 0.5,0.5,1,1 });
 		}
 
-		Brbanje::Renderer2D::DrawRotatedQuad({ 1.0f,0.0f }, { 0.5f,2.0f }, rotation, { 0.0f,0.5f,0.1f,1.0f });
+		Brbanje::Renderer2D::DrawRotatedQuad({ 1.0f,0.0f }, { 0.5f,2.0f }, glm::radians(rotation), { 0.0f,0.5f,0.1f,1.0f });
 		Brbanje::Renderer2D::DrawQuad({ 1.0f,0.0f }, { 0.5f,2.0f }, { m_SquareColor });
 		
 		Brbanje::Renderer2D::DrawQuad({ -1.0f,0.1f,0.0f }, { 1.0f,1.0f }, m_Texture);
@@ -72,8 +81,29 @@ void Sandbox2D::OnUpdate(Brbanje::Timestep ts)
 			}
 		}
 
+		if (Brbanje::Input::IsMouseButtonPressed(BR_MOUSE_BUTTON_LEFT))
+		{
+			auto [x, y] = Brbanje::Input::GetMousePos();
+			auto width = Brbanje::Application::getApplication().getWindow().GetWidth();
+			auto height = Brbanje::Application::getApplication().getWindow().GetHeight();
+
+			auto bounds = m_CameraController.GetBounds();
+			auto pos = m_CameraController.GetCamera().GetPosition();
+			x = (x / width) * bounds.GetWidth() - bounds.GetWidth() * 0.5f;
+			y = bounds.GetHeight() * 0.5f - (y / height) * bounds.GetHeight();
+			m_Particle.Position = { x + pos.x, y + pos.y };
+			for (int i = 0; i < 5; i++)
+				m_ParticleSystem.Emit(m_Particle);
+		}
+
+		m_ParticleSystem.OnUpdate(ts);
+		m_ParticleSystem.OnRender(m_CameraController.GetCamera());
+
 		Brbanje::Renderer2D::EndScene();
 	}
+
+
+	
 	
 }
 
