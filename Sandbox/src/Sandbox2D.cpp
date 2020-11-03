@@ -4,6 +4,24 @@
 #include "Brbanje/Renderer/Shader.h"
 
 
+
+static const char* tileMap =
+"1GWWWWWWWWWWWWWWWWWWWWWW"
+"WWWWWWWWWWWWWWWWWWWWWWWW"
+"WWWWWWWWWWWWWWWWWWWWWWWW"
+"WWWWWWWWWDDWGWWWWWWWWWWW"
+"WWWWWWWWWDDWWGWWWWWWWWWW"
+"WWWWWWWWWWWWWWWWWWWWWWWW"
+"WWWWWWWWWWWWGGWWWWWWWWWW"
+"WWWWWWWWWWWWWWWWWWWWWWWW"
+"WWWWWWWWWWWWWWWWWWWWWWWW"
+;
+
+static uint32_t mapWidth = 24;
+static uint32_t mapHeight = strlen(tileMap) / mapWidth;
+
+
+
 Sandbox2D::Sandbox2D(): Layer("Sandbox2D"), m_CameraController(1280.0f/720.0f, true)
 {
 
@@ -17,7 +35,7 @@ void Sandbox2D::OnAttach()
 	m_Texture = Brbanje::Texture2D::Create("Assets/Textures/zeldusana.png");
 	m_Texture1 = Brbanje::Texture2D::Create("Assets/Textures/beer.png");
 	m_SpriteSheet = Brbanje::Texture2D::Create("Assets/game/Spritesheet/spriteSheet.png");
-	m_SubTex = Brbanje::SubTexture2D::CreateFromCoords(m_SpriteSheet, { 0.0f,1.0f }, { 128.0f, 128.0f }, {1.0f,2.0f});
+	
 
 
 	m_Particle.ColorBegin = { 254 / 255.0f, 212 / 255.0f, 123 / 255.0f, 1.0f };
@@ -28,6 +46,11 @@ void Sandbox2D::OnAttach()
 	m_Particle.VelocityVariation = { 3.0f, 1.0f };
 	m_Particle.Position = { 0.0f, 0.0f };
 	
+	m_CameraController.SetZoom(5.0f);
+
+	m_TileMap['W'] = Brbanje::SubTexture2D::CreateFromCoords(m_SpriteSheet, { 11.0f,11.0f }, { 128.0f, 128.0f }, { 1.0f,1.0f }); // Water
+	m_TileMap['D'] = Brbanje::SubTexture2D::CreateFromCoords(m_SpriteSheet, { 6.0f,11.0f }, { 128.0f, 128.0f }, { 1.0f,1.0f }); //Dirt
+	m_TileMap['G'] = Brbanje::SubTexture2D::CreateFromCoords(m_SpriteSheet, { 1.0f,11.0f }, { 128.0f, 128.0f }, { 1.0f,1.0f }); //Grass
 }
 
 void Sandbox2D::OnDetach()
@@ -107,7 +130,30 @@ void Sandbox2D::OnUpdate(Brbanje::Timestep ts)
 #endif
 
 		Brbanje::Renderer2D::BeginScene(m_CameraController.GetCamera());
-		Brbanje::Renderer2D::DrawQuad({ 0.0f,0.0f}, { 1.0f,2.0f }, m_SubTex);
+	
+		
+		for (uint32_t y = 0; y < mapHeight; ++y)
+		{
+			for (uint32_t x = 0; x < mapWidth; ++x)
+			{
+				char tile = tileMap[x + (y * mapWidth)];
+
+				if (m_TileMap.find(tile) != m_TileMap.end())
+				{
+					Brbanje::Renderer2D::DrawQuad({ (float)x-(mapWidth/2), (float)mapHeight - y -1 - mapHeight/2 }, { 1.0f,1.0f }, m_TileMap[tile]);
+				}
+				else
+				{
+					Brbanje::Renderer2D::DrawQuad({ (float)x - mapWidth / 2, (float)mapHeight - y - 1 - mapHeight / 2 }, { 1.0f,1.0f }, m_Texture);
+				}
+
+			}
+		}
+		
+
+
+
+		
 		Brbanje::Renderer2D::EndScene();
 	}
 

@@ -14,6 +14,7 @@ private:
 	Brbanje::Ref<Brbanje::Texture2D> m_Texture1;
 	Brbanje::Ref<Brbanje::Texture2D> m_SpriteSheet;
 	Brbanje::Ref<Brbanje::SubTexture2D> m_SubTex;
+	std::unordered_map<char, Brbanje::Ref<Brbanje::SubTexture2D>> m_TileMap;
 
 	ParticleSystem m_ParticleSystem;
 	ParticleProps m_Particle;

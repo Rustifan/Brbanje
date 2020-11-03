@@ -30,14 +30,15 @@ namespace Brbanje
 		float m_CameraRotation = 0.0f;
 
 		float m_CameraSpeed = 5.0f, m_RotationSpeed = 160.0f;
-
+	private:
+		void CalculateProjection();
 	public:
 		OrtographicCameraController(float aspectRatio, bool rotation = false);
 		void OnUpdate(Timestep ts);
 		void OnEvent(Event& e);
 		bool OnMouseScrolled(MouseScrolledEvent& e);
 		bool OnWindowResize(WindowResizeEvent& e);
-		void SetZoom(float zoom) { m_Zoom = zoom; }
+		void SetZoom(float zoom) { m_Zoom = zoom; CalculateProjection(); }
 		float GetZoom()const { return m_Zoom; }
 
 		OrthographicCamera& GetCamera() { return m_Camera; }
