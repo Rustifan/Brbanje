@@ -25,6 +25,7 @@
 #include "Brbanje/Renderer/Shader.h"
 #include "Brbanje/Renderer/VertexArray.h"
 #include "Brbanje/Renderer/Texture.h"
+#include "Brbanje/Renderer/SubTexture2D.h"
 #include "Brbanje/Renderer/Renderer2D.h"
 
 #include "Brbanje/Renderer/OrtographicCameraController.h"

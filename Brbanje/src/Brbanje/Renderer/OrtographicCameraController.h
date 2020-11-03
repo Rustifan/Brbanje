@@ -8,12 +8,22 @@
 
 namespace Brbanje
 {
+	struct OrthographicCameraBounds
+	{
+		float Left, Right;
+		float Bottom, Top;
+
+		float GetWidth() { return Right - Left; }
+		float GetHeight() { return Top - Bottom; }
+	};
+
 	class OrtographicCameraController
 	{
 	private:
 		float m_Zoom = 1.0f;
 		float m_AspectRatio;
 		bool m_Rotation = false;
+		OrthographicCameraBounds m_Bounds;
 		OrthographicCamera m_Camera;
 		
 		glm::vec3 m_CameraPosition = { 0.0f,0.0f,0.0f };
@@ -29,8 +39,9 @@ namespace Brbanje
 		bool OnWindowResize(WindowResizeEvent& e);
 		void SetZoom(float zoom) { m_Zoom = zoom; }
 		float GetZoom()const { return m_Zoom; }
+
 		OrthographicCamera& GetCamera() { return m_Camera; }
-				
+		const OrthographicCameraBounds& GetBounds()const{ return m_Bounds; }
 
 	};
 }

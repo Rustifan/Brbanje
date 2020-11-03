@@ -173,7 +173,7 @@ namespace Brbanje
 		}
 		
 		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) *
-			glm::rotate(glm::mat4(1.0f), glm::radians(rotation), glm::vec3(0.0f,0.0f,1.0f)) *
+			glm::rotate(glm::mat4(1.0f), rotation, glm::vec3(0.0f,0.0f,1.0f)) *
 			glm::scale(glm::mat4(1.0f), glm::vec3(size.x, size.y, 1.0f));
 
 		s_Data.QuadVertexBufferPointer->position = transform * s_Data.QuadVerexPositions[0];
@@ -245,7 +245,7 @@ namespace Brbanje
 
 
 		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) *
-			glm::rotate(glm::mat4(1.0f), glm::radians(rotation), glm::vec3(0.0f,0.0f,1.0f)) *
+			glm::rotate(glm::mat4(1.0f), rotation, glm::vec3(0.0f,0.0f,1.0f)) *
 			glm::scale(glm::mat4(1.0f), glm::vec3(size.x, size.y, 1.0f));
 
 		s_Data.QuadVertexBufferPointer->position = transform * s_Data.QuadVerexPositions[0];
@@ -413,6 +413,155 @@ namespace Brbanje
 		DrawQuad(glm::vec3(position.x, position.y, 0.0f), size, texture, tiling, tintingColor);
 	}
 
+	void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, Ref<SubTexture2D> subTexture, float tiling, glm::vec4 tintingColor)
+	{
+		BR_PROFILE_FUNCTION;
+
+		if (s_Data.QuadIndexCount >= s_Data.MAX_QUAD_INDICES)
+		{
+			FlushAndReset();
+		}
+
+		float textureIndex = 0.0f;
+		Ref<Texture2D> texture = subTexture->GetTexture();
+
+
+		for (uint32_t i = 1; i < s_Data.TextureSlotIndex; ++i)
+		{
+			if (*s_Data.TextureSlots[i].get() == *texture.get())
+				textureIndex = (float)i; break;
+		}
+
+
+
+
+		if (textureIndex == 0)
+		{
+			textureIndex = (float)s_Data.TextureSlotIndex;
+			s_Data.TextureSlots[s_Data.TextureSlotIndex] = texture;
+			s_Data.TextureSlotIndex++;
+		}
+
+
+		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) *
+			glm::scale(glm::mat4(1.0f), glm::vec3(size.x, size.y, 1.0f));
+
+		s_Data.QuadVertexBufferPointer->position = transform * s_Data.QuadVerexPositions[0];
+		s_Data.QuadVertexBufferPointer->color = tintingColor;
+		s_Data.QuadVertexBufferPointer->texCoords = subTexture->GetTetureCoords()[0];
+		s_Data.QuadVertexBufferPointer->texIndex = textureIndex;
+		s_Data.QuadVertexBufferPointer->tilingFactor = tiling;
+		s_Data.QuadVertexBufferPointer++;
+
+		s_Data.QuadVertexBufferPointer->position = transform * s_Data.QuadVerexPositions[1];
+		s_Data.QuadVertexBufferPointer->color = tintingColor;
+		s_Data.QuadVertexBufferPointer->texCoords = subTexture->GetTetureCoords()[1];
+		s_Data.QuadVertexBufferPointer->texIndex = textureIndex;
+		s_Data.QuadVertexBufferPointer->tilingFactor = tiling;
+		s_Data.QuadVertexBufferPointer++;
+
+		s_Data.QuadVertexBufferPointer->position = transform * s_Data.QuadVerexPositions[2];
+		s_Data.QuadVertexBufferPointer->color = tintingColor;
+		s_Data.QuadVertexBufferPointer->texCoords = subTexture->GetTetureCoords()[2];
+		s_Data.QuadVertexBufferPointer->texIndex = textureIndex;
+		s_Data.QuadVertexBufferPointer->tilingFactor = tiling;
+		s_Data.QuadVertexBufferPointer++;
+
+		s_Data.QuadVertexBufferPointer->position = transform * s_Data.QuadVerexPositions[3];
+		s_Data.QuadVertexBufferPointer->color = tintingColor;
+		s_Data.QuadVertexBufferPointer->texCoords = subTexture->GetTetureCoords()[3];
+		s_Data.QuadVertexBufferPointer->texIndex = textureIndex;
+		s_Data.QuadVertexBufferPointer->tilingFactor = tiling;
+		s_Data.QuadVertexBufferPointer++;
+
+		s_Data.QuadIndexCount += 6;
+
+
+
+		++s_Data.Stats.QuadNumber;
+
+	}
+
+	void Renderer2D::DrawQuad(const glm::vec2& position, const glm::vec2& size, Ref<SubTexture2D> subTexture, float tiling, glm::vec4 tintingColor)
+	{
+
+		DrawQuad(glm::vec3(position.x, position.y, 0.0f), size, subTexture, tiling, tintingColor);
+	}
+
+	void Renderer2D::DrawRotatedQuad(const glm::vec3& position, const glm::vec2& size, float rotation, Ref<SubTexture2D> subTexture, float tiling, glm::vec4 tintingColor)
+	{
+		BR_PROFILE_FUNCTION;
+
+		if (s_Data.QuadIndexCount >= s_Data.MAX_QUAD_INDICES)
+		{
+			FlushAndReset();
+		}
+
+		Ref<Texture2D> texture = subTexture->GetTexture();
+
+		float textureIndex = 0.0f;
+
+		for (uint32_t i = 1; i < s_Data.TextureSlotIndex; ++i)
+		{
+			if (*s_Data.TextureSlots[i].get() == *texture.get())
+				textureIndex = (float)i;
+			break;
+		}
+
+
+
+
+		if (textureIndex == 0)
+		{
+			textureIndex = (float)s_Data.TextureSlotIndex;
+			s_Data.TextureSlots[s_Data.TextureSlotIndex] = texture;
+			s_Data.TextureSlotIndex++;
+		}
+
+
+		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) *
+			glm::rotate(glm::mat4(1.0f), rotation, glm::vec3(0.0f, 0.0f, 1.0f)) *
+			glm::scale(glm::mat4(1.0f), glm::vec3(size.x, size.y, 1.0f));
+
+		s_Data.QuadVertexBufferPointer->position = transform * s_Data.QuadVerexPositions[0];
+		s_Data.QuadVertexBufferPointer->color = tintingColor;
+		s_Data.QuadVertexBufferPointer->texCoords = subTexture->GetTetureCoords()[0];
+		s_Data.QuadVertexBufferPointer->texIndex = textureIndex;
+		s_Data.QuadVertexBufferPointer->tilingFactor = tiling;
+		s_Data.QuadVertexBufferPointer++;
+
+		s_Data.QuadVertexBufferPointer->position = transform * s_Data.QuadVerexPositions[1];
+		s_Data.QuadVertexBufferPointer->color = tintingColor;
+		s_Data.QuadVertexBufferPointer->texCoords = subTexture->GetTetureCoords()[1];
+		s_Data.QuadVertexBufferPointer->texIndex = textureIndex;
+		s_Data.QuadVertexBufferPointer->tilingFactor = tiling;
+		s_Data.QuadVertexBufferPointer++;
+
+		s_Data.QuadVertexBufferPointer->position = transform * s_Data.QuadVerexPositions[2];
+		s_Data.QuadVertexBufferPointer->color = tintingColor;
+		s_Data.QuadVertexBufferPointer->texCoords = subTexture->GetTetureCoords()[2];
+		s_Data.QuadVertexBufferPointer->texIndex = textureIndex;
+		s_Data.QuadVertexBufferPointer->tilingFactor = tiling;
+		s_Data.QuadVertexBufferPointer++;
+
+		s_Data.QuadVertexBufferPointer->position = transform * s_Data.QuadVerexPositions[3];
+		s_Data.QuadVertexBufferPointer->color = tintingColor;
+		s_Data.QuadVertexBufferPointer->texCoords = subTexture->GetTetureCoords()[3];
+		s_Data.QuadVertexBufferPointer->texIndex = textureIndex;
+		s_Data.QuadVertexBufferPointer->tilingFactor = tiling;
+		s_Data.QuadVertexBufferPointer++;
+
+		s_Data.QuadIndexCount += 6;
+
+		++s_Data.Stats.QuadNumber;
+	}
+
+	void Renderer2D::DrawRotatedQuad(const glm::vec2& position, const glm::vec2& size, float rotation, Ref<SubTexture2D> subTexture, float tiling, glm::vec4 tintingColor)
+	{
+
+		DrawRotatedQuad(glm::vec3(position.x, position.y, 0.0f), size, rotation, subTexture, tiling);
+	}
+
 	const Renderer2D::Statistics& Renderer2D::GetStats()
 	{
 		return s_Data.Stats;
@@ -422,4 +571,6 @@ namespace Brbanje
 	{
 		memset(&s_Data.Stats, 0, sizeof(s_Data.Stats));
 	}
+
+
 }
