@@ -229,8 +229,11 @@ namespace Brbanje
 		for (uint32_t i = 1; i < s_Data.TextureSlotIndex; ++i)
 		{
 			if (*s_Data.TextureSlots[i].get() == *texture.get())
-				textureIndex = (float)i; 
-			break;
+			{
+				textureIndex = (float)i;
+				break;
+			}
+				
 		}
 
 

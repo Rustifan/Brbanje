@@ -45,7 +45,7 @@ namespace Brbanje
 		m_Data.Width = props.Width;
 		m_Data.Height = props.Height;
 
-		BR_CORE_INFO("Creating window {0} ({1}, {2})", props.Title, props.Width, props.Height);
+		BR_CORE_INFO("Creating window - {0} ({1}, {2})", props.Title, props.Width, props.Height);
 		if(!s_GLFWinitialized)
 		{
 			int sucess = glfwInit();

@@ -218,7 +218,7 @@ private:
 class Sandbox : public Brbanje::Application
 {
 public:
-	Sandbox()
+	Sandbox():Application()
 	{
 		//PushLayer(new ExampleLayer);
 		PushLayer(new Sandbox2D());

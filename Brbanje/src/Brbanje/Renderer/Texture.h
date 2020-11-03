@@ -14,6 +14,7 @@ namespace Brbanje
 		virtual void SetData(void* data, uint32_t size) const = 0;
 		virtual bool operator==(const Texture& other) = 0;
 		virtual uint32_t GetRendererID() const = 0;
+	
 	};
 
 	class Texture2D : public Texture

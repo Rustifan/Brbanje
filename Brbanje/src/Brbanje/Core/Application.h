@@ -32,9 +32,9 @@ namespace Brbanje
 		
 		
 	public:
-		Application();
+		Application(const std::string& name = "Brbanje Engine");
 		virtual ~Application();
-		
+		void Close();
 		void OnEvent(Event& e);
 		void PushLayer(Layer* layer);
 		void PushOverlay(Layer* layer);

@@ -5,20 +5,7 @@
 
 
 
-static const char* tileMap =
-"1GWWWWWWWWWWWWWWWWWWWWWW"
-"WWWWWWWWWWWWWWWWWWWWWWWW"
-"WWWWWWWWWWWWWWWWWWWWWWWW"
-"WWWWWWWWWDDWGWWWWWWWWWWW"
-"WWWWWWWWWDDWWGWWWWWWWWWW"
-"WWWWWWWWWWWWWWWWWWWWWWWW"
-"WWWWWWWWWWWWGGWWWWWWWWWW"
-"WWWWWWWWWWWWWWWWWWWWWWWW"
-"WWWWWWWWWWWWWWWWWWWWWWWW"
-;
 
-static uint32_t mapWidth = 24;
-static uint32_t mapHeight = strlen(tileMap) / mapWidth;
 
 
 
@@ -36,21 +23,7 @@ void Sandbox2D::OnAttach()
 	m_Texture1 = Brbanje::Texture2D::Create("Assets/Textures/beer.png");
 	m_SpriteSheet = Brbanje::Texture2D::Create("Assets/game/Spritesheet/spriteSheet.png");
 	
-
-
-	m_Particle.ColorBegin = { 254 / 255.0f, 212 / 255.0f, 123 / 255.0f, 1.0f };
-	m_Particle.ColorEnd = { 254 / 255.0f, 109 / 255.0f, 41 / 255.0f, 1.0f };
-	m_Particle.SizeBegin = 0.5f, m_Particle.SizeVariation = 0.3f, m_Particle.SizeEnd = 0.0f;
-	m_Particle.LifeTime = 1.0f;
-	m_Particle.Velocity = { 0.0f, 0.0f };
-	m_Particle.VelocityVariation = { 3.0f, 1.0f };
-	m_Particle.Position = { 0.0f, 0.0f };
 	
-	m_CameraController.SetZoom(5.0f);
-
-	m_TileMap['W'] = Brbanje::SubTexture2D::CreateFromCoords(m_SpriteSheet, { 11.0f,11.0f }, { 128.0f, 128.0f }, { 1.0f,1.0f }); // Water
-	m_TileMap['D'] = Brbanje::SubTexture2D::CreateFromCoords(m_SpriteSheet, { 6.0f,11.0f }, { 128.0f, 128.0f }, { 1.0f,1.0f }); //Dirt
-	m_TileMap['G'] = Brbanje::SubTexture2D::CreateFromCoords(m_SpriteSheet, { 1.0f,11.0f }, { 128.0f, 128.0f }, { 1.0f,1.0f }); //Grass
 }
 
 void Sandbox2D::OnDetach()
@@ -69,16 +42,17 @@ void Sandbox2D::OnUpdate(Brbanje::Timestep ts)
 	//reset stats
 
 	Brbanje::Renderer2D::ResetStats();
-
+	
 	//render
 	{
 		BR_PROFILE_SCOPE("Renderer Prep");
 		Brbanje::RenderCommand::SetColor(glm::vec4(0.1f, 0.1f, 0.1f, 0));
 		Brbanje::RenderCommand::Clear();
 	}
+
 	{
 		BR_PROFILE_SCOPE("Renderer Draw");
-#if 0
+
 		Brbanje::Renderer2D::BeginScene(m_CameraController.GetCamera());
 
 		static float rotation = 0.0f;
@@ -127,34 +101,18 @@ void Sandbox2D::OnUpdate(Brbanje::Timestep ts)
 		m_ParticleSystem.OnRender(m_CameraController.GetCamera());
 
 		Brbanje::Renderer2D::EndScene();
-#endif
 
-		Brbanje::Renderer2D::BeginScene(m_CameraController.GetCamera());
-	
+
 		
-		for (uint32_t y = 0; y < mapHeight; ++y)
-		{
-			for (uint32_t x = 0; x < mapWidth; ++x)
-			{
-				char tile = tileMap[x + (y * mapWidth)];
 
-				if (m_TileMap.find(tile) != m_TileMap.end())
-				{
-					Brbanje::Renderer2D::DrawQuad({ (float)x-(mapWidth/2), (float)mapHeight - y -1 - mapHeight/2 }, { 1.0f,1.0f }, m_TileMap[tile]);
-				}
-				else
-				{
-					Brbanje::Renderer2D::DrawQuad({ (float)x - mapWidth / 2, (float)mapHeight - y - 1 - mapHeight / 2 }, { 1.0f,1.0f }, m_Texture);
-				}
-
-			}
-		}
+		
 		
 
 
 
 		
 		Brbanje::Renderer2D::EndScene();
+		
 	}
 
 
@@ -171,17 +129,17 @@ void Sandbox2D::OnEvent(Brbanje::Event& event)
 void Sandbox2D::OnImGuiRender()
 {
 	BR_PROFILE_FUNCTION;
-	ImGui::Begin("Controller");
-
 	
-	ImGui::Text("Quad count: %d", Brbanje::Renderer2D::GetStats().QuadNumber);
-	ImGui::Text("Draw calls: %d", Brbanje::Renderer2D::GetStats().DrawCalls);
 	
 
-	ImGui::ColorPicker4("Square Color", (float*)&m_SquareColor);
+		ImGui::Begin("Controller");
+		ImGui::Text("Quad count: %d", Brbanje::Renderer2D::GetStats().QuadNumber);
+		ImGui::Text("Draw calls: %d", Brbanje::Renderer2D::GetStats().DrawCalls);
 	
+		
 
-	ImGui::End();
+		ImGui::End();
+	
 }
 
 

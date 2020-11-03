@@ -15,13 +15,13 @@ namespace Brbanje
 
 	
 
-	Application::Application()
+	Application::Application(const std::string& name)
 	{
 		BR_PROFILE_FUNCTION;
 		
 		BR_CORE_ASSERT(!s_instance, "Application already exist")
 		s_instance = this;
-		m_Window = std::unique_ptr<Window>(Window::Create());
+		m_Window = std::unique_ptr<Window>(Window::Create(name));
 		m_Window->SetEventCallback(BIND_EVENT_FN(Application::OnEvent));
 		m_ImGuiLayer = new ImGuiLayer;
 		PushOverlay(m_ImGuiLayer);
@@ -145,5 +145,10 @@ namespace Brbanje
 		BR_PROFILE_FUNCTION;
 		overlay->OnAttach();
 		m_LayerStack.PushOverlay(overlay);
+	}
+
+	void Application::Close()
+	{
+		m_Running = false;
 	}
 }
