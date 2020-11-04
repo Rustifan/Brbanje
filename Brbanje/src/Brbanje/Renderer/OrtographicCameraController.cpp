@@ -76,10 +76,17 @@ namespace Brbanje
 	{
 		BR_PROFILE_FUNCTION;
 
-		m_AspectRatio = (float)e.GetWidth() / (float)e.GetHeight();
-		CalculateProjection();
+		OnResize(e.GetWidth(), e.GetHeight());
 		return false;
 
+	}
+
+	void OrtographicCameraController::OnResize(uint32_t width, uint32_t height)
+	{
+		BR_PROFILE_FUNCTION;
+
+		m_AspectRatio = (float)width / (float)height;
+		CalculateProjection();
 	}
 
 	void OrtographicCameraController::CalculateProjection()

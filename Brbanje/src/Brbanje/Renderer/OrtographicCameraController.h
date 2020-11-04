@@ -36,6 +36,7 @@ namespace Brbanje
 		OrtographicCameraController(float aspectRatio, bool rotation = false);
 		void OnUpdate(Timestep ts);
 		void OnEvent(Event& e);
+		void OnResize(uint32_t width, uint32_t height);
 		bool OnMouseScrolled(MouseScrolledEvent& e);
 		bool OnWindowResize(WindowResizeEvent& e);
 		void SetZoom(float zoom) { m_Zoom = zoom; CalculateProjection(); }

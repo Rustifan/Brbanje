@@ -191,11 +191,30 @@ namespace Brbanje
 				ImGui::EndMenuBar();
 			}
 
+			//Settings
+
 			ImGui::Begin("Controller");
 			ImGui::Text("Quad count: %d", Brbanje::Renderer2D::GetStats().QuadNumber);
 			ImGui::Text("Draw calls: %d", Brbanje::Renderer2D::GetStats().DrawCalls);
-			ImGui::Image((void*)m_Framebuffer->GetColorAttachmentId(), ImVec2{ 1080,720 }, { 0,1 } ,{ 1,0 } );
 			ImGui::End();
+
+			//viewport
+			ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0, 0));
+			ImGui::Begin("Viewport");
+			
+			ImVec2 viewPortSize = ImGui::GetContentRegionAvail();
+			
+			if (*((glm::vec2*)&viewPortSize)!=m_ViewportSize)
+			{
+				m_ViewportSize.x = viewPortSize.x;
+				m_ViewportSize.y = viewPortSize.y;
+				m_Framebuffer->Resize(m_ViewportSize.x, m_ViewportSize.y);
+				m_CameraController.OnResize(m_ViewportSize.x, m_ViewportSize.y);
+			}
+			ImGui::Image((void*)m_Framebuffer->GetColorAttachmentId(), ImVec2{ m_ViewportSize.x, m_ViewportSize.y }, { 0,1 }, { 1,0 });
+			
+			ImGui::End();
+			ImGui::PopStyleVar();
 
 			ImGui::End();
 		}

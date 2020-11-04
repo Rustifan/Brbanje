@@ -15,10 +15,20 @@ namespace Brbanje
 	OpenGlFramebuffer::~OpenGlFramebuffer()
 	{
 		glDeleteFramebuffers(1, &m_RendererID);
+		glDeleteTextures(1, &m_ColorAttachment);
+		glDeleteTextures(1, &m_DepthAttachment);
 	}
 
 	void OpenGlFramebuffer::Invalidate()
 	{
+		if (m_RendererID)
+		{
+			glDeleteFramebuffers(1, &m_RendererID);
+			glDeleteTextures(1, &m_ColorAttachment);
+			glDeleteTextures(1, &m_DepthAttachment);
+		}
+		
+		
 		glCreateFramebuffers(1, &m_RendererID);
 
 		glBindFramebuffer(GL_FRAMEBUFFER, m_RendererID);
@@ -43,10 +53,18 @@ namespace Brbanje
 	void OpenGlFramebuffer::Bind()
 	{
 		glBindFramebuffer(GL_FRAMEBUFFER, m_RendererID);
+		glViewport(0, 0, m_FramebufferSpecs.width, m_FramebufferSpecs.height);
 	}
 
 	void OpenGlFramebuffer::Unbind()
 	{
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	}
+
+	void OpenGlFramebuffer::Resize(uint32_t width, uint32_t height)
+	{
+		m_FramebufferSpecs.width = width;
+		m_FramebufferSpecs.height = height;
+		Invalidate();
 	}
 }
