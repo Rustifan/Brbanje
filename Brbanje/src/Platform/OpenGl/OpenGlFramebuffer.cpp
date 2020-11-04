@@ -6,6 +6,8 @@
 
 namespace Brbanje
 {
+	static uint32_t s_MaxFramebufferSize = 8120;
+
 	OpenGlFramebuffer::OpenGlFramebuffer(const FramebufferSpecifications& framebufferSpecs):
 		m_FramebufferSpecs(framebufferSpecs)
 	{
@@ -63,6 +65,13 @@ namespace Brbanje
 
 	void OpenGlFramebuffer::Resize(uint32_t width, uint32_t height)
 	{
+		if (width == 0 || height == 0 || width > s_MaxFramebufferSize || height > s_MaxFramebufferSize)
+		{
+			BR_CORE_WARN("attempted to resize framebuffer to width: {0} and height: {1}", width, height);
+			return;
+		}
+		
+		
 		m_FramebufferSpecs.width = width;
 		m_FramebufferSpecs.height = height;
 		Invalidate();

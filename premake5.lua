@@ -12,6 +12,7 @@ IncludeDir["GLFW"] = "Brbanje/Vendor/GLFW/Include"
 IncludeDir["GLAD"] = "Brbanje/Vendor/GLAD/include"
 IncludeDir["ImGui"] = "Brbanje/Vendor/imgui"
 IncludeDir["glm"] = "Brbanje/Vendor/glm"
+IncludeDir["entt"] = "Brbanje/Vendor/entt/include"
 
 group "Dependencies"
 include "Brbanje/Vendor/GLFW"
@@ -42,7 +43,7 @@ project "Brbanje"
 	}
 
 	includedirs { "%{prj.name}/Vendor/spdlog/include", "%{prj.name}/src", 
-					IncludeDir["GLFW"], IncludeDir["GLAD"], IncludeDir["ImGui"],IncludeDir["glm"]}
+					IncludeDir["GLFW"], IncludeDir["GLAD"], IncludeDir["ImGui"],IncludeDir["glm"], IncludeDir["entt"]}
 
 	links {"GLFW","GLAD","ImGui", "opengl32.lib"}
 
@@ -90,7 +91,7 @@ project "Sandbox"
 	}
 
 	includedirs { "Brbanje/Vendor/spdlog/include", "Brbanje/src",
-	IncludeDir["GLFW"], IncludeDir["GLAD"], IncludeDir["ImGui"], IncludeDir["glm"]}
+	IncludeDir["GLFW"], IncludeDir["GLAD"], IncludeDir["ImGui"], IncludeDir["glm"], IncludeDir["entt"]}
 
 	links {"Brbanje"}
 
@@ -135,7 +136,7 @@ project "Brbeetor"
 	}
 
 	includedirs { "Brbanje/Vendor/spdlog/include", "Brbanje/src",
-	IncludeDir["GLFW"], IncludeDir["GLAD"], IncludeDir["ImGui"], IncludeDir["glm"]}
+	IncludeDir["GLFW"], IncludeDir["GLAD"], IncludeDir["ImGui"], IncludeDir["glm"], IncludeDir["entt"]}
 
 	links {"Brbanje"}
 
