@@ -40,6 +40,7 @@ namespace Brbanje
 		void PushOverlay(Layer* layer);
 		static inline Application& getApplication() { return *s_instance; };
 		inline Window& getWindow() { return  *m_Window; }
+		ImGuiLayer* GetImGuiLayer() { return m_ImGuiLayer; }
 		void Run();
 		
 		

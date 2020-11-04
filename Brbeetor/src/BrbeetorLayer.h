@@ -8,6 +8,7 @@ namespace Brbanje
 	{
 	private:
 		OrtographicCameraController m_CameraController;
+		bool m_IsViewportFocused = false, m_IsViewportHovered = false;
 		glm::vec4 m_SquareColor = glm::vec4(0.8f, 0.3f, 0.2f, 1.0f);
 		Ref<Texture2D> m_Texture;
 		Ref<Brbanje::Texture2D> m_Texture1;
@@ -16,7 +17,7 @@ namespace Brbanje
 		Brbanje::Ref<Brbanje::Framebuffer> m_Framebuffer;
 		glm::vec2 m_ViewportSize;
 		std::unordered_map<char, Ref<SubTexture2D>> m_TileMap;
-
+		
 		
 		struct ProfileResult
 		{

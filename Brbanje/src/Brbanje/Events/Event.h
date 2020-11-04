@@ -37,6 +37,7 @@ namespace Brbanje
 	{
 		friend class EventDispacher;
 	public:
+		virtual ~Event() = default;
 		virtual EventType GetEventType() const = 0;
 		virtual const char* GetName() const = 0;
 		virtual const int GetCategoryFlags() const = 0;

@@ -1,12 +1,13 @@
 #include "brpch.h"
-#include "WindowsInput.h"
+#include "Brbanje/Core/Input.h"
+#include "Brbanje/Core/Application.h"
 #include "GLFW/glfw3.h"
 
 namespace Brbanje
 {
-	Input* Input::s_Instance = new WindowsInput;
+	
 
-	bool WindowsInput::IsKeyPressedImpl(int KeyCode)const
+	bool Input::IsKeyPressed(int KeyCode)
 	{
 		
 		GLFWwindow* NativeWindow =(GLFWwindow*)Application::getApplication().getWindow().GetNativeWindow();
@@ -14,7 +15,7 @@ namespace Brbanje
 
 	}
 
-	bool WindowsInput::IsMouseButtonPressedImpl(int button)const
+	bool Input::IsMouseButtonPressed(int button)
 	{
 		GLFWwindow* NativeWindow = static_cast<GLFWwindow*>(Application::getApplication().getWindow().GetNativeWindow());
 	
@@ -22,7 +23,7 @@ namespace Brbanje
 
 	}
 
-	float WindowsInput::GetMouseXImpl()const
+	float Input::GetMouseX()
 	{
 		GLFWwindow* NativeWindow = static_cast<GLFWwindow*>(Application::getApplication().getWindow().GetNativeWindow());
 		double x;
@@ -30,7 +31,7 @@ namespace Brbanje
 		return (float)x;
 	}
 
-	float WindowsInput::GetMouseYImpl()const
+	float Input::GetMouseY()
 	{
 		GLFWwindow* NativeWindow = static_cast<GLFWwindow*>(Application::getApplication().getWindow().GetNativeWindow());
 		double y;
@@ -38,7 +39,7 @@ namespace Brbanje
 		return (float)y;
 	}
 
-	std::pair<float, float> WindowsInput::GetMousePosImpl()const
+	std::pair<float, float> Input::GetMousePos()
 	{
 		GLFWwindow* NativeWindow = static_cast<GLFWwindow*>(Application::getApplication().getWindow().GetNativeWindow());
 		double x, y;

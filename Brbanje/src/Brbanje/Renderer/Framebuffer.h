@@ -14,6 +14,7 @@ namespace Brbanje
 	class Framebuffer
 	{
 	public:
+		virtual ~Framebuffer() {}
 		virtual const FramebufferSpecifications& GetFramebufferSpecs() const = 0;
 
 

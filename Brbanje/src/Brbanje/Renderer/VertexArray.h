@@ -10,7 +10,7 @@ namespace Brbanje
 	
 	public:
 
-		virtual ~VertexArray() {}
+		virtual ~VertexArray() = default;
 		virtual void Bind() = 0;
 		virtual void Unbind() = 0;
 		static Ref<VertexArray> Create();
