@@ -25,10 +25,12 @@ namespace Brbanje
 		Brbanje::FramebufferSpecifications fbSpec;
 		fbSpec.width = 1280; fbSpec.height = 720;
 		m_Framebuffer = Brbanje::Framebuffer::Create(fbSpec);
+		
+		m_ActiveScene = std::make_shared<Scene>();
 
-
-
-	
+		auto square = m_ActiveScene->CreateEntity();
+		m_ActiveScene->Reg().emplace<TransformComponent>(square, glm::mat4(1.0f));
+		m_ActiveScene->Reg().emplace<SpriteComponent>(square, glm::vec4(1.0f,1.0f,0.0f,1.0f) );
 	}
 
 	void BrbeetorLayer::OnDetach()
@@ -41,11 +43,15 @@ namespace Brbanje
 		BR_PROFILE_FUNCTION;
 		//update
 
+
+
 		if (m_IsViewportFocused)
 		{
 			m_CameraController.OnUpdate(ts);
 		}
 		//reset stats
+
+		
 
 		Brbanje::Renderer2D::ResetStats();
 		m_Framebuffer->Bind();
@@ -61,34 +67,8 @@ namespace Brbanje
 
 			Brbanje::Renderer2D::BeginScene(m_CameraController.GetCamera());
 
-			static float rotation = 0.0f;
-			rotation++;
-			if (rotation > 360) rotation = 0.0f;
-			Brbanje::Renderer2D::DrawRotatedQuad({ 0.5f,-0.5f,-0.1 }, glm::vec2(1.0f, 1.0f), glm::radians(rotation), m_Texture, 2, { 0.5,0.5,1,1 });
-
-
-			for (int i = 0; i < 10; i++)
-			{
-				Brbanje::Renderer2D::DrawQuad({ i,i + 1,0.0f }, { 1.0f,1.0f }, { 1.0f,1.0f,0.0f,1.0f });
-				Brbanje::Renderer2D::DrawRotatedQuad({ i,i, }, glm::vec2(1.0f, 1.0f), glm::radians(92.0f), m_Texture, 2, { 0.5,0.5,1,1 });
-			}
-
-			Brbanje::Renderer2D::DrawRotatedQuad({ 1.0f,0.0f }, { 0.5f,2.0f }, glm::radians(rotation), { 0.0f,0.5f,0.1f,1.0f });
-			Brbanje::Renderer2D::DrawQuad({ 1.0f,0.0f }, { 0.5f,2.0f }, { m_SquareColor });
-
-			Brbanje::Renderer2D::DrawQuad({ -1.0f,0.1f,0.0f }, { 1.0f,1.0f }, m_Texture);
-			Brbanje::Renderer2D::DrawQuad({ 0.0f,-1.1f }, { 0.5f,0.5f }, m_Texture);
-			Brbanje::Renderer2D::DrawQuad({ -1.0, -1.0 }, { 0.5f, 0.5f }, m_Texture1, 2.0f, { 1.0f,0.2f,0.2f,1.0f });
-
-			for (uint32_t y = 0; y < 10; ++y)
-			{
-				for (uint32_t x = 0; x < 10; ++x)
-				{
-					Brbanje::Renderer2D::DrawQuad({ float(x) * 0.2f, float(y) * 0.2f }, { 0.19f,0.19f }, { 0.2f,0.3f,0.7f,1.0f });
-				}
-			}
-
-			
+				
+			m_ActiveScene->OnUpdate(ts);
 
 			Brbanje::Renderer2D::EndScene();
 

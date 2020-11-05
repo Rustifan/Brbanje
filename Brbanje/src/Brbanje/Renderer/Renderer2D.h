@@ -34,6 +34,13 @@ namespace Brbanje
 		static void DrawQuad(const glm::vec3& position, const glm::vec2& size, Ref<SubTexture2D> subTexture, float tiling = 1.0f, glm::vec4 tintingColor = glm::vec4(1.0f));
 		static void DrawQuad(const glm::vec2& position, const glm::vec2& size, Ref<SubTexture2D> subTexture, float tiling = 1.0f, glm::vec4 tintingColor = glm::vec4(1.0f));
 
+		static void DrawQuad(const glm::mat4& transform, const glm::vec4& color);
+		static void DrawQuad(const glm::mat4& transform, Ref<Texture2D> texture, float tiling = 1.0f, glm::vec4 tintingColor = glm::vec4(1.0f));
+
+		
+
+
+
 		struct Statistics
 		{
 			uint32_t DrawCalls;

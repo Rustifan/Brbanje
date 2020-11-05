@@ -17,7 +17,7 @@ namespace Brbanje
 		Brbanje::Ref<Brbanje::Framebuffer> m_Framebuffer;
 		glm::vec2 m_ViewportSize;
 		std::unordered_map<char, Ref<SubTexture2D>> m_TileMap;
-		
+		Ref<Scene> m_ActiveScene;
 		
 		struct ProfileResult
 		{

@@ -574,6 +574,121 @@ namespace Brbanje
 		DrawRotatedQuad(glm::vec3(position.x, position.y, 0.0f), size, rotation, subTexture, tiling);
 	}
 
+	
+
+	void Renderer2D::DrawQuad(const glm::mat4& transform, const glm::vec4& color)
+	{
+		BR_PROFILE_FUNCTION;
+
+		if (s_Data.QuadIndexCount >= s_Data.MAX_QUAD_INDICES)
+		{
+			FlushAndReset();
+		}
+
+		
+
+		s_Data.QuadVertexBufferPointer->position = transform * s_Data.QuadVerexPositions[0];
+		s_Data.QuadVertexBufferPointer->color = color;
+		s_Data.QuadVertexBufferPointer->texCoords = { 0.0f,0.0f };
+		s_Data.QuadVertexBufferPointer->texIndex = 0.0f;
+		s_Data.QuadVertexBufferPointer->tilingFactor = 1.0f;
+		s_Data.QuadVertexBufferPointer++;
+
+		s_Data.QuadVertexBufferPointer->position = transform * s_Data.QuadVerexPositions[1];
+		s_Data.QuadVertexBufferPointer->color = color;
+		s_Data.QuadVertexBufferPointer->texCoords = { 1.0f,0.0f };
+		s_Data.QuadVertexBufferPointer->texIndex = 0.0f;
+		s_Data.QuadVertexBufferPointer->tilingFactor = 1.0f;
+		s_Data.QuadVertexBufferPointer++;
+
+		s_Data.QuadVertexBufferPointer->position = transform * s_Data.QuadVerexPositions[2];
+		s_Data.QuadVertexBufferPointer->color = color;
+		s_Data.QuadVertexBufferPointer->texCoords = { 1.0f,1.0f };
+		s_Data.QuadVertexBufferPointer->texIndex = 0.0f;
+		s_Data.QuadVertexBufferPointer->tilingFactor = 1.0f;
+		s_Data.QuadVertexBufferPointer++;
+
+		s_Data.QuadVertexBufferPointer->position = transform * s_Data.QuadVerexPositions[3];
+		s_Data.QuadVertexBufferPointer->color = color;
+		s_Data.QuadVertexBufferPointer->texCoords = { 0.0f,1.0f };
+		s_Data.QuadVertexBufferPointer->texIndex = 0.0f;
+		s_Data.QuadVertexBufferPointer->tilingFactor = 1.0f;
+
+		s_Data.QuadVertexBufferPointer++;
+
+		s_Data.QuadIndexCount += 6;
+
+
+		++s_Data.Stats.QuadNumber;
+	}
+
+	void Renderer2D::DrawQuad(const glm::mat4& transform, Ref<Texture2D> texture, float tiling, glm::vec4 tintingColor)
+	{
+		BR_PROFILE_FUNCTION;
+
+		if (s_Data.QuadIndexCount >= s_Data.MAX_QUAD_INDICES)
+		{
+			FlushAndReset();
+		}
+
+		float textureIndex = 0.0f;
+
+		for (uint32_t i = 1; i < s_Data.TextureSlotIndex; ++i)
+		{
+			if (*s_Data.TextureSlots[i].get() == *texture.get())
+			{
+				textureIndex = (float)i;
+				break;
+			}
+
+		}
+
+
+
+
+		if (textureIndex == 0)
+		{
+			textureIndex = (float)s_Data.TextureSlotIndex;
+			s_Data.TextureSlots[s_Data.TextureSlotIndex] = texture;
+			s_Data.TextureSlotIndex++;
+		}
+
+		s_Data.QuadVertexBufferPointer->position = transform * s_Data.QuadVerexPositions[0];
+		s_Data.QuadVertexBufferPointer->color = tintingColor;
+		s_Data.QuadVertexBufferPointer->texCoords = { 0.0f,0.0f };
+		s_Data.QuadVertexBufferPointer->texIndex = textureIndex;
+		s_Data.QuadVertexBufferPointer->tilingFactor = tiling;
+		s_Data.QuadVertexBufferPointer++;
+
+		s_Data.QuadVertexBufferPointer->position = transform * s_Data.QuadVerexPositions[1];
+		s_Data.QuadVertexBufferPointer->color = tintingColor;
+		s_Data.QuadVertexBufferPointer->texCoords = { 1.0f,0.0f };
+		s_Data.QuadVertexBufferPointer->texIndex = textureIndex;
+		s_Data.QuadVertexBufferPointer->tilingFactor = tiling;
+		s_Data.QuadVertexBufferPointer++;
+
+		s_Data.QuadVertexBufferPointer->position = transform * s_Data.QuadVerexPositions[2];
+		s_Data.QuadVertexBufferPointer->color = tintingColor;
+		s_Data.QuadVertexBufferPointer->texCoords = { 1.0f,1.0f };
+		s_Data.QuadVertexBufferPointer->texIndex = textureIndex;
+		s_Data.QuadVertexBufferPointer->tilingFactor = tiling;
+		s_Data.QuadVertexBufferPointer++;
+
+		s_Data.QuadVertexBufferPointer->position = transform * s_Data.QuadVerexPositions[3];
+		s_Data.QuadVertexBufferPointer->color = tintingColor;
+		s_Data.QuadVertexBufferPointer->texCoords = { 0.0f,1.0f };
+		s_Data.QuadVertexBufferPointer->texIndex = textureIndex;
+		s_Data.QuadVertexBufferPointer->tilingFactor = tiling;
+		s_Data.QuadVertexBufferPointer++;
+
+		s_Data.QuadIndexCount += 6;
+
+
+
+		++s_Data.Stats.QuadNumber;
+
+	}
+
 	const Renderer2D::Statistics& Renderer2D::GetStats()
 	{
 		return s_Data.Stats;
