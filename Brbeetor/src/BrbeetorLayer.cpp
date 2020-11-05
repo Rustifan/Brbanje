@@ -2,9 +2,6 @@
 #include "BrbeetorLayer.h"
 
 
-
-
-
 namespace Brbanje
 {
 
@@ -28,9 +25,12 @@ namespace Brbanje
 		
 		m_ActiveScene = std::make_shared<Scene>();
 
-		auto square = m_ActiveScene->CreateEntity();
-		m_ActiveScene->Reg().emplace<TransformComponent>(square, glm::mat4(1.0f));
-		m_ActiveScene->Reg().emplace<SpriteComponent>(square, glm::vec4(1.0f,1.0f,0.0f,1.0f) );
+		m_Square = m_ActiveScene->CreateEntity();
+	
+		m_Square.AddComponent<SpriteComponent>(glm::vec4(0.0f, 1.0f, 1.0f, 1.0f));
+		
+		
+		
 	}
 
 	void BrbeetorLayer::OnDetach()
@@ -180,6 +180,7 @@ namespace Brbanje
 		ImGui::Begin("Controller");
 		ImGui::Text("Quad count: %d", Brbanje::Renderer2D::GetStats().QuadNumber);
 		ImGui::Text("Draw calls: %d", Brbanje::Renderer2D::GetStats().DrawCalls);
+		ImGui::ColorEdit4("Color", (float*)&m_Square.GetComponent<SpriteComponent>().color);
 		ImGui::End();
 
 		//viewport

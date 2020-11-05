@@ -4,9 +4,22 @@
 
 namespace Brbanje
 {
+	struct TagComponent
+	{
+		std::string tag;
+		TagComponent() = default;
+		TagComponent(const std::string& tag) :
+			tag(tag) {}
+		TagComponent(const TagComponent& other) = default;
+		operator std::string&() { return tag; }
+		operator const std::string& ()const { return tag; }
+		
+	};
+	std::ostream& operator <<(std::ostream& stream, const TagComponent& tag);
+	
 	struct TransformComponent
 	{
-		glm::mat4 transform;
+		glm::mat4 transform = glm::mat4(1.0f);
 		TransformComponent() = default;
 		TransformComponent(const glm::mat4 transform) :
 			transform(transform) {}
@@ -17,7 +30,7 @@ namespace Brbanje
 
 	struct SpriteComponent
 	{
-		glm::vec4 color;
+		glm::vec4 color = {1.0f, 1.0f, 1.0f, 1.0f};
 		SpriteComponent() = default;
 		SpriteComponent(const glm::vec4& color) :
 			color(color) {}

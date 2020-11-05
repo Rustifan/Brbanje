@@ -6,6 +6,8 @@
 
 namespace Brbanje
 {
+	class Entity;
+
 	class Scene
 	{
 	private:
@@ -14,7 +16,9 @@ namespace Brbanje
 		Scene();
 		~Scene();
 		void OnUpdate(Timestep ts);
-		entt::entity CreateEntity();
-		entt::registry& Reg() { return m_Registry; }
+		Entity CreateEntity(const std::string& tag = std::string());
+		
+
+		friend class Entity;
 	};
 }

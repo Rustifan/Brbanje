@@ -18,7 +18,7 @@ namespace Brbanje
 		glm::vec2 m_ViewportSize;
 		std::unordered_map<char, Ref<SubTexture2D>> m_TileMap;
 		Ref<Scene> m_ActiveScene;
-		
+		Entity m_Square;
 		struct ProfileResult
 		{
 			const char* name;

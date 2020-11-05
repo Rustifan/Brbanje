@@ -15,6 +15,7 @@
 #include "glm/gtc/type_ptr.hpp"
 #include "Scene/Scene.h"
 #include "Scene/Components.h"
+#include "Scene/Entity.h"
 
 
 //Renderer includes----------------------------------------------------------------------------------------

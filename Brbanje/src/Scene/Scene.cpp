@@ -1,6 +1,7 @@
 #include "brpch.h"
 #include "Scene.h"
 #include "Brbanje/Renderer/Renderer2D.h"
+#include "Entity.h"
 
 namespace Brbanje
 {
@@ -28,8 +29,17 @@ namespace Brbanje
 
 	}
 
-	entt::entity Scene::CreateEntity()
+	Entity Scene::CreateEntity(const std::string& tag)
 	{
-		return m_Registry.create();
+		Entity entity = Entity(m_Registry.create(), this);
+		entity.AddComponent<TransformComponent>();
+		std::string name = tag == std::string() ? "Entity" : tag;
+		entity.AddComponent<TagComponent>(name);
+		
+
+		return entity;
 	}
+
+	std::ostream& operator <<(std::ostream& stream, const TagComponent& tag) { stream << tag.tag; return stream; }
+
 }
