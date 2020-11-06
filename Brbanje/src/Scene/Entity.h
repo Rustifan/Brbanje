@@ -9,8 +9,8 @@ namespace Brbanje
 	{
 	private:
 		
-		Scene* m_Scene;
-		entt::entity m_EntityHandle;
+		Scene* m_Scene = nullptr;
+		entt::entity m_EntityHandle{entt::null};
 	public:
 		Entity(entt::entity entityHandle, Scene* scene);	
 		Entity() = default;
@@ -43,6 +43,8 @@ namespace Brbanje
 
 			m_Scene->m_Registry.remove<T>(m_EntityHandle);
 		}
+
+		operator bool() const { return m_Scene != nullptr; }
 	};
 
 }

@@ -29,6 +29,8 @@ namespace Brbanje
 	
 		m_Square.AddComponent<SpriteComponent>(glm::vec4(0.0f, 1.0f, 1.0f, 1.0f));
 		
+		m_CameraEntity = m_ActiveScene->CreateEntity("Camera Entity");
+		m_CameraEntity.AddComponent<CameraComponent>(glm::ortho(-16.0f, 16.0f, -9.0f, 9.0f));
 		
 		
 	}
@@ -65,17 +67,17 @@ namespace Brbanje
 		{
 			BR_PROFILE_SCOPE("Renderer Draw");
 
-			Brbanje::Renderer2D::BeginScene(m_CameraController.GetCamera());
+			
 
 				
 			m_ActiveScene->OnUpdate(ts);
 
-			Brbanje::Renderer2D::EndScene();
+			
 
 
 
 
-			Brbanje::Renderer2D::BeginScene(m_CameraController.GetCamera());
+			//Brbanje::Renderer2D::BeginScene(m_CameraController.GetCamera());
 
 
 		
@@ -84,7 +86,7 @@ namespace Brbanje
 
 
 
-			Brbanje::Renderer2D::EndScene();
+			//Brbanje::Renderer2D::EndScene();
 			m_Framebuffer->Unbind();
 		}
 

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "glm/glm.hpp"
+#include "Brbanje/Renderer/Camera.h"
 
 namespace Brbanje
 {
@@ -37,5 +38,14 @@ namespace Brbanje
 		SpriteComponent(const SpriteComponent& other) = default;
 		operator glm::vec4& () { return color; }
 		operator const glm::vec4& ()const { return color; }
+	};
+
+	struct CameraComponent
+	{
+		Camera camera;
+		bool primary = true;
+		CameraComponent() = default;
+		CameraComponent(const glm::mat4& projection) : camera(projection) {}
+		CameraComponent(const CameraComponent& other) = default;
 	};
 }

@@ -18,13 +18,47 @@ namespace Brbanje
 
 	void Scene::OnUpdate(Timestep ts)
 	{
-		auto group = m_Registry.group<TransformComponent>(entt::get<SpriteComponent>);
-		for (auto entity : group)
+		
+		
+		Camera* mainCamera = nullptr;
+		glm::mat4* transform = nullptr;
 		{
-			auto& [transform, sprite] = group.get<TransformComponent, SpriteComponent>(entity);
+			auto group = m_Registry.group<>(entt::get<TransformComponent, CameraComponent>);
+			for (auto entity : group)
+			{
+				auto& [trasformComp, camera] = group.get<TransformComponent, CameraComponent>(entity);
+				if (camera.primary)
+				{
+					mainCamera = &camera.camera;
+					transform = &trasformComp.transform;
+				}
 
-			Renderer2D::DrawQuad(transform, sprite);
+			}
 		}
+
+		if (mainCamera)
+		{
+
+			Renderer2D::BeginScene(mainCamera->GetProjection(), *transform);
+
+			auto group = m_Registry.group<TransformComponent>(entt::get<SpriteComponent>);
+			for (auto entity : group)
+			{
+				if (m_Registry.has<SpriteComponent>(entity))
+				{
+					auto& [transform, sprite] = group.get<TransformComponent, SpriteComponent>(entity);
+
+					Renderer2D::DrawQuad(transform, sprite);
+				}
+				
+			}
+
+			Renderer2D::EndScene();
+		}
+		
+		
+		
+		
 
 
 	}

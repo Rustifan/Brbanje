@@ -19,6 +19,7 @@ namespace Brbanje
 		std::unordered_map<char, Ref<SubTexture2D>> m_TileMap;
 		Ref<Scene> m_ActiveScene;
 		Entity m_Square;
+		Entity m_CameraEntity;
 		struct ProfileResult
 		{
 			const char* name;

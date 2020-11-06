@@ -22,7 +22,7 @@ void Sandbox2D::OnAttach()
 	m_Texture = Brbanje::Texture2D::Create("Assets/Textures/zeldusana.png");
 	m_Texture1 = Brbanje::Texture2D::Create("Assets/Textures/beer.png");
 	m_SpriteSheet = Brbanje::Texture2D::Create("Assets/game/Spritesheet/spriteSheet.png");
-	
+	m_SubTex = Brbanje::SubTexture2D::CreateFromCoords(m_SpriteSheet, { 11.0f,11.0f }, { 128.0f,128.0f });
 	
 }
 
@@ -73,6 +73,7 @@ void Sandbox2D::OnUpdate(Brbanje::Timestep ts)
 		Brbanje::Renderer2D::DrawQuad({ -1.0f,0.1f,0.0f }, { 1.0f,1.0f }, m_Texture);
 		Brbanje::Renderer2D::DrawQuad({ 0.0f,-1.1f }, { 0.5f,0.5f }, m_Texture);
 		Brbanje::Renderer2D::DrawQuad({ -1.0, -1.0 }, { 0.5f, 0.5f }, m_Texture1, 2.0f, {1.0f,0.2f,0.2f,1.0f});
+		Brbanje::Renderer2D::DrawRotatedQuad({ 0.0f,0.0f,0.2f }, { 1.0f,1.0f }, glm::radians(23.0f), m_SubTex, 2.0f, {1.0f, 1.0f, 1.0f, 0.5f });
 
 		for (uint32_t y = 0; y < 10; ++y)
 		{

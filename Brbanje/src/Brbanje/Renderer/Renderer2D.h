@@ -1,6 +1,7 @@
 #pragma once
 
 #include "OrthographicCamera.h"
+#include "Camera.h"
 #include "Texture.h"
 #include "SubTexture2D.h"
 
@@ -12,6 +13,7 @@ namespace Brbanje
 		static void Init();
 		static void Shutdown();
 		static void BeginScene(const OrthographicCamera& camera);
+		static void BeginScene(const Camera& camera, const glm::mat4& transform);
 		static void EndScene();
 		static void Flush();
 
@@ -55,5 +57,6 @@ namespace Brbanje
 
 	private:
 		static void FlushAndReset();
+		static void SetVertexBufferData(const glm::mat4& transform, const glm::vec4& tintingColor, const glm::vec2* texCoords, float textureIndex, float tiling);
 	};
 }
