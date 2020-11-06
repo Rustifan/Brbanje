@@ -32,6 +32,9 @@ namespace Brbanje
 		m_CameraEntity = m_ActiveScene->CreateEntity("Camera Entity");
 		m_CameraEntity.AddComponent<CameraComponent>(glm::ortho(-16.0f, 16.0f, -9.0f, 9.0f));
 		
+		m_SecondCamera = m_ActiveScene->CreateEntity("Second camera");
+		m_SecondCamera.AddComponent<CameraComponent>(glm::ortho(-1.0f, 1.0f, -1.0f, 1.0f));
+		m_SecondCamera.GetComponent<CameraComponent>().primary = false;
 		
 	}
 
@@ -183,6 +186,26 @@ namespace Brbanje
 		ImGui::Text("Quad count: %d", Brbanje::Renderer2D::GetStats().QuadNumber);
 		ImGui::Text("Draw calls: %d", Brbanje::Renderer2D::GetStats().DrawCalls);
 		ImGui::ColorEdit4("Color", (float*)&m_Square.GetComponent<SpriteComponent>().color);
+		
+		
+		glm::mat4& cameraPosition = m_CameraEntity.GetComponent<TransformComponent>().transform;
+		
+		ImGui::Spacing();
+		ImGui::SliderFloat4("Camera position", glm::value_ptr(cameraPosition[3]),0,10);
+		ImGui::Spacing();
+		static bool mainCamera = true;
+		ImGui::Checkbox("main Camera", &mainCamera);
+		if (mainCamera)
+		{
+			m_CameraEntity.GetComponent<CameraComponent>().primary = true;
+			m_SecondCamera.GetComponent<CameraComponent>().primary = false;
+		}
+		else
+		{
+			m_CameraEntity.GetComponent<CameraComponent>().primary = false;
+			m_SecondCamera.GetComponent<CameraComponent>().primary = true;
+		}
+		
 		ImGui::End();
 
 		//viewport

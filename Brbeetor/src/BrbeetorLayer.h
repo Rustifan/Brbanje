@@ -20,6 +20,8 @@ namespace Brbanje
 		Ref<Scene> m_ActiveScene;
 		Entity m_Square;
 		Entity m_CameraEntity;
+		Entity m_SecondCamera;
+
 		struct ProfileResult
 		{
 			const char* name;
