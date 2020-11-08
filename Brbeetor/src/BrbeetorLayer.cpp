@@ -2,11 +2,16 @@
 #include "BrbeetorLayer.h"
 
 
+
+
+
+
 namespace Brbanje
 {
 
 	BrbeetorLayer::BrbeetorLayer() : Layer("BrbeetorLayer"), m_CameraController(1280.0f / 720.0f, true)
 	{
+		
 
 	}
 
@@ -30,11 +35,13 @@ namespace Brbanje
 		m_Square.AddComponent<SpriteComponent>(glm::vec4(0.0f, 1.0f, 1.0f, 1.0f));
 		
 		m_CameraEntity = m_ActiveScene->CreateEntity("Camera Entity");
-		m_CameraEntity.AddComponent<CameraComponent>(glm::ortho(-16.0f, 16.0f, -9.0f, 9.0f));
+		auto& cam = m_CameraEntity.AddComponent<CameraComponent>();
+		cam.fixedAspectRatio = true;
 		
 		m_SecondCamera = m_ActiveScene->CreateEntity("Second camera");
-		m_SecondCamera.AddComponent<CameraComponent>(glm::ortho(-1.0f, 1.0f, -1.0f, 1.0f));
+		m_SecondCamera.AddComponent<CameraComponent>();
 		m_SecondCamera.GetComponent<CameraComponent>().primary = false;
+
 		
 	}
 
@@ -80,16 +87,6 @@ namespace Brbanje
 
 
 
-			//Brbanje::Renderer2D::BeginScene(m_CameraController.GetCamera());
-
-
-		
-
-
-
-
-
-			//Brbanje::Renderer2D::EndScene();
 			m_Framebuffer->Unbind();
 		}
 
@@ -189,9 +186,10 @@ namespace Brbanje
 		
 		
 		glm::mat4& cameraPosition = m_CameraEntity.GetComponent<TransformComponent>().transform;
-		
+		float* pos = (float*)&cameraPosition[3];
+
 		ImGui::Spacing();
-		ImGui::SliderFloat4("Camera position", glm::value_ptr(cameraPosition[3]),0,10);
+		ImGui::SliderFloat4("Camera position", pos,0,10);
 		ImGui::Spacing();
 		static bool mainCamera = true;
 		ImGui::Checkbox("main Camera", &mainCamera);
@@ -204,6 +202,16 @@ namespace Brbanje
 		{
 			m_CameraEntity.GetComponent<CameraComponent>().primary = false;
 			m_SecondCamera.GetComponent<CameraComponent>().primary = true;
+		}
+		static float cameraSize = 10;
+		bool drag = ImGui::DragFloat("Camera 2 Size: ", &cameraSize);
+		if (drag)
+		{
+			auto& cam = m_SecondCamera.GetComponent<CameraComponent>().camera;
+			if (cameraSize != cam.GetSize())
+			{
+				cam.SetSize(cameraSize);
+			}
 		}
 		
 		ImGui::End();
@@ -227,6 +235,7 @@ namespace Brbanje
 			m_ViewportSize.y = viewPortSize.y;
 			m_Framebuffer->Resize(m_ViewportSize.x, m_ViewportSize.y);
 			m_CameraController.OnResize(m_ViewportSize.x, m_ViewportSize.y);
+			m_ActiveScene->OnViewportResize(m_ViewportSize.x, m_ViewportSize.y);
 		}
 		ImGui::Image((void*)m_Framebuffer->GetColorAttachmentId(), ImVec2{ m_ViewportSize.x, m_ViewportSize.y }, { 0,1 }, { 1,0 });
 			

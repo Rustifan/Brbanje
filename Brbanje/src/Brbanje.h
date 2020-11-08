@@ -13,9 +13,9 @@
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
 #include "glm/gtc/type_ptr.hpp"
-#include "Scene/Scene.h"
-#include "Scene/Components.h"
-#include "Scene/Entity.h"
+#include "Brbanje/Scene/Scene.h"
+#include "Brbanje/Scene/Components.h"
+#include "Brbanje/Scene/Entity.h"
 
 
 //Renderer includes----------------------------------------------------------------------------------------

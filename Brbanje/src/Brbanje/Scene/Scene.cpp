@@ -73,7 +73,18 @@ namespace Brbanje
 
 		return entity;
 	}
-
+	void Scene::OnViewportResize(uint32_t width, uint32_t height)
+	{
+		auto cameraComponents = m_Registry.view<CameraComponent>();
+		for (entt::entity entt : cameraComponents)
+		{
+			CameraComponent& cam = cameraComponents.get<CameraComponent>(entt);
+			if (!cam.fixedAspectRatio)
+			{
+				cam.camera.ResizeViewport(width, height);
+			}
+		}
+	}	
 	std::ostream& operator <<(std::ostream& stream, const TagComponent& tag) { stream << tag.tag; return stream; }
 
 }

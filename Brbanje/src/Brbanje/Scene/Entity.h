@@ -1,7 +1,7 @@
 #pragma once
 
 #include "entt.hpp"
-#include "Scene/Scene.h"
+#include "Brbanje/Scene/Scene.h"
 
 namespace Brbanje
 {

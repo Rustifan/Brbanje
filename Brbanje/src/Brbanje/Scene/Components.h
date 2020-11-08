@@ -2,6 +2,7 @@
 
 #include "glm/glm.hpp"
 #include "Brbanje/Renderer/Camera.h"
+#include "Brbanje/Scene/SceneCamera.h"
 
 namespace Brbanje
 {
@@ -42,10 +43,11 @@ namespace Brbanje
 
 	struct CameraComponent
 	{
-		Camera camera;
+		SceneCamera camera;
 		bool primary = true;
+		bool fixedAspectRatio = false;
 		CameraComponent() = default;
-		CameraComponent(const glm::mat4& projection) : camera(projection) {}
+		
 		CameraComponent(const CameraComponent& other) = default;
 	};
 }
