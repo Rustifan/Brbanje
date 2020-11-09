@@ -3,6 +3,7 @@
 #include "glm/glm.hpp"
 #include "Brbanje/Renderer/Camera.h"
 #include "Brbanje/Scene/SceneCamera.h"
+#include "Brbanje/Scene/ScriptableEntity.h"
 
 namespace Brbanje
 {
@@ -49,5 +50,26 @@ namespace Brbanje
 		CameraComponent() = default;
 		
 		CameraComponent(const CameraComponent& other) = default;
+	};
+
+	struct NativeScriptComponent
+	{
+		ScriptableEntity* instance;
+		std::function<void (ScriptableEntity*)> OnCreateFunction;
+		std::function<void (ScriptableEntity*, Timestep)> OnUpdateFunction;
+		std::function<void (ScriptableEntity*)> OnDestroyFunction;
+		std::function<void ()> InstatiateFunction;
+		std::function<void ()> DestroyInstanceFunction;
+		
+		template <typename T>
+		void Bind()
+		{
+			InstatiateFunction = [&]() {instance = new T();};
+			DestroyInstanceFunction = [&]() {delete (T*)instance;};
+			OnCreateFunction = [](ScriptableEntity* instance) {((T*)instance)->OnCreate();};
+			OnUpdateFunction = [](ScriptableEntity* instance, Timestep ts) {((T*)instance)->OnUpdate(ts);};
+			OnDestroyFunction = [](ScriptableEntity* instance) {((T*)instance)->OnDestroy();};
+		}
+
 	};
 }

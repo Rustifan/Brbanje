@@ -2,6 +2,8 @@
 #include "Scene.h"
 #include "Brbanje/Renderer/Renderer2D.h"
 #include "Entity.h"
+#include "Brbanje/Scene/ScriptableEntity.h"
+#include "Components.h"
 
 namespace Brbanje
 {
@@ -19,6 +21,22 @@ namespace Brbanje
 	void Scene::OnUpdate(Timestep ts)
 	{
 		
+		m_Registry.view<NativeScriptComponent>().each([=](auto entity, auto& component)
+			{
+				if (!component.instance)
+				{
+					component.InstatiateFunction();
+					component.instance->m_Entity = Entity(entity, this);
+					component.OnCreateFunction(component.instance);
+					
+					
+
+					
+				}
+
+				component.OnUpdateFunction(component.instance, ts);
+			});
+
 		
 		Camera* mainCamera = nullptr;
 		glm::mat4* transform = nullptr;

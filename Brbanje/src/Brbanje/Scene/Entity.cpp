@@ -1,6 +1,7 @@
 #include "brpch.h"
 #include "Entity.h"
 
+
 namespace Brbanje
 {
 	Entity::Entity(entt::entity entityHandle, Scene* scene)

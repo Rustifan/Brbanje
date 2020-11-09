@@ -42,6 +42,54 @@ namespace Brbanje
 		m_SecondCamera.AddComponent<CameraComponent>();
 		m_SecondCamera.GetComponent<CameraComponent>().primary = false;
 
+		class CameraController: public ScriptableEntity
+		{
+		private:
+			TransformComponent* transform;
+			glm::vec2 direction{ 0.0f,0.0f};
+			float moveSpeed = 5.0f;
+		public:
+			void OnCreate()
+			{
+				transform = &GetComponent<TransformComponent>();
+
+			}
+
+			void OnUpdate(Timestep ts)
+			{
+				transform->transform[3][0] += direction.x * moveSpeed * (float)ts;
+				transform->transform[3][1] += direction.y * moveSpeed * (float)ts;
+				
+				if (Input::IsKeyPressed(BR_KEY_A))
+					direction.x = -1.0f;
+				
+				
+				else if (Input::IsKeyPressed(BR_KEY_D))
+					direction.x = 1.0f;
+				else direction.x = 0.0f;
+				
+				if (Input::IsKeyPressed(BR_KEY_S))
+					direction.y = -1.0f;
+				
+				
+				else if (Input::IsKeyPressed(BR_KEY_W))
+					direction.y = 1.0f;
+				else direction.y = 0.0f;
+				
+				if (direction.x != 0 || direction.y != 0)
+					direction = glm::normalize(direction);
+
+				
+			}
+
+			void OnDestroy()
+			{
+
+			}
+
+		};
+
+		m_CameraEntity.AddComponent<NativeScriptComponent>().Bind<CameraController>();
 		
 	}
 
@@ -90,6 +138,10 @@ namespace Brbanje
 			m_Framebuffer->Unbind();
 		}
 
+		class CameraController : public ScriptableEntity
+		{
+			
+		};
 
 
 
