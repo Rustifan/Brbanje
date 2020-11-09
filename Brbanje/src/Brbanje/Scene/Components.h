@@ -55,20 +55,16 @@ namespace Brbanje
 	struct NativeScriptComponent
 	{
 		ScriptableEntity* instance;
-		std::function<void (ScriptableEntity*)> OnCreateFunction;
-		std::function<void (ScriptableEntity*, Timestep)> OnUpdateFunction;
-		std::function<void (ScriptableEntity*)> OnDestroyFunction;
-		std::function<void ()> InstatiateFunction;
-		std::function<void ()> DestroyInstanceFunction;
+		
+		ScriptableEntity* (*InstatiateFunction)();
+		void (*DestroyInstanceFunction)(NativeScriptComponent*);
 		
 		template <typename T>
 		void Bind()
 		{
-			InstatiateFunction = [&]() {instance = new T();};
-			DestroyInstanceFunction = [&]() {delete (T*)instance;};
-			OnCreateFunction = [](ScriptableEntity* instance) {((T*)instance)->OnCreate();};
-			OnUpdateFunction = [](ScriptableEntity* instance, Timestep ts) {((T*)instance)->OnUpdate(ts);};
-			OnDestroyFunction = [](ScriptableEntity* instance) {((T*)instance)->OnDestroy();};
+			InstatiateFunction = []() {return (ScriptableEntity*)(new T());};
+			DestroyInstanceFunction = [](NativeScriptComponent* instance) {delete (T*)instance;};
+			
 		}
 
 	};

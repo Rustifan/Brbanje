@@ -21,20 +21,20 @@ namespace Brbanje
 	void Scene::OnUpdate(Timestep ts)
 	{
 		
-		m_Registry.view<NativeScriptComponent>().each([=](auto entity, auto& component)
+		m_Registry.view<NativeScriptComponent>().each([=](auto entity, NativeScriptComponent& component)
 			{
 				if (!component.instance)
 				{
-					component.InstatiateFunction();
+					component.instance = component.InstatiateFunction();
 					component.instance->m_Entity = Entity(entity, this);
-					component.OnCreateFunction(component.instance);
+					component.instance->OnCreate();
 					
 					
 
 					
 				}
 
-				component.OnUpdateFunction(component.instance, ts);
+				component.instance->OnUpdate(ts);
 			});
 
 		

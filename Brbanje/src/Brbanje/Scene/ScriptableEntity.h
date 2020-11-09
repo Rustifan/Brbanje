@@ -10,7 +10,9 @@ namespace Brbanje
 		Entity m_Entity;
 		
 	public:
-		
+		virtual void OnCreate() {}
+		virtual void OnUpdate(Timestep ts) {}
+		virtual void OnDestroy() {}
 		
 		template <class T>
 		T& GetComponent()
