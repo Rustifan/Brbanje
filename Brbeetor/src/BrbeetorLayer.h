@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Brbanje.h"
+#include "Editor/SceneHierarchyPanel.h"
 
 namespace Brbanje
 {
@@ -21,6 +22,8 @@ namespace Brbanje
 		Entity m_Square;
 		Entity m_CameraEntity;
 		Entity m_SecondCamera;
+		SceneHierarchyPanel m_SceneHierarchy;
+
 
 		struct ProfileResult
 		{

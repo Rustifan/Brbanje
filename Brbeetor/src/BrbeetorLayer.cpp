@@ -30,6 +30,8 @@ namespace Brbanje
 		
 		m_ActiveScene = std::make_shared<Scene>();
 
+		m_SceneHierarchy.SetContext(m_ActiveScene);
+
 		m_Square = m_ActiveScene->CreateEntity();
 	
 		m_Square.AddComponent<SpriteComponent>(glm::vec4(0.0f, 1.0f, 1.0f, 1.0f));
@@ -52,7 +54,10 @@ namespace Brbanje
 			void OnCreate()
 			{
 				transform = &GetComponent<TransformComponent>();
-
+				
+				srand(std::chrono::high_resolution_clock::now().time_since_epoch().count());
+				transform->transform[3].x = rand() % 10-5;
+				transform->transform[3].y = rand() % 10-5;
 			}
 
 			void OnUpdate(Timestep ts)
@@ -90,6 +95,7 @@ namespace Brbanje
 		};
 
 		m_CameraEntity.AddComponent<NativeScriptComponent>().Bind<CameraController>();
+		m_SecondCamera.AddComponent<NativeScriptComponent>().Bind<CameraController>();
 		
 	}
 
@@ -293,6 +299,8 @@ namespace Brbanje
 			
 		ImGui::End();
 		ImGui::PopStyleVar();
+
+		m_SceneHierarchy.OnImGuiRender();
 
 		ImGui::End();
 		

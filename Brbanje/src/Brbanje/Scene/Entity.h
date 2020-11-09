@@ -1,7 +1,10 @@
 #pragma once
 
-#include "entt.hpp"
 #include "Scene.h"
+#include "Brbanje/Core/Core.h"
+#include "Brbanje/Core/Log.h"
+#include "entt.hpp"
+
 
 
 namespace Brbanje
@@ -46,6 +49,16 @@ namespace Brbanje
 		}
 
 		operator bool() const { return m_Scene != nullptr; }
+		operator uint32_t() const{ return (uint32_t)m_EntityHandle; }
+		bool operator==(const Entity& other) const 
+		{ 
+			if (!m_Scene || !(other.m_Scene))
+			{
+				return false;
+			}
+			return m_EntityHandle == other.m_EntityHandle && m_Scene == other.m_Scene; 
+		}
+		bool operator!=(const Entity& other) const { return !(*this == other); }
 	};
 
 }
