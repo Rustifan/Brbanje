@@ -32,9 +32,12 @@ namespace Brbanje
 
 		m_SceneHierarchy.SetContext(m_ActiveScene);
 
-		m_Square = m_ActiveScene->CreateEntity();
+		m_Square = m_ActiveScene->CreateEntity("Kocka");
 	
 		m_Square.AddComponent<SpriteComponent>(glm::vec4(0.0f, 1.0f, 1.0f, 1.0f));
+
+		auto& redSquare = m_ActiveScene->CreateEntity("Druga Kocka");
+		redSquare.AddComponent<SpriteComponent>(glm::vec4(1.0f, 0.0f, 0.3f, 1.0f));
 		
 		m_CameraEntity = m_ActiveScene->CreateEntity("Camera Entity");
 		auto& cam = m_CameraEntity.AddComponent<CameraComponent>();
@@ -55,9 +58,7 @@ namespace Brbanje
 			{
 				transform = &GetComponent<TransformComponent>();
 				
-				srand(std::chrono::high_resolution_clock::now().time_since_epoch().count());
-				transform->transform[3].x = rand() % 10-5;
-				transform->transform[3].y = rand() % 10-5;
+			
 			}
 
 			void OnUpdate(Timestep ts)
@@ -243,34 +244,8 @@ namespace Brbanje
 		ImGui::ColorEdit4("Color", (float*)&m_Square.GetComponent<SpriteComponent>().color);
 		
 		
-		glm::mat4& cameraPosition = m_CameraEntity.GetComponent<TransformComponent>().transform;
-		float* pos = (float*)&cameraPosition[3];
-
-		ImGui::Spacing();
-		ImGui::SliderFloat4("Camera position", pos,0,10);
-		ImGui::Spacing();
-		static bool mainCamera = true;
-		ImGui::Checkbox("main Camera", &mainCamera);
-		if (mainCamera)
-		{
-			m_CameraEntity.GetComponent<CameraComponent>().primary = true;
-			m_SecondCamera.GetComponent<CameraComponent>().primary = false;
-		}
-		else
-		{
-			m_CameraEntity.GetComponent<CameraComponent>().primary = false;
-			m_SecondCamera.GetComponent<CameraComponent>().primary = true;
-		}
-		static float cameraSize = 10;
-		bool drag = ImGui::DragFloat("Camera 2 Size: ", &cameraSize);
-		if (drag)
-		{
-			auto& cam = m_SecondCamera.GetComponent<CameraComponent>().camera;
-			if (cameraSize != cam.GetSize())
-			{
-				cam.SetSize(cameraSize);
-			}
-		}
+		
+		
 		
 		ImGui::End();
 

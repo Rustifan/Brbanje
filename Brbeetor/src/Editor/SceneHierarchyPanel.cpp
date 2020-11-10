@@ -33,7 +33,7 @@ namespace Brbanje
 		if (ImGui::IsWindowHovered() && ImGui::IsMouseDown(0))
 		{
 			m_EntitySelectionContext = Entity();
-			BR_TRACE("krafna");
+			
 		}
 
 		ImGui::End();
@@ -96,6 +96,92 @@ namespace Brbanje
 				ImGui::DragFloat3("Position", glm::value_ptr(transform.transform[3]), 0.5f);
 				ImGui::TreePop();
 			}
+		}
+
+		if (entity.HasComponent<CameraComponent>())
+		{
+
+			if (ImGui::TreeNodeEx((void*)typeid(CameraComponent).hash_code(), ImGuiTreeNodeFlags_DefaultOpen, "Camera"))
+			{
+				CameraComponent& camera = entity.GetComponent<CameraComponent>();
+				
+				const char* previewValues[] = { "Perspective", "Orthographic" };
+				const char* selectedValue = previewValues[(int)camera.camera.GetProjectionType()];
+
+				ImGui::Checkbox("Primary", &camera.primary);
+
+				if (ImGui::BeginCombo("Projection", selectedValue))
+				{
+					 
+
+					for (uint32_t i = 0; i < 2; ++i)
+					{
+						bool isSelected = selectedValue == previewValues[i];
+						if (ImGui::Selectable(previewValues[i], &isSelected))
+						{
+							selectedValue = previewValues[i];
+							camera.camera.SetProjectionType((SceneCamera::ProjectionType)i);
+						}
+
+						if (isSelected)
+						{
+							ImGui::SetItemDefaultFocus();
+						}
+
+					}
+					ImGui::EndCombo();
+				}
+
+				if (camera.camera.GetProjectionType() == SceneCamera::ProjectionType::Orthographic)
+				{
+					float size = camera.camera.GetSize();
+					if (ImGui::DragFloat("size", &size, 0.1f))
+					{
+						camera.camera.SetSize(size);
+					}
+					
+					
+					float nearClip = camera.camera.GetOrthographicNearClip();
+					if (ImGui::DragFloat("near clip", &nearClip, 0.1f))
+					{
+						camera.camera.SetOrthoGraphicNearClip(nearClip);
+					}
+
+					float farClip = camera.camera.GetOrthographicFarClip();
+					if (ImGui::DragFloat("far clip", &farClip, 0.1f))
+					{
+						camera.camera.SetOrthoGraphicFarClip(farClip);
+					}
+
+					ImGui::Checkbox("Fixed Aspect Ratio", &camera.fixedAspectRatio);
+
+				}
+
+				else if (camera.camera.GetProjectionType() == SceneCamera::ProjectionType::Perspective)
+				{
+					float FOV = glm::degrees(camera.camera.GetPerspectiveFOV());
+					if (ImGui::DragFloat("FOV", &FOV, 0.1f))
+					{
+						camera.camera.SetPerspectiveFOV(glm::radians(FOV));
+					}
+
+					float nearClip = camera.camera.GetPerspectiveNearClip();
+					if (ImGui::DragFloat("near clip", &nearClip, 0.1f))
+					{
+						camera.camera.SetPerspectiveNearClip(nearClip);
+					}
+
+					float farClip = camera.camera.GetPerspectiveFarClip();
+					if (ImGui::DragFloat("far clip", &farClip, 0.1f))
+					{
+						camera.camera.SetPerspectiveFarClip(farClip);
+					}
+
+				}
+
+				ImGui::TreePop();
+			}
+
 		}
 
 	}
