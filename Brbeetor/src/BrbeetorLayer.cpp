@@ -63,8 +63,8 @@ namespace Brbanje
 
 			void OnUpdate(Timestep ts)
 			{
-				transform->transform[3][0] += direction.x * moveSpeed * (float)ts;
-				transform->transform[3][1] += direction.y * moveSpeed * (float)ts;
+				transform->position.x += direction.x * moveSpeed * (float)ts;
+				transform->position.y += direction.y * moveSpeed * (float)ts;
 				
 				if (Input::IsKeyPressed(BR_KEY_A))
 					direction.x = -1.0f;

@@ -39,7 +39,7 @@ namespace Brbanje
 
 		
 		Camera* mainCamera = nullptr;
-		glm::mat4* transform = nullptr;
+		glm::mat4 transform;
 		{
 			auto group = m_Registry.group<>(entt::get<TransformComponent, CameraComponent>);
 			for (auto entity : group)
@@ -48,7 +48,7 @@ namespace Brbanje
 				if (camera.primary)
 				{
 					mainCamera = &camera.camera;
-					transform = &trasformComp.transform;
+					transform = trasformComp.GetTransform();
 				}
 
 			}
@@ -57,7 +57,7 @@ namespace Brbanje
 		if (mainCamera)
 		{
 
-			Renderer2D::BeginScene(mainCamera->GetProjection(), *transform);
+			Renderer2D::BeginScene(mainCamera->GetProjection(), transform);
 
 			auto group = m_Registry.group<TransformComponent>(entt::get<SpriteComponent>);
 			for (auto entity : group)
@@ -66,7 +66,7 @@ namespace Brbanje
 				{
 					auto& [transform, sprite] = group.get<TransformComponent, SpriteComponent>(entity);
 
-					Renderer2D::DrawQuad(transform, sprite);
+					Renderer2D::DrawQuad(transform.GetTransform(), sprite);
 				}
 				
 			}

@@ -33,6 +33,8 @@ namespace Brbanje
 
 	Application* Brbanje::CreateApplication()
 	{
+		
+
 		return new Brbeetor();
 	}
 

@@ -22,13 +22,26 @@ namespace Brbanje
 	
 	struct TransformComponent
 	{
-		glm::mat4 transform = glm::mat4(1.0f);
+		glm::vec3 position = { 0.0f,0.0f,0.0f };
+		glm::vec3 size = { 1.0f,1.0f,1.0f };
+		glm::vec3 rotation = { 0.0f,0.0f,0.0f };
+
 		TransformComponent() = default;
-		TransformComponent(const glm::mat4 transform) :
-			transform(transform) {}
+		TransformComponent(const glm::vec3 position) :
+			position(position) {}
 		TransformComponent(const TransformComponent& other) = default;
-		operator glm::mat4& () { return transform; }
-		operator const glm::mat4& ()const { return transform; }
+		
+		glm::mat4 GetTransform()const
+		{
+			glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) *
+
+				glm::rotate(glm::mat4(1.0f), rotation.x, glm::vec3(1.0f, 0.0f, 0.0f)) *
+				glm::rotate(glm::mat4(1.0f), rotation.y, glm::vec3(0.0f, 1.0f, 0.0f)) *
+				glm::rotate(glm::mat4(1.0f), rotation.z, glm::vec3(0.0f, 0.0f, 1.0f)) *
+				glm::scale(glm::mat4(1.0f), size);
+			
+			return transform;
+		}
 	};
 
 	struct SpriteComponent
