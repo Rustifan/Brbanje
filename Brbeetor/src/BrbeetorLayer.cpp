@@ -5,7 +5,6 @@
 
 
 
-
 namespace Brbanje
 {
 
@@ -41,7 +40,7 @@ namespace Brbanje
 		
 		m_CameraEntity = m_ActiveScene->CreateEntity("Camera Entity");
 		auto& cam = m_CameraEntity.AddComponent<CameraComponent>();
-		cam.fixedAspectRatio = true;
+		
 		
 		m_SecondCamera = m_ActiveScene->CreateEntity("Second camera");
 		m_SecondCamera.AddComponent<CameraComponent>();
@@ -241,7 +240,7 @@ namespace Brbanje
 		ImGui::Begin("Controller");
 		ImGui::Text("Quad count: %d", Brbanje::Renderer2D::GetStats().QuadNumber);
 		ImGui::Text("Draw calls: %d", Brbanje::Renderer2D::GetStats().DrawCalls);
-		ImGui::ColorEdit4("Color", (float*)&m_Square.GetComponent<SpriteComponent>().color);
+		
 		
 		
 		

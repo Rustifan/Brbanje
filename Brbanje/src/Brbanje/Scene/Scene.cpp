@@ -100,9 +100,54 @@ namespace Brbanje
 			if (!cam.fixedAspectRatio)
 			{
 				cam.camera.ResizeViewport(width, height);
+				m_ViewportWidth = width;
+				m_ViewPortHeight = height;
 			}
 		}
 	}	
+
+	void Scene::DestroyEntity(Entity entity)
+	{
+		m_Registry.destroy(entity);
+	}
+
+	template<typename T>
+	void Scene::OnComponentAdded(T& component, Entity entity)
+	{
+		
+	}
+
+	template<>
+	void Scene::OnComponentAdded<SpriteComponent>(SpriteComponent& component, Entity entity)
+	{
+		
+
+	}
+	
+	template<>
+	void Scene::OnComponentAdded<CameraComponent>(CameraComponent& component, Entity entity)
+	{
+		component.camera.ResizeViewport(m_ViewportWidth, m_ViewPortHeight);
+	}
+
+	template<>
+	void Scene::OnComponentAdded<TagComponent>(TagComponent& component, Entity entity)
+	{
+
+	}
+
+	template<>
+	void Scene::OnComponentAdded<NativeScriptComponent>(NativeScriptComponent& component, Entity entity)
+	{
+
+	}
+
+	template<>
+	void Scene::OnComponentAdded<TransformComponent>(TransformComponent& component, Entity entity)
+	{
+
+	}
+
 	std::ostream& operator <<(std::ostream& stream, const TagComponent& tag) { stream << tag.tag; return stream; }
 
 }

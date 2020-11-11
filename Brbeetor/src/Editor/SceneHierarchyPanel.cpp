@@ -37,6 +37,25 @@ namespace Brbanje
 			
 		}
 
+		
+		// add entity button	
+		if (ImGui::BeginPopupContextWindow("add entity", ImGuiMouseButton_Right, false))
+		{
+			if (ImGui::MenuItem("add Entity"))
+			{
+				m_Scene->CreateEntity("new Entity");
+				
+			}
+			ImGui::EndPopup();
+			
+		}
+
+		
+		
+
+
+		
+		
 		ImGui::End();
 
 		
@@ -44,10 +63,29 @@ namespace Brbanje
 		ImGui::Begin("Properties");
 		
 		
+
 		
 		if (m_EntitySelectionContext)
 		{
 			DrawComponents(m_EntitySelectionContext);
+
+			if (ImGui::Button("Add Component"))
+			{
+				ImGui::OpenPopup("Add Component");
+			}
+			if (ImGui::BeginPopup("Add Component"))
+			{
+				if (ImGui::MenuItem("Sprite component"))
+				{
+					m_EntitySelectionContext.AddComponent<SpriteComponent>();
+				}
+				if (ImGui::MenuItem("Camera component"))
+				{
+					m_EntitySelectionContext.AddComponent<CameraComponent>();
+				}
+				ImGui::EndPopup();
+			}
+				
 		}
 
 		ImGui::End();
@@ -60,6 +98,17 @@ namespace Brbanje
 		ImGuiTreeNodeFlags flags = ((entity == m_EntitySelectionContext) ? ImGuiTreeNodeFlags_Selected : 0) | ImGuiTreeNodeFlags_OpenOnArrow;
 
 		bool opened = ImGui::TreeNodeEx((void*)(uint64_t)(uint32_t)entity, flags, tag.c_str());
+		bool isDeleted = false;
+
+		if (ImGui::BeginPopupContextItem())
+		{
+			if (ImGui::MenuItem("Delete entity"))
+			{
+				isDeleted = true;
+			}
+
+			ImGui::EndPopup();
+		}
 
 		if (ImGui::IsItemClicked())
 		{
@@ -71,6 +120,15 @@ namespace Brbanje
 			ImGui::TreePop();
 		}
 
+		if (isDeleted)
+		{
+			if (m_EntitySelectionContext == entity)
+			{
+				m_EntitySelectionContext = {};
+			}
+			m_Scene->DestroyEntity(entity);
+
+		}
 	}
 
 	static void DrawVec3Control(const std::string& label, glm::vec3& values, float resetValue = 0.0f, float columnWidth = 100.0f)
@@ -91,7 +149,7 @@ namespace Brbanje
 		ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0.0f, 0.0f));
 
 		float lineHeight = GImGui->Font->FontSize + GImGui->Style.FramePadding.y * 2.0f;
-		ImVec2 buttonSize = { lineHeight + 3.0f, lineHeight };
+		ImVec2 buttonSize = { lineHeight+3.0f, lineHeight };
 
 		//Color Testing
 		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.9f, 0.1f, 0.15f, 1.0f));
@@ -145,6 +203,8 @@ namespace Brbanje
 
 	void SceneHierarchyPanel::DrawComponents(Entity entity)
 	{
+		const ImGuiTreeNodeFlags componentNodeFlags = ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_AllowItemOverlap;
+		
 		if (entity.HasComponent<TagComponent>())
 		{
 			
@@ -164,14 +224,14 @@ namespace Brbanje
 		if (entity.HasComponent<TransformComponent>())
 		{
 			
-			if (ImGui::TreeNodeEx((void*)typeid(TransformComponent).hash_code(), ImGuiTreeNodeFlags_DefaultOpen, "Transform"))
+			if (ImGui::TreeNodeEx((void*)typeid(TransformComponent).hash_code(), componentNodeFlags, "Transform"))
 			{
 				TransformComponent& transform = entity.GetComponent<TransformComponent>();
 				
 				
 				
 
-				DrawVec3Control("Translation", transform.position);
+				DrawVec3Control("Position", transform.position);
 				
 				
 
@@ -191,7 +251,28 @@ namespace Brbanje
 		if (entity.HasComponent<CameraComponent>())
 		{
 
-			if (ImGui::TreeNodeEx((void*)typeid(CameraComponent).hash_code(), ImGuiTreeNodeFlags_DefaultOpen, "Camera"))
+			bool open = (ImGui::TreeNodeEx((void*)typeid(CameraComponent).hash_code(), componentNodeFlags, "Camera"));
+			
+			ImGui::SameLine(ImGui::GetWindowSize().x - 35.0f);
+
+			if (ImGui::Button("+"))
+			{
+
+				ImGui::OpenPopup("Remove Camera Component");
+			}
+
+			bool isDeleted = false;
+
+			if (ImGui::BeginPopup("Remove Camera Component"))
+			{
+				if (ImGui::MenuItem("Remove component"))
+				{
+					isDeleted = true;
+				}
+				ImGui::EndPopup();
+			}
+			
+			if (open)
 			{
 				CameraComponent& camera = entity.GetComponent<CameraComponent>();
 				
@@ -272,12 +353,40 @@ namespace Brbanje
 				ImGui::TreePop();
 			}
 
+			if (isDeleted)
+			{
+				m_EntitySelectionContext.RemoveComponent<CameraComponent>();
+			}
+
 		}
 
 		if (entity.HasComponent<SpriteComponent>())
 		{
-			if (ImGui::TreeNodeEx((void*)typeid(SpriteComponent).hash_code(), ImGuiTreeNodeFlags_DefaultOpen, "Sprite"))
+			bool open = (ImGui::TreeNodeEx((void*)typeid(SpriteComponent).hash_code(), componentNodeFlags, "Sprite"));
+			
+			ImGui::SameLine(ImGui::GetWindowSize().x - 35.0f);
+
+			if (ImGui::Button("+"))
 			{
+				
+				ImGui::OpenPopup("Remove component");
+			}
+
+			bool isDeleted = false;
+
+			if (ImGui::BeginPopup("Remove component"))
+			{
+				if (ImGui::MenuItem("Remove component"))
+				{
+					isDeleted = true;
+				}
+				ImGui::EndPopup();
+			}
+
+			if(open)
+			{
+				
+				
 				
 				SpriteComponent& sprite = entity.GetComponent<SpriteComponent>();
 				glm::vec4 color = sprite.color;
@@ -288,6 +397,11 @@ namespace Brbanje
 				
 
 				ImGui::TreePop();
+			}
+
+			if (isDeleted)
+			{
+				m_EntitySelectionContext.RemoveComponent<SpriteComponent>();
 			}
 		}
 

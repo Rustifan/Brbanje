@@ -36,8 +36,11 @@ namespace Brbanje
 		T& AddComponent(Args&&... args)
 		{
 			BR_CORE_ASSERT(!HasComponent<T>(), "it already have that component ")
+			T& component = m_Scene->m_Registry.emplace<T>(m_EntityHandle, std::forward<Args>(args)...);
 
-			return m_Scene->m_Registry.emplace<T>(m_EntityHandle, std::forward<Args>(args)...);
+			m_Scene->OnComponentAdded<T>(component, *this);
+
+			return component;
 		}
 
 		template <typename T>
@@ -50,6 +53,7 @@ namespace Brbanje
 
 		operator bool() const { return m_Scene != nullptr; }
 		operator uint32_t() const{ return (uint32_t)m_EntityHandle; }
+		operator entt::entity() const{ return m_EntityHandle; }
 		bool operator==(const Entity& other) const 
 		{ 
 			if (!m_Scene || !(other.m_Scene))
