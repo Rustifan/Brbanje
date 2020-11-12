@@ -13,11 +13,13 @@ IncludeDir["GLAD"] = "Brbanje/Vendor/GLAD/include"
 IncludeDir["ImGui"] = "Brbanje/Vendor/imgui"
 IncludeDir["glm"] = "Brbanje/Vendor/glm"
 IncludeDir["entt"] = "Brbanje/Vendor/entt/include"
+IncludeDir["yaml-cpp"] = "Brbanje/Vendor/yaml-cpp/include"
 
 group "Dependencies"
 include "Brbanje/Vendor/GLFW"
 include "Brbanje/Vendor/GLAD"
 include "Brbanje/Vendor/imgui"
+include "Brbanje/Vendor/yaml-cpp"
 group ""
 
 
@@ -43,9 +45,9 @@ project "Brbanje"
 	}
 
 	includedirs { "%{prj.name}/Vendor/spdlog/include", "%{prj.name}/src", 
-					IncludeDir["GLFW"], IncludeDir["GLAD"], IncludeDir["ImGui"],IncludeDir["glm"], IncludeDir["entt"]}
+					IncludeDir["GLFW"], IncludeDir["GLAD"], IncludeDir["ImGui"],IncludeDir["glm"], IncludeDir["entt"], IncludeDir["yaml-cpp"]}
 
-	links {"GLFW","GLAD","ImGui", "opengl32.lib"}
+	links {"GLFW","GLAD","ImGui", "opengl32.lib", "yaml-cpp"}
 
 	filter "system:windows"
 		
@@ -91,7 +93,7 @@ project "Sandbox"
 	}
 
 	includedirs { "Brbanje/Vendor/spdlog/include", "Brbanje/src",
-	IncludeDir["GLFW"], IncludeDir["GLAD"], IncludeDir["ImGui"], IncludeDir["glm"], IncludeDir["entt"]}
+	IncludeDir["GLFW"], IncludeDir["GLAD"], IncludeDir["ImGui"], IncludeDir["glm"], IncludeDir["entt"],IncludeDir["yaml-cpp"]}
 
 	links {"Brbanje"}
 
@@ -136,7 +138,7 @@ project "Brbeetor"
 	}
 
 	includedirs { "Brbanje/Vendor/spdlog/include", "Brbanje/src",
-	IncludeDir["GLFW"], IncludeDir["GLAD"], IncludeDir["ImGui"], IncludeDir["glm"], IncludeDir["entt"]}
+	IncludeDir["GLFW"], IncludeDir["GLAD"], IncludeDir["ImGui"], IncludeDir["glm"], IncludeDir["entt"],IncludeDir["yaml-cpp"]}
 
 	links {"Brbanje"}
 
