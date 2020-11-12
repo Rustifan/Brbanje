@@ -24,7 +24,7 @@ namespace Brbanje
 		virtual void OnDetach()override;
 		virtual void OnImGuiRender()override;
 		virtual void OnEvent(Event& e)override;
-		
+		void SetDarkThemeColor();
 		void Begin();
 		void End();
 		void SetBlockEvents(bool block) { m_BlockEvents = block; }

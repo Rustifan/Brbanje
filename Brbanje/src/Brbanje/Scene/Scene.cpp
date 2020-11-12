@@ -44,7 +44,7 @@ namespace Brbanje
 			auto group = m_Registry.group<>(entt::get<TransformComponent, CameraComponent>);
 			for (auto entity : group)
 			{
-				auto& [trasformComp, camera] = group.get<TransformComponent, CameraComponent>(entity);
+				auto [trasformComp, camera] = group.get<TransformComponent, CameraComponent>(entity);
 				if (camera.primary)
 				{
 					mainCamera = &camera.camera;
@@ -64,7 +64,7 @@ namespace Brbanje
 			{
 				if (m_Registry.has<SpriteComponent>(entity))
 				{
-					auto& [transform, sprite] = group.get<TransformComponent, SpriteComponent>(entity);
+					auto [transform, sprite] = group.get<TransformComponent, SpriteComponent>(entity);
 
 					Renderer2D::DrawQuad(transform.GetTransform(), sprite);
 				}

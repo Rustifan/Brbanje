@@ -39,6 +39,7 @@ namespace Brbanje
 	Brbanje::OpenGlVertexArray::~OpenGlVertexArray()
 	{
 		BR_PROFILE_FUNCTION;
+		glDeleteVertexArrays(1, &m_RendererID);
 	}
 
 	void Brbanje::OpenGlVertexArray::Bind()

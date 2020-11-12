@@ -128,6 +128,7 @@ namespace Brbanje
 	{
 		
 		BR_PROFILE_FUNCTION;
+		
 		s_Data.TextureShader->Attach();
 		s_Data.TextureShader->SetMat4("u_ViewProjection", camera.GetProjectionViewMatrix());
 		s_Data.QuadVertexBufferPointer = s_Data.QuadVertexBufferBase;
@@ -149,14 +150,20 @@ namespace Brbanje
 	{
 		BR_PROFILE_FUNCTION;
 
-		uint32_t dataSize = (uint8_t*)s_Data.QuadVertexBufferPointer - (uint8_t*)s_Data.QuadVertexBufferBase;
-		s_Data.QuadVertexBuffer->SetData(s_Data.QuadVertexBufferBase, dataSize);
+		if (s_Data.Stats.QuadNumber > 0)
+		{
+			uint32_t dataSize = (uint8_t*)s_Data.QuadVertexBufferPointer - (uint8_t*)s_Data.QuadVertexBufferBase;
+			s_Data.QuadVertexBuffer->SetData(s_Data.QuadVertexBufferBase, dataSize);
+			
 
-		Flush();
+			Flush();
+		}
+		
 	}
 
 	void Renderer2D::Flush()
 	{
+		
 		for (uint32_t i = 0; i < s_Data.TextureSlotIndex; ++i)
 		{
 			s_Data.TextureSlots[i]->Bind(i);
