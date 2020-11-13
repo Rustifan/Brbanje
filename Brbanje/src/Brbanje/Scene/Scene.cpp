@@ -5,6 +5,7 @@
 #include "Brbanje/Scene/ScriptableEntity.h"
 #include "Components.h"
 
+
 namespace Brbanje
 {
 	Scene::Scene()
@@ -15,7 +16,7 @@ namespace Brbanje
 
 	Scene::~Scene()
 	{
-
+		
 	}
 
 	void Scene::OnUpdate(Timestep ts)
@@ -105,6 +106,13 @@ namespace Brbanje
 			}
 		}
 	}	
+
+	void Scene::NewScene()
+	{
+		
+		m_Panel->m_EntitySelectionContext = {};
+		m_Registry.clear();
+	}
 
 	void Scene::DestroyEntity(Entity entity)
 	{

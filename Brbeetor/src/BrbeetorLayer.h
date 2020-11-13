@@ -1,10 +1,14 @@
 #pragma once
+#include "Editor/SceneHierarchyPanel.h"
 
 #include "Brbanje.h"
-#include "Editor/SceneHierarchyPanel.h"
+
+
 
 namespace Brbanje
 {
+	class SceneHierarchyPanel;
+
 	class BrbeetorLayer : public Layer
 	{
 	private:

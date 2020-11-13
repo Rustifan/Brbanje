@@ -1,6 +1,8 @@
 #pragma once
 
-#include "Scene.h"
+
+
+
 #include "Brbanje/Core/Core.h"
 #include "Brbanje/Core/Log.h"
 #include "entt.hpp"
@@ -8,7 +10,10 @@
 
 
 namespace Brbanje
-{
+{	
+	
+	class Scene;
+
 	class Entity
 	{
 	private:

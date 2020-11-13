@@ -3,6 +3,8 @@
 #include "Brbanje/Scene/Entity.h"
 #include "Brbanje/Core/Core.h"
 #include "Brbanje/Core/Log.h"
+#include  "Brbanje/Scene/Scene.h"
+
 #include "glm/gtc/type_ptr.hpp"
 #include <imgui.h>
 #include "imgui_internal.h"
@@ -17,6 +19,8 @@ namespace Brbanje
 	void SceneHierarchyPanel::SetContext(Ref<Scene> contex)
 	{
 		m_Scene = contex;
+		m_Scene->m_Panel = this;
+		
 	}
 
 	void SceneHierarchyPanel::OnImGuiRender()

@@ -23,8 +23,7 @@ namespace Brbanje
 
 		float m_AspectRatio;
 		ProjectionType m_ProjectionType = ProjectionType::Orthographic;
-	private:
-		void RecalculateProjectionMatrix();
+	
 
 	public:
 
@@ -42,7 +41,7 @@ namespace Brbanje
 		float GetOrthographicNearClip()const { return m_OrthographicNearClip; }
 		float GetOrthographicFarClip()const { return m_OrthographicFarClip; }
 		void SetOrthoGraphicNearClip(float nearClip) { m_OrthographicNearClip = nearClip; RecalculateProjectionMatrix(); }
-		void SetOrthoGraphicFarClip(float farClip) { m_OrthographicNearClip = farClip; RecalculateProjectionMatrix(); }
+		void SetOrthoGraphicFarClip(float farClip) { m_OrthographicFarClip = farClip; RecalculateProjectionMatrix(); }
 
 
 		float GetPerspectiveFOV()const { return m_PerspectiveFOV; }
@@ -51,6 +50,7 @@ namespace Brbanje
 		void SetPerspectiveNearClip(float nearClip) { m_PerspectiveNearClip = nearClip; RecalculateProjectionMatrix();}
 		float GetPerspectiveFarClip() { return m_PerspectiveFarClip; }
 		void SetPerspectiveFarClip(float farClip) { m_PerspectiveFarClip = farClip; RecalculateProjectionMatrix();}
-	
+		void RecalculateProjectionMatrix();
+
 	};
 }

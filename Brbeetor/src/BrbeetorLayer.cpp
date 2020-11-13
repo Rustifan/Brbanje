@@ -1,6 +1,7 @@
 #include "brpch.h"
 #include "BrbeetorLayer.h"
-
+#include "Brbanje/Scene/Serializer.h"
+#include "Editor/SceneHierarchyPanel.h"
 
 
 
@@ -236,7 +237,25 @@ namespace Brbanje
 
 				if (ImGui::MenuItem("Close"))
 					Brbanje::Application::getApplication().Close();
+
+				if (ImGui::MenuItem("Save"))
+				{
+					Serializer serializer(m_ActiveScene);
+					serializer.Serialize("test.brba");
+					m_ActiveScene->OnViewportResize(m_ViewportSize.x, m_ViewportSize.y);
+				}
+
+				if (ImGui::MenuItem("Load"))
+				{
+					Serializer serializer(m_ActiveScene);
+					serializer.Deserialize("test.brba");
+					m_ActiveScene->OnViewportResize(m_ViewportSize.x, m_ViewportSize.y);
+
+				}
+
+
 				ImGui::EndMenu();
+
 			}
 
 

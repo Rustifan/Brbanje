@@ -1,11 +1,12 @@
 #pragma once
 
 #include "Brbanje/Core/Core.h"
-#include  "Brbanje/Scene/Scene.h"
 #include "Brbanje/Scene/Entity.h"
 
 namespace Brbanje
 {
+	class Scene;
+
 	class SceneHierarchyPanel
 	{
 	private:
@@ -22,6 +23,6 @@ namespace Brbanje
 		SceneHierarchyPanel() = default;
 		void SetContext(Ref<Scene> constext);
 		void OnImGuiRender();
-
+		friend class Scene;
 	};
 }

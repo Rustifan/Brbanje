@@ -1,6 +1,6 @@
 #include "brpch.h"
 #include "Entity.h"
-
+#include "Scene.h"
 
 namespace Brbanje
 {

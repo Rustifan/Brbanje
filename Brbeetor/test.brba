@@ -1,0 +1,94 @@
+Scene: TheScene
+Entities:
+  - Entity:
+      Name: Kocka
+      Components:
+        transform component:
+          position:
+            - 0
+            - 3.5
+            - 0
+          rotation:
+            - 0
+            - 0
+            - 0
+          size:
+            - 1
+            - 1
+            - 1
+        sprite component:
+          color:
+            - 0
+            - 1
+            - 1
+            - 1
+  - Entity:
+      Name: Druga Kocka
+      Components:
+        transform component:
+          position:
+            - 0
+            - 0
+            - 0
+          rotation:
+            - 0
+            - 0
+            - 0
+          size:
+            - 1
+            - 1
+            - 1
+        sprite component:
+          color:
+            - 1
+            - 0
+            - 0.300000012
+            - 1
+  - Entity:
+      Name: Camera Entity
+      Components:
+        transform component:
+          position:
+            - 0
+            - 0
+            - 0
+          rotation:
+            - 0
+            - 0
+            - 0
+          size:
+            - 1
+            - 1
+            - 1
+        camera component:
+          primary: true
+          projection: 1
+          perspective FOV: 0.785398185
+          perspective near: 0.00999999978
+          perspective far: 1000
+          orthographic size: 10
+          orthographic near: -1
+          orthographic far: 1
+          fixed aspect ratio: false
+  - Entity:
+      Name: new Entity
+      Components:
+        transform component:
+          position:
+            - 0
+            - -2.4000001
+            - 0
+          rotation:
+            - 0
+            - 0.116937056
+            - 0
+          size:
+            - 1
+            - 2.70000005
+            - 1
+        sprite component:
+          color:
+            - 0.646086872
+            - 0.718146682
+            - 0.366005242
+            - 1
