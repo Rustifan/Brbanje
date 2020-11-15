@@ -3,7 +3,7 @@
 #include "entt.hpp"
 #include "Brbanje/Core/Timestep.h"
 #include "../../Brbeetor/src/Editor/SceneHierarchyPanel.h"
-
+#include <sstream>
 
 namespace Brbanje
 {	
@@ -17,8 +17,10 @@ namespace Brbanje
 	private:
 		entt::registry m_Registry;
 		SceneHierarchyPanel* m_Panel = nullptr;
-		
 		uint32_t m_ViewportWidth, m_ViewPortHeight;
+		
+		std::stringstream m_saveBuffer;
+		
 	public:
 		Scene();
 		~Scene();
@@ -29,7 +31,9 @@ namespace Brbanje
 		void NewScene();
 		template <typename T>
 		void OnComponentAdded(T& component, Entity entity);
-
+		const std::stringstream& GetSaveBuffer()const { return m_saveBuffer; }
+		void ClearSaveBuffer() { m_saveBuffer.str(std::string()); }
+		
 		friend class Entity;
 		friend class SceneHierarchyPanel;
 		friend class Serializer;

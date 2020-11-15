@@ -27,7 +27,7 @@ namespace Brbanje
 		Entity m_CameraEntity;
 		Entity m_SecondCamera;
 		SceneHierarchyPanel m_SceneHierarchy;
-
+		std::string m_SavePath = "";
 
 		struct ProfileResult
 		{
@@ -44,7 +44,12 @@ namespace Brbanje
 		void OnUpdate(Brbanje::Timestep ts)override;
 		void OnEvent(Brbanje::Event& event)override;
 		void OnImGuiRender()override;
-
+		void OnKeyPress();
+		void LoadScene();
+		void SaveScene();
+		void SaveAsScene();
+		void NewScene();
+		void Quit();
 	};
 
 }

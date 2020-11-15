@@ -48,8 +48,8 @@ namespace Brbanje
 			uint32_t DrawCalls;
 			uint32_t QuadNumber;
 
-			uint32_t VertexCount() { return QuadNumber * 4; }
-			uint32_t IndexCount() { return QuadNumber * 6; }
+			uint32_t VertexCount() const{ return QuadNumber * 4; }
+			uint32_t IndexCount()const { return QuadNumber * 6; }
 		};
 
 		static const Statistics &GetStats();

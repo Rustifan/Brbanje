@@ -110,10 +110,7 @@ namespace Brbanje
 
 	bool Application::OnKeyPress(KeyPressedEvent& e)
 	{
-		if (e.GetKeyCode() == 256)
-		{
-			m_Running = false;
-		}
+		
 		return false;
 	}
 

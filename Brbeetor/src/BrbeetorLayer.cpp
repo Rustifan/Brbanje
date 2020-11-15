@@ -2,8 +2,8 @@
 #include "BrbeetorLayer.h"
 #include "Brbanje/Scene/Serializer.h"
 #include "Editor/SceneHierarchyPanel.h"
-
-
+#include "Brbanje/Utils/FileDialog.h"
+#include <optional>
 
 
 namespace Brbanje
@@ -12,7 +12,6 @@ namespace Brbanje
 	BrbeetorLayer::BrbeetorLayer() : Layer("BrbeetorLayer"), m_CameraController(1280.0f / 720.0f, true)
 	{
 		
-
 	}
 
 	void BrbeetorLayer::OnAttach()
@@ -32,20 +31,9 @@ namespace Brbanje
 
 		m_SceneHierarchy.SetContext(m_ActiveScene);
 
-		m_Square = m_ActiveScene->CreateEntity("Kocka");
-	
-		m_Square.AddComponent<SpriteComponent>(glm::vec4(0.0f, 1.0f, 1.0f, 1.0f));
+		
 
-		auto& redSquare = m_ActiveScene->CreateEntity("Druga Kocka");
-		redSquare.AddComponent<SpriteComponent>(glm::vec4(1.0f, 0.0f, 0.3f, 1.0f));
 		
-		m_CameraEntity = m_ActiveScene->CreateEntity("Camera Entity");
-		auto& cam = m_CameraEntity.AddComponent<CameraComponent>();
-		
-		
-		m_SecondCamera = m_ActiveScene->CreateEntity("Second camera");
-		m_SecondCamera.AddComponent<CameraComponent>();
-		m_SecondCamera.GetComponent<CameraComponent>().primary = false;
 
 		class CameraController: public ScriptableEntity
 		{
@@ -95,8 +83,7 @@ namespace Brbanje
 
 		};
 
-		m_CameraEntity.AddComponent<NativeScriptComponent>().Bind<CameraController>();
-		m_SecondCamera.AddComponent<NativeScriptComponent>().Bind<CameraController>();
+		
 		
 	}
 
@@ -110,7 +97,7 @@ namespace Brbanje
 		BR_PROFILE_FUNCTION;
 		//update
 
-
+		OnKeyPress();
 
 		if (m_IsViewportFocused)
 		{
@@ -235,22 +222,32 @@ namespace Brbanje
 			if (ImGui::BeginMenu("File"))
 			{
 
-				if (ImGui::MenuItem("Close"))
-					Brbanje::Application::getApplication().Close();
-
-				if (ImGui::MenuItem("Save"))
+				if (ImGui::MenuItem("New (CTRL + N)"))
 				{
-					Serializer serializer(m_ActiveScene);
-					serializer.Serialize("test.brba");
-					m_ActiveScene->OnViewportResize(m_ViewportSize.x, m_ViewportSize.y);
+					NewScene();
 				}
 
-				if (ImGui::MenuItem("Load"))
+				if (ImGui::MenuItem("Open (CTRL + O)"))
 				{
-					Serializer serializer(m_ActiveScene);
-					serializer.Deserialize("test.brba");
-					m_ActiveScene->OnViewportResize(m_ViewportSize.x, m_ViewportSize.y);
+					LoadScene();
 
+				}
+
+				if (ImGui::MenuItem("Save (CTRL + S)"))
+				{
+					SaveScene();
+				}
+
+				if (ImGui::MenuItem("Save As (CTRL + SHIFT + S)"))
+				{
+					SaveAsScene();
+				}
+
+				
+
+				if (ImGui::MenuItem("Close (CTRL + SHIFT + Q)"))
+				{
+					Quit();
 				}
 
 
@@ -265,9 +262,10 @@ namespace Brbanje
 		//Settings
 
 		ImGui::Begin("Controller");
-		ImGui::Text("Quad count: %d", Brbanje::Renderer2D::GetStats().QuadNumber);
-		ImGui::Text("Draw calls: %d", Brbanje::Renderer2D::GetStats().DrawCalls);
-		
+		ImGui::Text("Quad count: %d", Renderer2D::GetStats().QuadNumber);
+		ImGui::Text("Draw calls: %d", Renderer2D::GetStats().DrawCalls);
+		ImGui::Text("Vertex count: %d", Renderer2D::GetStats().VertexCount());
+		ImGui::Text("Index count: %d", Renderer2D::GetStats().IndexCount());
 		
 		
 		
@@ -304,6 +302,144 @@ namespace Brbanje
 		m_SceneHierarchy.OnImGuiRender();
 
 		ImGui::End();
+		
+	}
+
+	void BrbeetorLayer::LoadScene()
+	{
+		
+		Serializer serializer(m_ActiveScene);
+		std::stringstream ss;
+		serializer.SerializeBinaryToBuffer(&ss);
+		if (ss.str().compare(m_ActiveScene->GetSaveBuffer().str()) != 0)
+		{
+			if (FileDialog::YesNoWindow("Save scene?", "You changed scene since last save. Do you want to save scene"))
+			{
+				SaveScene();
+			}
+		}
+		
+
+		std::optional<std::string> loadPath = FileDialog::OpenFile("Brbanje file(*.brb)\0*brb\0");
+		if (loadPath)
+		{
+			serializer.Deserialize(loadPath.value());
+			m_ActiveScene->OnViewportResize(m_ViewportSize.x, m_ViewportSize.y);
+			m_SavePath = loadPath.value();
+		}
+		
+	}
+
+	void BrbeetorLayer::SaveAsScene()
+	{
+		Serializer serializer(m_ActiveScene);
+		std::optional<std::string> filePath = FileDialog::SaveFile("Brbanje file(*.brb)\0*.brb\0");
+		if (filePath)
+		{
+			std::string ext = filePath.value().substr(filePath.value().length() - 4, 4);
+			if (ext.compare(".brb") == 0)
+			{
+				serializer.Serialize(filePath.value());
+				m_SavePath = filePath.value();
+			}
+			else
+			{
+				serializer.Serialize(filePath.value() + ".brb");
+				m_SavePath = filePath.value() + ".brb";
+			}
+			m_ActiveScene->OnViewportResize(m_ViewportSize.x, m_ViewportSize.y);
+			
+		}
+		
+	}
+
+	void BrbeetorLayer::SaveScene()
+	{
+		if (m_SavePath.compare("") == 0)
+		{
+			SaveAsScene();
+		}
+		else
+		{
+			Serializer serializer(m_ActiveScene);
+			serializer.Serialize(m_SavePath);
+		}
+	}
+
+	void BrbeetorLayer::NewScene()
+	{
+		Serializer serializer(m_ActiveScene);
+		std::stringstream ss;
+		serializer.SerializeBinaryToBuffer(&ss);
+		if (ss.str().compare(m_ActiveScene->GetSaveBuffer().str()) != 0)
+		{
+			if (FileDialog::YesNoWindow("Save scene?", "You changed scene since last save. Do you want to save scene?"))
+			{
+				SaveScene();
+			}
+		}
+		
+		
+		
+		m_ActiveScene->NewScene();
+		m_ActiveScene->OnViewportResize(m_ViewportSize.x, m_ViewportSize.y);
+		m_SavePath = "";
+		m_ActiveScene->ClearSaveBuffer();
+		
+		
+
+	}
+
+	void BrbeetorLayer::Quit()
+	{
+		Serializer serializer(m_ActiveScene);
+		std::stringstream ss;
+		serializer.SerializeBinaryToBuffer(&ss);
+		if (ss.str().compare(m_ActiveScene->GetSaveBuffer().str()) != 0)
+		{
+			if (FileDialog::YesNoWindow("Save scene?", "You changed scene since last save. Do you want to save scene?"))
+			{
+				SaveScene();
+			}
+		}
+
+		if (FileDialog::YesNoWindow("Quit?", "Do you really want to quit?"))
+		{
+			Application::getApplication().Close();
+		}
+	}
+
+	void BrbeetorLayer::OnKeyPress()
+	{
+		bool ctrlPress = Input::IsKeyPressed(BR_KEY_LEFT_CONTROL) || Input::IsKeyPressed(BR_KEY_RIGHT_CONTROL);
+		bool shiftPress = Input::IsKeyPressed(BR_KEY_LEFT_SHIFT) || Input::IsKeyPressed(BR_KEY_RIGHT_SHIFT);
+
+		//New Scene
+		if (ctrlPress && Input::IsKeyPressed(BR_KEY_N))
+		{
+			NewScene();
+		}
+
+		if (ctrlPress && shiftPress && Input::IsKeyPressed(BR_KEY_S))
+		{
+			SaveAsScene();
+		}
+
+		if (ctrlPress && Input::IsKeyPressed(BR_KEY_S))
+		{
+			SaveScene();
+		}
+
+		if (ctrlPress && Input::IsKeyPressed(BR_KEY_O))
+		{
+			LoadScene();
+		}
+
+		if (ctrlPress && shiftPress && Input::IsKeyPressed(BR_KEY_Q))
+		{
+			Quit();
+		}
+
 		
 	}
 

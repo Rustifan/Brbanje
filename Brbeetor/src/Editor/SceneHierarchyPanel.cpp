@@ -153,6 +153,7 @@ namespace Brbanje
 		if (ImGui::Button("X", buttonSize))
 		{
 			values.x = resetValue;
+			
 		}
 		ImGui::PopFont();
 		ImGui::PopStyleColor(3);
@@ -269,7 +270,7 @@ namespace Brbanje
 
 			auto& tag = entity.GetComponent<TagComponent>().tag;
 
-			char buffer[256];
+			char buffer[100];
 			memset(buffer, 0, sizeof(buffer));
 			strcpy_s(buffer, sizeof(buffer), tag.c_str());
 
