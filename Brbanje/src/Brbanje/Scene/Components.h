@@ -4,6 +4,7 @@
 #include "Brbanje/Renderer/Camera.h"
 #include "Brbanje/Scene/SceneCamera.h"
 #include "Brbanje/Scene/ScriptableEntity.h"
+#include "Brbanje/Renderer/Texture.h"
 
 namespace Brbanje
 {
@@ -26,6 +27,7 @@ namespace Brbanje
 		glm::vec3 size = { 1.0f,1.0f,1.0f };
 		glm::vec3 rotation = { 0.0f,0.0f,0.0f };
 
+
 		TransformComponent() = default;
 		TransformComponent(const glm::vec3 position) :
 			position(position) {}
@@ -47,6 +49,9 @@ namespace Brbanje
 	struct SpriteComponent
 	{
 		glm::vec4 color = {1.0f, 1.0f, 1.0f, 1.0f};
+		Ref<Texture2D> texture;
+		float tilingFactor = 1.0f;
+
 		SpriteComponent() = default;
 		SpriteComponent(const glm::vec4& color) :
 			color(color) {}

@@ -26,6 +26,7 @@ namespace Brbanje
 		void SetSize(const glm::vec2& size) { m_Size = size; }
 		void OnRender();
 		void OnUpdate(Timestep ts);
+		void OnMove();
 		bool isMoving() { return m_Move;	}
 	};
 }

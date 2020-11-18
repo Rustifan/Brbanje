@@ -283,7 +283,7 @@ namespace Brbanje
 		
 
 		
-
+		m_ActiveScene->SetMouseHoveredOnVieport(ImGui::IsWindowHovered());
 		
 
 		

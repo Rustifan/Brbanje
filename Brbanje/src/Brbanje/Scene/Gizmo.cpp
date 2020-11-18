@@ -26,13 +26,14 @@ namespace Brbanje
 	{
 		
 		
-		Renderer2D::DrawQuad(glm::vec3(transform->position.x, transform->position.y, transform->position.z+0.01f), m_Size, m_Color);
+		Renderer2D::DrawQuad(glm::vec3(transform->position.x, transform->position.y, 
+			m_Entity.GetScene()->GetMainCamera()->GetOrthographicFarClip()-0.01f), m_Size, m_Color);
 
 	}
 
 	void Gizmo::OnUpdate(Timestep ts)
 	{
-		if (m_Alpha + m_FadeSpeed*ts >= 0.8f || m_Alpha + m_FadeSpeed*ts <= 0.5f)
+		if (m_Alpha  >= 0.8f || m_Alpha  <= 0.5f)
 		{
 			m_FadeSpeed = -m_FadeSpeed;
 		}
@@ -59,6 +60,11 @@ namespace Brbanje
 			m_Move = false;
 		}
 		
+		
+	}
+
+	void Gizmo::OnMove()
+	{
 		if (m_Move)
 		{
 			glm::vec2 mousePos = m_Entity.GetScene()->GetSceneMousePos();

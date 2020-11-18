@@ -63,7 +63,10 @@ namespace Brbanje
 			out << YAML::Key << "sprite component" << YAML::Value;
 			out << YAML::BeginMap;
 			out << YAML::Key << "color" << YAML::Value << sprite.color;
+			out << YAML::Key << "texture" << YAML::Value << std::string(sprite.texture ? sprite.texture->GetFilePath().c_str() : "No texture");
+			out << YAML::Key << "tiling factor" << YAML::Value << sprite.tilingFactor;
 			out << YAML::EndMap;
+
 		}
 		if (entity.HasComponent<CameraComponent>())
 		{
@@ -178,6 +181,12 @@ namespace Brbanje
 					color.b = spriteNode["color"][2].as<float>();
 					color.a = spriteNode["color"][3].as<float>();
 					sprite.color = color;
+					
+					if (spriteNode["texture"].as<std::string>().compare(std::string("No texture")) != 0)
+					{
+						sprite.texture = m_Scene->GetTextureFromTextureMap(spriteNode["texture"].as<std::string>());
+					}
+					sprite.tilingFactor = spriteNode["tiling factor"].as<float>();
 
 				}
 
@@ -220,6 +229,8 @@ namespace Brbanje
 		//Sprite
 		bool hasSprite;
 		glm::vec4 color;
+		char spritepath[200];
+		float tilingFactor;
 		//Camera
 		bool hasCamera;
 		bool isPrimary;
@@ -268,11 +279,17 @@ namespace Brbanje
 				data.hasSprite = true;
 				SpriteComponent& sprite = entity.GetComponent<SpriteComponent>();
 				data.color = sprite.color;
+				std::string spriteFilePath = sprite.texture ? sprite.texture->GetFilePath() : "no texture";
+				strcpy(data.spritepath, spriteFilePath.c_str());
+				data.tilingFactor = sprite.tilingFactor;
+
 			}
 			else
 			{
 				data.hasSprite = false;
 				data.color = { 0,0,0,0 };
+				strcpy(data.spritepath, "NoSprite");
+				data.tilingFactor = 0;
 			}
 			if (entity.HasComponent<CameraComponent>())
 			{
@@ -341,6 +358,11 @@ namespace Brbanje
 			{
 				SpriteComponent& sprite = entity.AddComponent<SpriteComponent>();
 				sprite.color = data.color;
+				if (std::string(data.spritepath).compare("no texture") != 0)
+				{
+					sprite.texture = m_Scene->GetTextureFromTextureMap(data.spritepath);
+				}
+				sprite.tilingFactor = data.tilingFactor;
 
 			}
 			if (data.hasCamera)
@@ -402,11 +424,16 @@ namespace Brbanje
 				data.hasSprite = true;
 				SpriteComponent& sprite = entity.GetComponent<SpriteComponent>();
 				data.color = sprite.color;
+				std::string spriteFilePath = sprite.texture ? sprite.texture->GetFilePath() : "no texture";
+				strcpy(data.spritepath, spriteFilePath.c_str());
+				data.tilingFactor = sprite.tilingFactor;
 			}
 			else
 			{
-				data.hasSprite = false;
+				
 				data.color = { 0,0,0,0 };
+				strcpy(data.spritepath, "NoSprite");
+				data.tilingFactor = 0;
 			}
 			if (entity.HasComponent<CameraComponent>())
 			{

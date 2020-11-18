@@ -13,7 +13,7 @@ namespace Brbanje
 	{
 		GLFWwindow* window = (GLFWwindow*)Application::getApplication().getWindow().GetNativeWindow();
 		HWND nativeWindow = glfwGetWin32Window(window);
-		char filepath[50];
+		char filepath[200];
 		OPENFILENAMEA ofn;
 		ZeroMemory(&filepath, sizeof(filepath));
 		ZeroMemory(&ofn, sizeof(ofn));
@@ -21,7 +21,7 @@ namespace Brbanje
 		ofn.hwndOwner = nativeWindow;
 		ofn.lpstrFilter = filter;
 		ofn.lpstrFile = filepath;
-		ofn.nMaxFile = 50;
+		ofn.nMaxFile = 200;
 		ofn.lpstrTitle = "Open File";
 		ofn.Flags = OFN_DONTADDTORECENT | OFN_FILEMUSTEXIST | OFN_NOCHANGEDIR;
 		if (GetOpenFileNameA(&ofn))
@@ -39,7 +39,7 @@ namespace Brbanje
 	{
 		GLFWwindow* window = (GLFWwindow*)Application::getApplication().getWindow().GetNativeWindow();
 		HWND nativeWindow = glfwGetWin32Window(window);
-		char filepath[50];
+		char filepath[200];
 		OPENFILENAMEA ofn;
 		ZeroMemory(&filepath, sizeof(filepath));
 		ZeroMemory(&ofn, sizeof(ofn));
@@ -47,7 +47,7 @@ namespace Brbanje
 		ofn.hwndOwner = nativeWindow;
 		ofn.lpstrFilter = filter;
 		ofn.lpstrFile = filepath;
-		ofn.nMaxFile = 50;
+		ofn.nMaxFile = 200;
 		ofn.lpstrTitle = "Save Scene";
 		ofn.Flags = OFN_DONTADDTORECENT | OFN_FILEMUSTEXIST | OFN_NOCHANGEDIR;
 		if (GetSaveFileNameA(&ofn))

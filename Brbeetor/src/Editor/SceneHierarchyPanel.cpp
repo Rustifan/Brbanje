@@ -8,6 +8,7 @@
 #include "glm/gtc/type_ptr.hpp"
 #include <imgui.h>
 #include "imgui_internal.h"
+#include "Brbanje/Utils/FileDialog.h"
 
 namespace Brbanje
 {
@@ -429,13 +430,71 @@ namespace Brbanje
 		
 		
 		
-		DrawComponent<SpriteComponent>("Sprite Component", m_EntitySelectionContext, [](SpriteComponent& sprite) {
+		DrawComponent<SpriteComponent>("Sprite Component", m_EntitySelectionContext, [this](SpriteComponent& sprite) {
 
 			glm::vec4 color = sprite.color;
 			if (ImGui::ColorEdit4("Color", (float*)&color))
 			{
 				sprite.color = color;
 			}
+
+			std::string text;
+			if (sprite.texture)
+			{
+				text = sprite.texture->GetFilePath();
+			}
+			else
+			{
+				text = "No Texture";
+			}
+			char buffer[100];
+			memset(buffer, 0, sizeof(buffer));
+			strcpy_s(buffer, sizeof(buffer), text.c_str());
+			
+
+			if (ImGui::InputText("##Texture", buffer, sizeof(buffer), ImGuiInputTextFlags_ReadOnly));
+			
+				
+				if (ImGui::BeginPopupContextItem("##Texture"))
+				{
+					if (ImGui::MenuItem("Remove texture"))
+					{
+						sprite.texture = {};
+					}
+
+					ImGui::EndPopup();
+				}
+				
+
+					
+				
+			
+			ImGui::SameLine();
+			if (ImGui::Button("Set Texture"))
+			{
+				
+				std::optional<std::string> TextureFilePath = FileDialog::OpenFile("Portable Network Graphics(*.png)\0*.png\0");
+				if (TextureFilePath)
+				{
+					sprite.texture = m_Scene->GetTextureFromTextureMap(TextureFilePath.value());
+				}
+				
+
+			}
+			
+			ImGui::Columns(2);
+			ImGui::SetColumnWidth(0, 100);
+			ImGui::Text("Tiling factor");
+			
+			ImGui::NextColumn();
+			float tiling = sprite.tilingFactor;
+			if (ImGui::DragFloat("##tiling factor", &tiling, 0.1f, 1.0f))
+			{
+				sprite.tilingFactor = tiling;
+			}
+			ImGui::Columns(1);
+			
+			
 
 			});
 	}

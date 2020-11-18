@@ -18,7 +18,7 @@ namespace Brbanje
 
 	Scene::~Scene()
 	{
-		
+		m_TextureMap.clear();
 	}
 
 	void Scene::OnUpdate(Timestep ts)
@@ -64,7 +64,15 @@ namespace Brbanje
 
 			Renderer2D::BeginScene(m_MainCamera->GetProjection(), transform);
 
+			
+			
+			
+			m_Gizmo.OnMove();
+
 			auto group = m_Registry.group<TransformComponent>(entt::get<SpriteComponent>);
+			
+			
+
 			for (auto entity : group)
 			{
 				if (m_Registry.has<SpriteComponent>(entity))
@@ -72,21 +80,31 @@ namespace Brbanje
 					auto [transform, sprite] = group.get<TransformComponent, SpriteComponent>(entity);
 
 					
-					if (Input::IsMouseButtonPressed(0))
+					//Selection 
+					if (Input::IsMouseButtonPressed(0) && m_MouseHoveredOnVIewport)
 					{
 
 						
-						
 							glm::vec2 mousePos = GetSceneMousePos();
-							if (mousePos.x > transform.position.x - transform.size.x / 2 &&
-								mousePos.x < transform.position.x + transform.size.x / 2 &&
-								mousePos.y > transform.position.y - transform.size.y / 2 &&
-								mousePos.y < transform.position.y + transform.size.y / 2)
+							if (IsClicked(transform, mousePos))
 							{
 								
 								if (!m_Gizmo.isMoving())
 								{
-									m_Panel->m_EntitySelectionContext = Entity(entity, this);
+									if (m_Panel->m_EntitySelectionContext)
+									{
+										auto& selectedTransform = m_Panel->m_EntitySelectionContext.GetComponent<TransformComponent>();
+										if (!IsClicked(selectedTransform, mousePos) || transform.position.z > selectedTransform.position.z)
+										{
+											m_Panel->m_EntitySelectionContext = Entity(entity, this);
+
+										}
+									}
+									else
+									{
+										m_Panel->m_EntitySelectionContext = Entity(entity, this);
+
+									}
 
 								}
 							
@@ -94,9 +112,23 @@ namespace Brbanje
 							}
 						
 					}
+
+					//Sprite
 					
-					Renderer2D::DrawQuad(transform.GetTransform(), sprite);
+					if (sprite.texture)
+					{
+						
+						Renderer2D::DrawQuad(transform.GetTransform(), sprite.texture, sprite.tilingFactor, sprite.color);
+					}
+					else
+					{
+						Renderer2D::DrawQuad(transform.GetTransform(), sprite);
+
+					}
+
 				}
+
+			
 				
 			}
 
@@ -105,7 +137,9 @@ namespace Brbanje
 				m_Gizmo.SetEntity(m_Panel->m_EntitySelectionContext);
 				m_Gizmo.OnUpdate(ts);
 				m_Gizmo.OnRender();
+
 			}
+
 			
 
 			Renderer2D::EndScene();
@@ -177,6 +211,31 @@ namespace Brbanje
 			return { mousePos.x,mousePos.y };
 		}
 		return { 0,0 };
+	}
+
+	bool Scene::IsClicked(TransformComponent& transform, const glm::vec2& mousePos)
+	{
+		return
+			mousePos.x > transform.position.x - transform.size.x / 2 &&
+			mousePos.x < transform.position.x + transform.size.x / 2 &&
+			mousePos.y > transform.position.y - transform.size.y / 2 &&
+			mousePos.y < transform.position.y + transform.size.y / 2;
+
+	}
+
+	Ref<Texture2D> Scene::GetTextureFromTextureMap(const std::string& filePath)
+	{
+		if (m_TextureMap.find(filePath) != m_TextureMap.end())
+		{
+			
+
+			return m_TextureMap[filePath];
+		}
+
+		
+		Ref<Texture2D> tex = m_TextureMap[filePath] = Texture2D::Create(filePath);
+		return tex;
+
 	}
 
 	template<typename T>
