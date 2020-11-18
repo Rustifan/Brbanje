@@ -8,6 +8,10 @@ namespace Brbanje
 	{
 	public:
 		enum class ProjectionType { Perspective = 0, Orthographic = 1 };
+		struct Bounds
+		{
+			float left, right, down, up;
+		};
 	private:
 
 		uint32_t m_Width = 1080, m_Height = 720;
@@ -23,7 +27,9 @@ namespace Brbanje
 
 		float m_AspectRatio;
 		ProjectionType m_ProjectionType = ProjectionType::Orthographic;
-	
+		Bounds m_Bounds;
+		
+		
 
 	public:
 
@@ -51,6 +57,8 @@ namespace Brbanje
 		float GetPerspectiveFarClip() { return m_PerspectiveFarClip; }
 		void SetPerspectiveFarClip(float farClip) { m_PerspectiveFarClip = farClip; RecalculateProjectionMatrix();}
 		void RecalculateProjectionMatrix();
+
+		const Bounds& GetBounds()const { return m_Bounds; }
 
 	};
 }

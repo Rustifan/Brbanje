@@ -24,11 +24,12 @@ namespace Brbanje
 		Entity(entt::entity entityHandle, Scene* scene);	
 		Entity() = default;
 
+		Scene* GetScene() { return m_Scene; }
 		template<typename T>
 		T& GetComponent()
 		{
 			BR_CORE_ASSERT(HasComponent<T>(), "Entity does not have component ")
-			return m_Scene->m_Registry.get<T>(m_EntityHandle);
+				return m_Scene->m_Registry.get<T>(m_EntityHandle);
 		}
 		
 		template<typename T>

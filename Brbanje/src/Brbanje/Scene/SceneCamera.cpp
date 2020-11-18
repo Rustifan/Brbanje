@@ -51,6 +51,10 @@ namespace Brbanje
 			float right = m_AspectRatio * m_Size * 0.5f;
 			float down = -m_Size * 0.5f;
 			float up = m_Size * 0.5f;
+			m_Bounds.left = left;
+			m_Bounds.right = right;
+			m_Bounds.down = down;
+			m_Bounds.up = up;
 			m_Projection = glm::ortho(left, right, down, up, m_OrthographicNearClip, m_OrthographicFarClip);
 			break;
 		}

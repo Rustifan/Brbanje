@@ -273,14 +273,25 @@ namespace Brbanje
 		
 		ImGui::End();
 
+	
+
 		//viewport
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0, 0));
 		
 		
 		ImGui::Begin("Viewport");
 		
+
+		
+
+		
+
+		
 		m_IsViewportFocused = ImGui::IsWindowFocused();
 		m_IsViewportHovered = ImGui::IsWindowHovered();
+
+		
+
 
 		Application::getApplication().GetImGuiLayer()->SetBlockEvents(!m_IsViewportFocused || !m_IsViewportHovered);
 		
@@ -293,9 +304,16 @@ namespace Brbanje
 			m_Framebuffer->Resize(m_ViewportSize.x, m_ViewportSize.y);
 			m_CameraController.OnResize(m_ViewportSize.x, m_ViewportSize.y);
 			m_ActiveScene->OnViewportResize(m_ViewportSize.x, m_ViewportSize.y);
-		}
-		ImGui::Image((void*)m_Framebuffer->GetColorAttachmentId(), ImVec2{ m_ViewportSize.x, m_ViewportSize.y }, { 0,1 }, { 1,0 });
 			
+		}
+
+		
+
+		ImGui::Image((void*)m_Framebuffer->GetColorAttachmentId(), ImVec2{ m_ViewportSize.x, m_ViewportSize.y }, { 0,1 }, { 1,0 });
+		
+		m_MainWindowPos = ImGui::GetItemRectMin();
+		m_ActiveScene->SetViewportWindowPos(*((glm::vec2*)& m_MainWindowPos));
+
 		ImGui::End();
 		ImGui::PopStyleVar();
 
@@ -440,6 +458,9 @@ namespace Brbanje
 			Quit();
 		}
 
+		
+		
+	
 		
 	}
 

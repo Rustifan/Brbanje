@@ -4,7 +4,7 @@
 #include "Brbanje/Core/Core.h"
 #include "Brbanje/Core/Log.h"
 #include  "Brbanje/Scene/Scene.h"
-
+#include "Brbanje/Core/Input.h"
 #include "glm/gtc/type_ptr.hpp"
 #include <imgui.h>
 #include "imgui_internal.h"
@@ -323,7 +323,7 @@ namespace Brbanje
 
 		ImGui::PopItemWidth();
 
-		DrawComponent<TransformComponent>("Transform Component", m_EntitySelectionContext, [](TransformComponent& transform) {
+		DrawComponent<TransformComponent>("Transform Component", m_EntitySelectionContext, [this,&entity](TransformComponent& transform) {
 
 			DrawVec3Control("Position", transform.position);
 
@@ -337,6 +337,7 @@ namespace Brbanje
 
 			DrawVec3Control("Size", transform.size, 1.0f, 100.f);
 
+			
 
 			});
 		

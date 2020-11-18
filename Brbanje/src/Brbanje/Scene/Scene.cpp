@@ -1,9 +1,11 @@
 #include "brpch.h"
 #include "Scene.h"
+#include "imgui.h"
 #include "Brbanje/Renderer/Renderer2D.h"
 #include "Entity.h"
 #include "Brbanje/Scene/ScriptableEntity.h"
 #include "Components.h"
+#include "Brbanje/Core/Input.h"
 
 
 namespace Brbanje
@@ -39,7 +41,7 @@ namespace Brbanje
 			});
 
 		
-		Camera* mainCamera = nullptr;
+		m_MainCamera = nullptr;
 		glm::mat4 transform;
 		{
 			auto group = m_Registry.group<>(entt::get<TransformComponent, CameraComponent>);
@@ -48,17 +50,19 @@ namespace Brbanje
 				auto [trasformComp, camera] = group.get<TransformComponent, CameraComponent>(entity);
 				if (camera.primary)
 				{
-					mainCamera = &camera.camera;
+					m_MainCamera = &camera.camera;
+					
 					transform = trasformComp.GetTransform();
+					m_MainCameraTransform = &trasformComp;
 				}
 
 			}
 		}
 
-		if (mainCamera)
+		if (m_MainCamera)
 		{
 
-			Renderer2D::BeginScene(mainCamera->GetProjection(), transform);
+			Renderer2D::BeginScene(m_MainCamera->GetProjection(), transform);
 
 			auto group = m_Registry.group<TransformComponent>(entt::get<SpriteComponent>);
 			for (auto entity : group)
@@ -67,10 +71,42 @@ namespace Brbanje
 				{
 					auto [transform, sprite] = group.get<TransformComponent, SpriteComponent>(entity);
 
+					
+					if (Input::IsMouseButtonPressed(0))
+					{
+
+						
+						
+							glm::vec2 mousePos = GetSceneMousePos();
+							if (mousePos.x > transform.position.x - transform.size.x / 2 &&
+								mousePos.x < transform.position.x + transform.size.x / 2 &&
+								mousePos.y > transform.position.y - transform.size.y / 2 &&
+								mousePos.y < transform.position.y + transform.size.y / 2)
+							{
+								
+								if (!m_Gizmo.isMoving())
+								{
+									m_Panel->m_EntitySelectionContext = Entity(entity, this);
+
+								}
+							
+
+							}
+						
+					}
+					
 					Renderer2D::DrawQuad(transform.GetTransform(), sprite);
 				}
 				
 			}
+
+			if (m_Panel->m_EntitySelectionContext)
+			{
+				m_Gizmo.SetEntity(m_Panel->m_EntitySelectionContext);
+				m_Gizmo.OnUpdate(ts);
+				m_Gizmo.OnRender();
+			}
+			
 
 			Renderer2D::EndScene();
 		}
@@ -117,6 +153,30 @@ namespace Brbanje
 	void Scene::DestroyEntity(Entity entity)
 	{
 		m_Registry.destroy(entity);
+	}
+
+	glm::vec2 Scene::GetSceneMousePos()
+	{
+		if (m_MainCamera)
+		{
+
+			SceneCamera::Bounds bounds = m_MainCamera->GetBounds();
+			ImGuiIO& io = ImGui::GetIO();
+			auto [x, y] = io.MousePos;
+			x -= m_ViewportWindowPos.x;
+			y = m_ViewPortHeight - y + m_ViewportWindowPos.y;
+			x /= m_ViewportWidth / 2;
+			y /= m_ViewPortHeight / 2;
+			x -= 1;
+			y -= 1;
+			x *= bounds.right;
+			y *= bounds.up;
+			glm::vec4 mousePos{ x,y,0.0f,1.0f };
+			mousePos = m_MainCameraTransform->GetTransform() * mousePos;
+
+			return { mousePos.x,mousePos.y };
+		}
+		return { 0,0 };
 	}
 
 	template<typename T>

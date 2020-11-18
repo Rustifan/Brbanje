@@ -26,6 +26,7 @@ namespace Brbanje
 		Entity m_Square;
 		Entity m_CameraEntity;
 		Entity m_SecondCamera;
+		ImVec2 m_MainWindowPos;
 		SceneHierarchyPanel m_SceneHierarchy;
 		std::string m_SavePath = "";
 
