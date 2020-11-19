@@ -16,7 +16,7 @@ namespace Brbanje
 		glm::vec2 m_Size = { 0.2f,0.2f };
 		glm::vec4 m_Color = { 0.2f,0.2f,0.7f,1.0f };
 		float m_Alpha = 0.5f;
-		float m_FadeSpeed = 0.2f;
+		float m_FadeSpeed = 0.5f;
 		
 		bool m_Move = false;
 	public:

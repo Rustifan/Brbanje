@@ -33,12 +33,25 @@ namespace Brbanje
 
 	void Gizmo::OnUpdate(Timestep ts)
 	{
-		if (m_Alpha  >= 0.8f || m_Alpha  <= 0.5f)
+		
+		if (m_Alpha  >= 0.8f )
 		{
-			m_FadeSpeed = -m_FadeSpeed;
+			if (m_FadeSpeed > 0)
+			{
+				m_FadeSpeed = -m_FadeSpeed;
+			}
 		}
+		else if (m_Alpha <= 0.3f)
+		{
+			if (m_FadeSpeed < 0 )
+			{
+				m_FadeSpeed = -m_FadeSpeed;
+			}
+		}
+
 		m_Alpha += m_FadeSpeed * ts;
 		m_Color = { m_Color.x, m_Color.y, m_Color.z, m_Alpha };
+		BR_TRACE(m_Alpha);
 
 		if (Input::IsMouseButtonPressed(0))
 		{

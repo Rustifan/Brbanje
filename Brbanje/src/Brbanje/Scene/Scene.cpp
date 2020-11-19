@@ -164,6 +164,8 @@ namespace Brbanje
 	}
 	void Scene::OnViewportResize(uint32_t width, uint32_t height)
 	{
+		m_ViewportWidth = width;
+		m_ViewPortHeight = height;
 		auto cameraComponents = m_Registry.view<CameraComponent>();
 		for (entt::entity entt : cameraComponents)
 		{
@@ -171,8 +173,7 @@ namespace Brbanje
 			if (!cam.fixedAspectRatio)
 			{
 				cam.camera.ResizeViewport(width, height);
-				m_ViewportWidth = width;
-				m_ViewPortHeight = height;
+				
 			}
 		}
 	}	
@@ -207,7 +208,7 @@ namespace Brbanje
 			y *= bounds.up;
 			glm::vec4 mousePos{ x,y,0.0f,1.0f };
 			mousePos = m_MainCameraTransform->GetTransform() * mousePos;
-
+			
 			return { mousePos.x,mousePos.y };
 		}
 		return { 0,0 };

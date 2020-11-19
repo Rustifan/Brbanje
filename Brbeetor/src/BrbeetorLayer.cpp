@@ -30,7 +30,7 @@ namespace Brbanje
 		m_ActiveScene = std::make_shared<Scene>();
 
 		m_SceneHierarchy.SetContext(m_ActiveScene);
-
+	
 		
 
 		
