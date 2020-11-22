@@ -7,7 +7,6 @@
 #include "BrbeetorLayer.h"
 
 
-
 namespace Brbanje
 {
 
@@ -17,8 +16,9 @@ namespace Brbanje
 	public:
 		Brbeetor():Application("Brbeetor Editor")
 		{
-			//PushLayer(new ExampleLayer);
+			
 			PushLayer(new BrbeetorLayer());
+			
 		}
 
 		~Brbeetor()

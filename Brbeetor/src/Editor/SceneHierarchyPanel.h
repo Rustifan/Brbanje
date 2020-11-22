@@ -24,5 +24,6 @@ namespace Brbanje
 		void SetContext(Ref<Scene> constext);
 		void OnImGuiRender();
 		friend class Scene;
+		friend class Gizmo;
 	};
 }

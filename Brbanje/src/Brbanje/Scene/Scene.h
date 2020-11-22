@@ -28,7 +28,7 @@ namespace Brbanje
 		std::stringstream m_saveBuffer;
 		std::unordered_map<std::string, Ref<Texture2D>> m_TextureMap;
 		SceneCamera* m_MainCamera = nullptr;
-		Gizmo m_Gizmo;
+		Ref<Gizmo> m_Gizmo;
 		
 	public:
 		Scene();
@@ -48,6 +48,7 @@ namespace Brbanje
 		glm::vec2 GetSceneMousePos();
 		SceneCamera* GetMainCamera()const { return m_MainCamera; }
 		void SetMouseHoveredOnVieport(bool isHovered) { m_MouseHoveredOnVIewport = isHovered; }
+		friend class Gizmo;
 		friend class Entity;
 		friend class SceneHierarchyPanel;
 		friend class Serializer;

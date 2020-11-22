@@ -3,6 +3,8 @@
 #include "Brbanje/Scene/Serializer.h"
 #include "Editor/SceneHierarchyPanel.h"
 #include "Brbanje/Utils/FileDialog.h"
+#include "../../Brbeetor/src/Editor/GizmoLayer.h"
+
 #include <optional>
 
 
@@ -123,8 +125,8 @@ namespace Brbanje
 
 				
 			m_ActiveScene->OnUpdate(ts);
-
 			
+			GizmoLayer::Get()->OnRender();
 
 
 

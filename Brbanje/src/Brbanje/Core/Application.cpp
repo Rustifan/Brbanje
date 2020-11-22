@@ -30,6 +30,11 @@ namespace Brbanje
 
 	Application::~Application()
 	{
+		for (Layer* layer : m_LayerStack)
+		{
+			
+			delete layer;
+		}
 
 	}
 
@@ -81,6 +86,7 @@ namespace Brbanje
 					for (Layer* layer : m_LayerStack)
 					{
 						layer->OnUpdate(timestep);
+						layer->OnRender();
 					}
 				}
 			}

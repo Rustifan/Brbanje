@@ -6,14 +6,14 @@
 #include "Brbanje/Scene/ScriptableEntity.h"
 #include "Components.h"
 #include "Brbanje/Core/Input.h"
-
+#include "../../Brbeetor/src/Editor/GizmoLayer.h"
 
 namespace Brbanje
 {
 	Scene::Scene()
 	{
-
-
+		m_Gizmo = std::make_shared<Gizmo>(this);
+		GizmoLayer::Get()->AddGizmo(m_Gizmo);
 	}
 
 	Scene::~Scene()
@@ -65,9 +65,13 @@ namespace Brbanje
 			Renderer2D::BeginScene(m_MainCamera->GetProjection(), transform);
 
 			
+			if (m_Panel->m_EntitySelectionContext)
+			{
+				
+				m_Gizmo->OnUpdate(ts);
+			}
 			
-			
-			m_Gizmo.OnMove();
+			m_Gizmo->OnMove();
 
 			auto group = m_Registry.group<TransformComponent>(entt::get<SpriteComponent>);
 			
@@ -81,7 +85,7 @@ namespace Brbanje
 
 					
 					//Selection 
-					if (Input::IsMouseButtonPressed(0) && m_MouseHoveredOnVIewport)
+					if (Input::IsMouseButtonPressed(0) && m_MouseHoveredOnVIewport && !m_Gizmo->isMoving())
 					{
 
 						
@@ -89,8 +93,8 @@ namespace Brbanje
 							if (IsClicked(transform, mousePos))
 							{
 								
-								if (!m_Gizmo.isMoving())
-								{
+								
+								
 									if (m_Panel->m_EntitySelectionContext)
 									{
 										auto& selectedTransform = m_Panel->m_EntitySelectionContext.GetComponent<TransformComponent>();
@@ -106,7 +110,7 @@ namespace Brbanje
 
 									}
 
-								}
+								
 							
 
 							}
@@ -125,6 +129,10 @@ namespace Brbanje
 						Renderer2D::DrawQuad(transform.GetTransform(), sprite);
 
 					}
+					
+					
+					
+					
 
 				}
 
@@ -132,13 +140,7 @@ namespace Brbanje
 				
 			}
 
-			if (m_Panel->m_EntitySelectionContext)
-			{
-				m_Gizmo.SetEntity(m_Panel->m_EntitySelectionContext);
-				m_Gizmo.OnUpdate(ts);
-				m_Gizmo.OnRender();
-
-			}
+			
 
 			
 
@@ -154,10 +156,12 @@ namespace Brbanje
 
 	Entity Scene::CreateEntity(const std::string& tag)
 	{
+		static uint32_t entittyID = 0;
 		Entity entity = Entity(m_Registry.create(), this);
 		entity.AddComponent<TransformComponent>();
 		std::string name = tag == std::string() ? "Entity" : tag;
-		entity.AddComponent<TagComponent>(name);
+		auto& tagComp = entity.AddComponent<TagComponent>(name);
+		tagComp.Entity_ID = entittyID++;
 		
 
 		return entity;

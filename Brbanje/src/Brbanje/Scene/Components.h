@@ -11,6 +11,7 @@ namespace Brbanje
 	struct TagComponent
 	{
 		std::string tag;
+		uint32_t Entity_ID;
 		TagComponent() = default;
 		TagComponent(const std::string& tag) :
 			tag(tag) {}

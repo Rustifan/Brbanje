@@ -12,7 +12,7 @@ namespace Brbanje
 	{
 		for (Layer* layer : m_Layers)
 		{
-			delete layer;
+			
 		}
 	}
 
