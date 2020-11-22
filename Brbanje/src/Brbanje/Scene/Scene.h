@@ -44,10 +44,12 @@ namespace Brbanje
 		void ClearSaveBuffer() { m_saveBuffer.str(std::string()); }
 		void SetViewportWindowPos(const glm::vec2& windowPos) { m_ViewportWindowPos = windowPos; }
 		bool IsClicked(TransformComponent& transform, const glm::vec2& mousePos);
+		bool IsClicked(const glm::vec3& position, const glm::vec2& size, const glm::vec2& mousePos);
 		Ref<Texture2D> GetTextureFromTextureMap(const std::string& filePath);
 		glm::vec2 GetSceneMousePos();
 		SceneCamera* GetMainCamera()const { return m_MainCamera; }
 		void SetMouseHoveredOnVieport(bool isHovered) { m_MouseHoveredOnVIewport = isHovered; }
+		
 		friend class Gizmo;
 		friend class Entity;
 		friend class SceneHierarchyPanel;

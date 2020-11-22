@@ -85,7 +85,7 @@ namespace Brbanje
 
 					
 					//Selection 
-					if (Input::IsMouseButtonPressed(0) && m_MouseHoveredOnVIewport && !m_Gizmo->isMoving())
+					if (ImGui::IsMouseClicked(0) && m_MouseHoveredOnVIewport && !m_Gizmo->isWorking())
 					{
 
 						
@@ -226,6 +226,15 @@ namespace Brbanje
 			mousePos.y > transform.position.y - transform.size.y / 2 &&
 			mousePos.y < transform.position.y + transform.size.y / 2;
 
+	}
+
+	bool Scene::IsClicked(const glm::vec3& position, const glm::vec2& size, const glm::vec2& mousePos)
+	{
+		return
+			mousePos.x > position.x - size.x / 2 &&
+			mousePos.x < position.x + size.x / 2 &&
+			mousePos.y > position.y - size.y / 2 &&
+			mousePos.y < position.y + size.y / 2;
 	}
 
 	Ref<Texture2D> Scene::GetTextureFromTextureMap(const std::string& filePath)

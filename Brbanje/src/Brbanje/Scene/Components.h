@@ -32,6 +32,7 @@ namespace Brbanje
 		TransformComponent() = default;
 		TransformComponent(const glm::vec3 position) :
 			position(position) {}
+		
 		TransformComponent(const TransformComponent& other) = default;
 		
 		glm::mat4 GetTransform()const
