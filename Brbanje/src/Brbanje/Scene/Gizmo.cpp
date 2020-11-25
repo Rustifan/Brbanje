@@ -26,7 +26,7 @@ namespace Brbanje
 	{
 		BR_PROFILE_FUNCTION;
 
-		if (m_Scene->m_Panel->m_EntitySelectionContext && m_Scene->m_MainCamera)
+		if (m_Scene->m_Panel->m_EntitySelectionContext && m_Scene->m_MainCamera && m_Scene->m_MainCamera->GetProjectionType() == SceneCamera::ProjectionType::Orthographic)
 		{
 			TransformComponent& transform = m_Scene->m_Panel->m_EntitySelectionContext.GetComponent<TransformComponent>();
 			
@@ -147,6 +147,9 @@ namespace Brbanje
 		if (m_Scene->m_Panel->m_EntitySelectionContext && m_Scene->m_MainCamera)
 		{
 			TransformComponent& transform = m_Scene->m_Panel->m_EntitySelectionContext.GetComponent<TransformComponent>();
+			
+			m_Size = m_Scene->m_MainCamera->GetSize() * 0.1f * glm::vec2(0.2f, 0.2f);
+			m_ResizeSize = m_Scene->m_MainCamera->GetSize() * 0.1f * 0.05f;
 
 			//Fade Speed control
 			if (m_ColorChange >= 0.8f)
@@ -180,10 +183,14 @@ namespace Brbanje
 					if (mousePos.x > transform.position.x - m_Size.x / 2 &&
 						mousePos.x < transform.position.x + m_Size.x / 2 &&
 						mousePos.y > transform.position.y - m_Size.y / 2 &&
-						mousePos.y < transform.position.y + m_Size.y / 2 && 
-						ImGui::IsMouseClicked(0))
+						mousePos.y < transform.position.y + m_Size.y / 2 
+						)
 					{
-						m_Move = true;
+						ImGui::SetMouseCursor(ImGuiMouseCursor_Hand);
+						if (ImGui::IsMouseClicked(0))
+						{
+							m_Move = true;
+						}
 					}
 				}
 
@@ -327,7 +334,7 @@ namespace Brbanje
 
 			if (m_Move)
 			{
-
+				ImGui::SetMouseCursor(ImGuiMouseCursor_Hand);
 				glm::vec2 mousePos = m_Scene->GetSceneMousePos();
 
 				transform.position = glm::vec3(mousePos.x, mousePos.y, transform.position.z);

@@ -2,6 +2,7 @@
 
 #include "Brbanje/Core/Core.h"
 #include "Brbanje/Scene/Entity.h"
+#include "glm/glm.hpp"
 
 namespace Brbanje
 {
@@ -23,6 +24,7 @@ namespace Brbanje
 		SceneHierarchyPanel() = default;
 		void SetContext(Ref<Scene> constext);
 		void OnImGuiRender();
+		static void DrawVec3Control(const std::string& label, glm::vec3& values, float resetValue = 1.0f, float columnWidth = 100.0f);
 		friend class Scene;
 		friend class Gizmo;
 	};

@@ -5,8 +5,8 @@ Entities:
       Components:
         transform component:
           position:
-            - 1.01598167
-            - -2.14611864
+            - 0.53652972
+            - -0.707762539
             - -0.300000012
           rotation:
             - 0
@@ -29,16 +29,16 @@ Entities:
       Components:
         transform component:
           position:
-            - -1.67808211
-            - 1.75799072
+            - -5.68949747
+            - 2.42922449
             - 0
           rotation:
             - 0
             - 0
             - 0.558505356
           size:
-            - 2.00456667
-            - 3.58721471
+            - 7.70091343
+            - 7.81095886
             - 3.79999995
         sprite component:
           color:
@@ -53,16 +53,16 @@ Entities:
       Components:
         transform component:
           position:
-            - 2.8310504
-            - 0.399543643
+            - 1.08675838
+            - 2.39725947
             - 0
           rotation:
             - 0
             - 0
             - 0
           size:
-            - 2.02054715
-            - 2.10045671
+            - 3.1849308
+            - 2.89954329
             - 1
         sprite component:
           color:

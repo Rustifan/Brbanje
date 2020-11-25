@@ -10,8 +10,11 @@
 
 namespace Brbanje
 {
-	Scene::Scene()
+	Scene::Scene(): m_CameraController(SceneCameraController(this))
 	{
+		m_MainCamera = m_CameraController.GetSceneCamera();
+		m_MainCameraTransform = m_CameraController.GetCameraTransform();
+
 		m_Gizmo = std::make_shared<Gizmo>(this);
 		GizmoLayer::Get()->AddGizmo(m_Gizmo);
 	}
@@ -24,6 +27,7 @@ namespace Brbanje
 	void Scene::OnUpdate(Timestep ts)
 	{
 		
+
 		m_Registry.view<NativeScriptComponent>().each([=](auto entity, NativeScriptComponent& component)
 			{
 				if (!component.instance)
@@ -40,30 +44,40 @@ namespace Brbanje
 				component.instance->OnUpdate(ts);
 			});
 
-		
-		m_MainCamera = nullptr;
-		glm::mat4 transform;
+		if (!m_EditorView)
 		{
-			auto group = m_Registry.group<>(entt::get<TransformComponent, CameraComponent>);
-			for (auto entity : group)
+			m_MainCamera = nullptr;
+			glm::mat4 transform;
 			{
-				auto [trasformComp, camera] = group.get<TransformComponent, CameraComponent>(entity);
-				if (camera.primary)
+				auto group = m_Registry.group<>(entt::get<TransformComponent, CameraComponent>);
+				for (auto entity : group)
 				{
-					m_MainCamera = &camera.camera;
-					
-					transform = trasformComp.GetTransform();
-					m_MainCameraTransform = &trasformComp;
-				}
+					auto [trasformComp, camera] = group.get<TransformComponent, CameraComponent>(entity);
+					if (camera.primary)
+					{
+						m_MainCamera = &camera.camera;
 
+						transform = trasformComp.GetTransform();
+						m_MainCameraTransform = &trasformComp;
+					}
+
+				}
 			}
 		}
+		
 
 		if (m_MainCamera)
 		{
+			if (m_EditorView)
+			{
+				m_CameraController.OnUpdate(ts);
+			}
+			
 
-			Renderer2D::BeginScene(m_MainCamera->GetProjection(), transform);
-
+			Renderer2D::BeginScene(m_MainCamera->GetProjection(), m_MainCameraTransform->GetTransform());
+			
+			
+			
 			
 			if (m_Panel->m_EntitySelectionContext)
 			{
@@ -72,6 +86,8 @@ namespace Brbanje
 			}
 			
 			m_Gizmo->OnMove();
+			
+			
 
 			auto group = m_Registry.group<TransformComponent>(entt::get<SpriteComponent>);
 			
@@ -143,7 +159,6 @@ namespace Brbanje
 			
 
 			
-
 			Renderer2D::EndScene();
 		}
 		
@@ -179,6 +194,10 @@ namespace Brbanje
 				cam.camera.ResizeViewport(width, height);
 				
 			}
+		}
+		if (m_EditorView)
+		{
+			m_MainCamera->ResizeViewport(width, height);
 		}
 	}	
 
@@ -249,6 +268,17 @@ namespace Brbanje
 		
 		Ref<Texture2D> tex = m_TextureMap[filePath] = Texture2D::Create(filePath);
 		return tex;
+
+	}
+
+	void Scene::OnImGuiRender()
+	{
+		
+	}
+
+	void Scene::OnEvent(Event& event)
+	{
+		m_CameraController.OnEvent(event);
 
 	}
 

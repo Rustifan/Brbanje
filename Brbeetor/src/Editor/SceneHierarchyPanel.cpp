@@ -76,6 +76,8 @@ namespace Brbanje
 		}
 
 		ImGui::End();
+
+		m_Scene->m_CameraController.OnImGuiRender();
 	}
 
 	void SceneHierarchyPanel::DrawEntityNode(Entity entity)
@@ -120,7 +122,7 @@ namespace Brbanje
 		}
 	}
 
-	static void DrawVec3Control(const std::string& label, glm::vec3& values, float resetValue = 0.0f, float columnWidth = 100.0f)
+	void SceneHierarchyPanel::DrawVec3Control(const std::string& label, glm::vec3& values, float resetValue, float columnWidth)
 	{
 		
 		ImGuiIO& io = ImGui::GetIO();

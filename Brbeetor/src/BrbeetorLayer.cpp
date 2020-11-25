@@ -143,13 +143,14 @@ namespace Brbanje
 
 	}
 
-	void BrbeetorLayer::OnEvent(Brbanje::Event& event)
+	void BrbeetorLayer::OnEvent(Event& event)
 	{
 		BR_PROFILE_FUNCTION;
 		if (m_IsViewportFocused)
 		{
 			m_CameraController.OnEvent(event);
 		}
+		m_ActiveScene->OnEvent(event);
 		
 	}
 
@@ -263,7 +264,7 @@ namespace Brbanje
 
 		//Settings
 
-		ImGui::Begin("Controller");
+		ImGui::Begin("Renderer stats");
 		ImGui::Text("Quad count: %d", Renderer2D::GetStats().QuadNumber);
 		ImGui::Text("Draw calls: %d", Renderer2D::GetStats().DrawCalls);
 		ImGui::Text("Vertex count: %d", Renderer2D::GetStats().VertexCount());
@@ -320,6 +321,7 @@ namespace Brbanje
 		ImGui::PopStyleVar();
 
 		m_SceneHierarchy.OnImGuiRender();
+		m_ActiveScene->OnImGuiRender();
 
 		ImGui::End();
 		

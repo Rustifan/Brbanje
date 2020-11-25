@@ -6,6 +6,7 @@
 #include "SceneCamera.h"
 #include "Components.h"
 #include "Gizmo.h"
+#include "SceneCameraController.h"
 #include <sstream>
 
 namespace Brbanje
@@ -18,7 +19,7 @@ namespace Brbanje
 	class Scene
 	{
 	private:
-		
+		SceneCameraController m_CameraController;
 		entt::registry m_Registry;
 		SceneHierarchyPanel* m_Panel = nullptr;
 		uint32_t m_ViewportWidth, m_ViewPortHeight;
@@ -29,11 +30,14 @@ namespace Brbanje
 		std::unordered_map<std::string, Ref<Texture2D>> m_TextureMap;
 		SceneCamera* m_MainCamera = nullptr;
 		Ref<Gizmo> m_Gizmo;
+		bool m_EditorView = true;
 		
 	public:
 		Scene();
 		~Scene();
 		void OnUpdate(Timestep ts);
+		void OnEvent(Event& event);
+		void OnImGuiRender();
 		void OnViewportResize(uint32_t width, uint32_t height);
 		Entity CreateEntity(const std::string& tag = std::string());
 		void DestroyEntity(Entity entity);
@@ -49,7 +53,8 @@ namespace Brbanje
 		glm::vec2 GetSceneMousePos();
 		SceneCamera* GetMainCamera()const { return m_MainCamera; }
 		void SetMouseHoveredOnVieport(bool isHovered) { m_MouseHoveredOnVIewport = isHovered; }
-		
+		bool IsMouseHovered() { return m_MouseHoveredOnVIewport; }
+
 		friend class Gizmo;
 		friend class Entity;
 		friend class SceneHierarchyPanel;
