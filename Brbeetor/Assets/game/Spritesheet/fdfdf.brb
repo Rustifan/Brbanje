@@ -1,0 +1,98 @@
+Scene: TheScene
+Entities:
+  - Entity:
+      Name: Background
+      Components:
+        transform component:
+          position:
+            - 0
+            - 0
+            - -0.5
+          rotation:
+            - 0
+            - 0
+            - 0
+          size:
+            - 9.5985918
+            - 8.93309784
+            - 1
+        sprite component:
+          color:
+            - 1
+            - 1
+            - 1
+            - 1
+          texture: C:\dev\Brbanje\Brbeetor\Assets\game\Spritesheet\spriteSheet.png
+          tiling factor: 1
+  - Entity:
+      Name: Kuca
+      Components:
+        transform component:
+          position:
+            - 2.13380313
+            - 2.18662
+            - 0
+          rotation:
+            - 0
+            - 0
+            - 0
+          size:
+            - 3.98943686
+            - 4.19014072
+            - 1
+        sprite component:
+          color:
+            - 1
+            - 1
+            - 1
+            - 1
+          texture: C:\dev\Brbanje\Brbeetor\Assets\game\Spritesheet\spriteSheet.png
+          tiling factor: 1
+  - Entity:
+      Name: Barrel
+      Components:
+        transform component:
+          position:
+            - -1.68075132
+            - -0.610328674
+            - 0
+          rotation:
+            - 0
+            - 0
+            - 0
+          size:
+            - 1.21009457
+            - 1.1079812
+            - 1
+        sprite component:
+          color:
+            - 1
+            - 1
+            - 1
+            - 1
+          texture: C:\dev\Brbanje\Brbeetor\Assets\game\Spritesheet\spriteSheet.png
+          tiling factor: 1
+  - Entity:
+      Name: Box
+      Components:
+        transform component:
+          position:
+            - -2.94835687
+            - -0.544600964
+            - 0
+          rotation:
+            - 0
+            - 0
+            - 0
+          size:
+            - 1.04637742
+            - 1.03755856
+            - 1
+        sprite component:
+          color:
+            - 1
+            - 1
+            - 1
+            - 1
+          texture: C:\dev\Brbanje\Brbeetor\Assets\game\Spritesheet\spriteSheet.png
+          tiling factor: 1

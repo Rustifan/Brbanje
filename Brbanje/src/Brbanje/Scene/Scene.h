@@ -8,6 +8,7 @@
 #include "Gizmo.h"
 #include "SceneCameraController.h"
 #include <sstream>
+#include "SubTextureEditor.h"
 
 namespace Brbanje
 {	
@@ -30,6 +31,7 @@ namespace Brbanje
 		std::unordered_map<std::string, Ref<Texture2D>> m_TextureMap;
 		SceneCamera* m_MainCamera = nullptr;
 		Ref<Gizmo> m_Gizmo;
+		SubTextureEditor m_SubTexEditor;
 		bool m_EditorView = true;
 		
 	public:
@@ -59,5 +61,6 @@ namespace Brbanje
 		friend class Entity;
 		friend class SceneHierarchyPanel;
 		friend class Serializer;
+		friend class SubTextureEditor;
 	};
 }

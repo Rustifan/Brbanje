@@ -1,29 +1,55 @@
 Scene: TheScene
 Entities:
   - Entity:
+      Name: asd
+      Components:
+        transform component:
+          position:
+            - 0
+            - 0
+            - 0.5
+          rotation:
+            - 0
+            - 0
+            - 0
+          size:
+            - 1
+            - 1
+            - 1
+        camera component:
+          primary: true
+          projection: 1
+          perspective FOV: 0.785398185
+          perspective near: 0.00999999978
+          perspective far: 1000
+          orthographic size: 10
+          orthographic near: -1
+          orthographic far: 1
+          fixed aspect ratio: false
+  - Entity:
       Name: new Entity
       Components:
         transform component:
           position:
-            - 0.53652972
-            - -0.707762539
-            - -0.300000012
+            - 2.17136145
+            - 1.64319277
+            - 0
           rotation:
             - 0
             - 0
-            - 0.00523598772
+            - 0
           size:
-            - 12.1114159
-            - 11.9630156
+            - 3.37272501
+            - 3.53334594
             - 1
         sprite component:
           color:
-            - 0.691119671
-            - 0.560531855
-            - 0.490988493
             - 1
-          texture: C:\dev\Brbanje\Brbeetor\Assets\Textures\goose.png
-          tiling factor: 8.39999962
+            - 0.999989986
+            - 0.999989986
+            - 1
+          texture: C:\dev\Brbanje\Brbeetor\Assets\Textures\beer.png
+          tiling factor: 1
   - Entity:
       Name: new Entity
       Components:
@@ -53,48 +79,22 @@ Entities:
       Components:
         transform component:
           position:
-            - 1.08675838
-            - 2.39725947
-            - 0
+            - 0.53652972
+            - -0.707762539
+            - -0.300000012
           rotation:
             - 0
             - 0
-            - 0
+            - 0.00523598772
           size:
-            - 3.1849308
-            - 2.89954329
+            - 12.1114159
+            - 11.9630156
             - 1
         sprite component:
           color:
+            - 0.691119671
+            - 0.560531855
+            - 0.490988493
             - 1
-            - 0.999989986
-            - 0.999989986
-            - 1
-          texture: C:\dev\Brbanje\Brbeetor\Assets\Textures\zeldusana.png
-          tiling factor: 1
-  - Entity:
-      Name: asd
-      Components:
-        transform component:
-          position:
-            - 0
-            - 0
-            - 0.5
-          rotation:
-            - 0
-            - 0
-            - 0
-          size:
-            - 1
-            - 1
-            - 1
-        camera component:
-          primary: true
-          projection: 1
-          perspective FOV: 0.785398185
-          perspective near: 0.00999999978
-          perspective far: 1000
-          orthographic size: 10
-          orthographic near: -1
-          orthographic far: 1
-          fixed aspect ratio: false
+          texture: C:\dev\Brbanje\Brbeetor\Assets\Textures\goose.png
+          tiling factor: 8.39999962

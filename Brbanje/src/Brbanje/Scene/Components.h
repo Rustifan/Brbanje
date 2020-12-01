@@ -5,6 +5,7 @@
 #include "Brbanje/Scene/SceneCamera.h"
 #include "Brbanje/Scene/ScriptableEntity.h"
 #include "Brbanje/Renderer/Texture.h"
+#include "Brbanje/Renderer/SubTexture2D.h"
 
 namespace Brbanje
 {
@@ -52,6 +53,7 @@ namespace Brbanje
 	{
 		glm::vec4 color = {1.0f, 1.0f, 1.0f, 1.0f};
 		Ref<Texture2D> texture;
+		Ref<SubTexture2D> subTexture;
 		float tilingFactor = 1.0f;
 
 		SpriteComponent() = default;

@@ -27,5 +27,6 @@ namespace Brbanje
 		static void DrawVec3Control(const std::string& label, glm::vec3& values, float resetValue = 1.0f, float columnWidth = 100.0f);
 		friend class Scene;
 		friend class Gizmo;
+		friend class SubTextureEditor;
 	};
 }

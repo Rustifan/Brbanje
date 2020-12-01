@@ -454,7 +454,7 @@ namespace Brbanje
 			strcpy_s(buffer, sizeof(buffer), text.c_str());
 			
 
-			if (ImGui::InputText("##Texture", buffer, sizeof(buffer), ImGuiInputTextFlags_ReadOnly));
+			ImGui::InputText("##Texture", buffer, sizeof(buffer), ImGuiInputTextFlags_ReadOnly);
 			
 				
 				if (ImGui::BeginPopupContextItem("##Texture"))
@@ -496,6 +496,13 @@ namespace Brbanje
 			}
 			ImGui::Columns(1);
 			
+			if (ImGui::Button("Edit Texture"))
+			{
+
+				m_Scene->m_SubTexEditor.SetEdit(true);
+
+
+			}
 			
 
 			});

@@ -10,12 +10,14 @@
 
 namespace Brbanje
 {
-	Scene::Scene(): m_CameraController(SceneCameraController(this))
+	Scene::Scene(): m_CameraController(SceneCameraController(this)), m_SubTexEditor(this)
 	{
 		m_MainCamera = m_CameraController.GetSceneCamera();
 		m_MainCameraTransform = m_CameraController.GetCameraTransform();
 
 		m_Gizmo = std::make_shared<Gizmo>(this);
+		
+
 		GizmoLayer::Get()->AddGizmo(m_Gizmo);
 	}
 
@@ -137,8 +139,15 @@ namespace Brbanje
 					
 					if (sprite.texture)
 					{
-						
-						Renderer2D::DrawQuad(transform.GetTransform(), sprite.texture, sprite.tilingFactor, sprite.color);
+						if (!sprite.subTexture)
+						{
+							Renderer2D::DrawQuad(transform.GetTransform(), sprite.texture, sprite.tilingFactor, sprite.color);
+
+						}
+						else
+						{
+							Renderer2D::DrawRotatedQuad(transform.position, transform.size, transform.rotation.z, sprite.subTexture);
+						}
 					}
 					else
 					{
@@ -164,7 +173,7 @@ namespace Brbanje
 		
 		
 		
-		
+		m_SubTexEditor.Update(ts);
 
 
 	}
@@ -240,20 +249,20 @@ namespace Brbanje
 	bool Scene::IsClicked(TransformComponent& transform, const glm::vec2& mousePos)
 	{
 		return
-			mousePos.x > transform.position.x - transform.size.x / 2 &&
-			mousePos.x < transform.position.x + transform.size.x / 2 &&
-			mousePos.y > transform.position.y - transform.size.y / 2 &&
-			mousePos.y < transform.position.y + transform.size.y / 2;
+			mousePos.x > transform.position.x - glm::abs(transform.size.x) / 2 &&
+			mousePos.x < transform.position.x + glm::abs(transform.size.x) / 2 &&
+			mousePos.y > transform.position.y - glm::abs(transform.size.y) / 2 &&
+			mousePos.y < transform.position.y + glm::abs(transform.size.y) / 2;
 
 	}
 
 	bool Scene::IsClicked(const glm::vec3& position, const glm::vec2& size, const glm::vec2& mousePos)
 	{
 		return
-			mousePos.x > position.x - size.x / 2 &&
-			mousePos.x < position.x + size.x / 2 &&
-			mousePos.y > position.y - size.y / 2 &&
-			mousePos.y < position.y + size.y / 2;
+			mousePos.x > position.x - glm::abs(size.x )/ 2 &&
+			mousePos.x < position.x + glm::abs(size.x) / 2 &&
+			mousePos.y > position.y - glm::abs(size.y) / 2 &&
+			mousePos.y < position.y + glm::abs(size.y) / 2;
 	}
 
 	Ref<Texture2D> Scene::GetTextureFromTextureMap(const std::string& filePath)
@@ -273,7 +282,7 @@ namespace Brbanje
 
 	void Scene::OnImGuiRender()
 	{
-		
+		m_SubTexEditor.OnImGuiRender();
 	}
 
 	void Scene::OnEvent(Event& event)
