@@ -27,6 +27,7 @@ namespace Brbanje
 		float m_TextureSIzeMultipl = 500.0f;
 		ImVec2 m_TextureSize;
 		ImVec2 m_WindowSize = { 0,0 };
+		ImVec2 m_ViewPortSize = {0,0};
 		glm::vec2 m_SubTexSize = {0 ,0 };
 		glm::vec2 m_SubTexPos = { 0,0 };
 	private:

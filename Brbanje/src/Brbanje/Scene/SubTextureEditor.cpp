@@ -37,16 +37,25 @@ namespace Brbanje
 
 	void SubTextureEditor::Edit()
 	{
+		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0, 0));
+
 		ImGui::Begin("Texture Editor", &m_Edit);
 		ImGui::Indent((ImGui::GetContentRegionAvailWidth() - m_TextureSize.x)/2);
 
-		ImGui::BeginChild("Texture", m_TextureSize, false);
+		if (ImGui::GetWindowSize() != m_WindowSize)
+		{
+			m_WindowSize = ImGui::GetWindowSize();
+			OnResize();
+		}
+
 		ImGui::Image((ImTextureID)m_Framebuffer->GetColorAttachmentId(), m_TextureSize, { 0,1 }, { 1,0 });
 
-		ImGui::EndChild();
 		
+
+		ImGui::End();
+		ImGui::PopStyleVar();
 		
-		
+		ImGui::Begin("Texture Editor Controlls", &m_Edit);
 		ImGui::DragFloat2("Sub Tex Pos", glm::value_ptr(m_SubTexPos), 1, m_Sprite->texture->GetWidth());
 		ImGui::DragFloat2("Sub Tex Size", (float*)&m_SubTexSize, 1, m_Sprite->texture->GetWidth());
 
@@ -61,11 +70,6 @@ namespace Brbanje
 		
 		
 		
-		if (ImGui::GetWindowSize() != m_WindowSize)
-		{
-			m_WindowSize = ImGui::GetWindowSize();
-			OnResize();
-		}
 	
 		
 		
@@ -106,15 +110,16 @@ namespace Brbanje
 		{
 			m_Framebuffer->Bind();
 
-			RenderCommand::SetColor({ 0.0f,0.2f,0,1.0f });
+			RenderCommand::SetColor({ 0.0f,0.0f,0,1.0f });
 			RenderCommand::Clear();
 
 			Renderer2D::BeginScene(m_FrameCamera.GetProjection(), m_FrameCameraTransform.GetTransform());
 
 			float TexAspect = (float)m_Sprite->texture->GetWidth() / (float)m_Sprite->texture->GetHeight();
+			//Draw Texture
 			Renderer2D::DrawQuad({ 0,0 }, { TexAspect ,1 }, m_Sprite->texture);
 
-			BR_TRACE(m_SubTexPos.x);
+			//Draw sub texture picker quad
 			glm::vec2 pos = FromPixelToWorld(m_SubTexPos);
 			
 			glm::vec2 size = FromPixelToWorld(m_SubTexSize, true);
@@ -158,13 +163,37 @@ namespace Brbanje
 
 	void SubTextureEditor::OnResize()
 	{
-		m_TextureSIzeMultipl = m_WindowSize.x/2;
+		
+		
 
 		if (m_Entity)
 		{
-			float TexAspect = (float)m_Sprite->texture->GetWidth() / (float)m_Sprite->texture->GetHeight();
+			float textureWidth = (float)m_Sprite->texture->GetWidth();
+			float textureHeight = (float)m_Sprite->texture->GetHeight();
+			float TexAspect = textureWidth / textureHeight;
+			m_ViewPortSize = ImGui::GetContentRegionAvail();
+			
+			//Texture size 
+			m_TextureSIzeMultipl = textureWidth >= textureHeight ? m_ViewPortSize.x / TexAspect : m_ViewPortSize.y;
 			m_TextureSize.x = TexAspect * m_TextureSIzeMultipl;
 			m_TextureSize.y = m_TextureSIzeMultipl;
+			
+			if (m_TextureSize.x > m_ViewPortSize.x) 
+			{
+				m_TextureSize.x = m_ViewPortSize.x;
+				m_TextureSize.y = m_TextureSize.x / TexAspect;
+			}
+			if (m_TextureSize.y > m_ViewPortSize.y)
+			{
+				m_TextureSize.y = m_ViewPortSize.y;
+				m_TextureSize.x = m_TextureSize.y * TexAspect;
+			}
+			
+			
+			
+			
+			
+
 			m_Framebuffer->Resize(m_TextureSize.x, m_TextureSize.y);
 			m_FrameCamera.ResizeViewport(m_TextureSize.x, m_TextureSize.y);
 		}
