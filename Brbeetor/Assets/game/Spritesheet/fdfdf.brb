@@ -1,20 +1,20 @@
 Scene: TheScene
 Entities:
   - Entity:
-      Name: Background
+      Name: new Entity
       Components:
         transform component:
           position:
-            - -0.158924311
-            - 0.403422713
-            - -0.400000006
+            - 0
+            - 0
+            - 0
           rotation:
             - 0
             - 0
             - 0
           size:
-            - 9.5985918
-            - 10.6349754
+            - 3.24938869
+            - 3.95843506
             - 1
         sprite component:
           color:
@@ -22,29 +22,47 @@ Entities:
             - 1
             - 1
             - 1
-          texture: C:\dev\Brbanje\Brbeetor\Assets\game\Spritesheet\spriteSheet.png
+          texture: C:\dev\Brbanje\Brbeetor\Assets\Textures\zeldusana.png
           tiling factor: 1
-          SubTex Min:
-            - 0.674017251
-            - 0.883542955
-          SubTex Max:
-            - 0.724017262
-            - 0.960466027
   - Entity:
-      Name: Kuca
+      Name: new Entity
       Components:
         transform component:
           position:
-            - 2.44498801
-            - 3.14180899
+            - 3.2151587
+            - -0.892420411
             - 0
           rotation:
             - 0
             - 0
             - 0
           size:
-            - 3.98943686
-            - 4.19014072
+            - 2.83374023
+            - 3.90953469
+            - 1
+        sprite component:
+          color:
+            - 1
+            - 1
+            - 1
+            - 1
+          texture: C:\dev\Brbanje\Brbeetor\Assets\Textures\beer.png
+          tiling factor: 1
+  - Entity:
+      Name: Box
+      Components:
+        transform component:
+          position:
+            - -2.88508558
+            - -0.892420411
+            - 0
+          rotation:
+            - 0
+            - 0
+            - 0
+          size:
+            - 3.69918871
+            - 5.45076227
             - 1
         sprite component:
           color:
@@ -55,11 +73,11 @@ Entities:
           texture: C:\dev\Brbanje\Brbeetor\Assets\game\Spritesheet\spriteSheet.png
           tiling factor: 1
           SubTex Min:
-            - 0.498524904
-            - 0.0735781267
+            - 0
+            - 0.0756062344
           SubTex Max:
-            - 0.548524916
-            - 0.150501207
+            - 0.0500000007
+            - 0.229452386
   - Entity:
       Name: Barrel
       Components:
@@ -91,20 +109,20 @@ Entities:
             - 0.5
             - 0.769230783
   - Entity:
-      Name: Box
+      Name: Kuca
       Components:
         transform component:
           position:
-            - -1.33251834
-            - -2.02934003
+            - 2.44498801
+            - 3.14180899
             - 0
           rotation:
             - 0
             - 0
             - 0
           size:
-            - 3.69918871
-            - 5.45076227
+            - 3.98943686
+            - 4.19014072
             - 1
         sprite component:
           color:
@@ -115,8 +133,38 @@ Entities:
           texture: C:\dev\Brbanje\Brbeetor\Assets\game\Spritesheet\spriteSheet.png
           tiling factor: 1
           SubTex Min:
-            - 0
-            - 0.0756062344
+            - 0.498524904
+            - 0.0735781267
           SubTex Max:
-            - 0.0500000007
-            - 0.229452386
+            - 0.548524916
+            - 0.150501207
+  - Entity:
+      Name: Background
+      Components:
+        transform component:
+          position:
+            - -0.158924311
+            - 0.403422713
+            - -0.400000006
+          rotation:
+            - 0
+            - 0
+            - 0
+          size:
+            - 9.5985918
+            - 10.6349754
+            - 1
+        sprite component:
+          color:
+            - 1
+            - 1
+            - 1
+            - 1
+          texture: C:\dev\Brbanje\Brbeetor\Assets\game\Spritesheet\spriteSheet.png
+          tiling factor: 1
+          SubTex Min:
+            - 0.674017251
+            - 0.883542955
+          SubTex Max:
+            - 0.724017262
+            - 0.960466027

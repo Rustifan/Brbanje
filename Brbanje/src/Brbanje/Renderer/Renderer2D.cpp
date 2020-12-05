@@ -152,6 +152,7 @@ namespace Brbanje
 
 		if (s_Data.Stats.QuadNumber > 0)
 		{
+			BR_TRACE(s_Data.TextureSlotIndex);
 			uint32_t dataSize = (uint8_t*)s_Data.QuadVertexBufferPointer - (uint8_t*)s_Data.QuadVertexBufferBase;
 			s_Data.QuadVertexBuffer->SetData(s_Data.QuadVertexBufferBase, dataSize);
 			

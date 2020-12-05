@@ -472,20 +472,22 @@ namespace Brbanje
 
 					
 				
-			
-			ImGui::SameLine();
-			if (ImGui::Button("Set Texture"))
-			{
 				
-				std::optional<std::string> TextureFilePath = FileDialog::OpenFile("Portable Network Graphics(*.png)\0*.png\0");
-				if (TextureFilePath)
+				
+				ImGui::SameLine();
+				if (ImGui::Button("Set Texture"))
 				{
-					sprite.texture = m_Scene->GetTextureFromTextureMap(TextureFilePath.value());
+
+					std::optional<std::string> TextureFilePath = FileDialog::OpenFile("Portable Network Graphics(*.png)\0*.png\0");
+					if (TextureFilePath)
+					{
+						sprite.texture = m_Scene->GetTextureFromTextureMap(TextureFilePath.value());
+					}
+
+
 				}
 				
 
-			}
-			
 			ImGui::Columns(2);
 			ImGui::SetColumnWidth(0, 100);
 			ImGui::Text("Tiling factor");
@@ -498,13 +500,17 @@ namespace Brbanje
 			}
 			ImGui::Columns(1);
 			
-			if (ImGui::Button("Edit Texture"))
+			if (sprite.texture)
 			{
+				if (ImGui::Button("Edit Texture"))
+				{
 
-				m_Scene->m_SubTexEditor.SetEdit(true);
+					m_Scene->m_SubTexEditor.SetEdit(true);
 
 
+				}
 			}
+			
 			
 
 			});
