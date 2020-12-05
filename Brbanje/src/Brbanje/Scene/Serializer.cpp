@@ -5,6 +5,17 @@
 
 namespace Brbanje
 {
+	
+	YAML::Emitter& operator << (YAML::Emitter& out, const glm::vec2& vec)
+	{
+		out << YAML::BeginSeq;
+		out << vec.x << vec.y;
+		out << YAML::EndSeq;
+
+		return out;
+	}
+	
+	
 	YAML::Emitter& operator << (YAML::Emitter& out, const glm::vec3& vec)
 	{
 		out << YAML::BeginSeq;
@@ -65,6 +76,11 @@ namespace Brbanje
 			out << YAML::Key << "color" << YAML::Value << sprite.color;
 			out << YAML::Key << "texture" << YAML::Value << std::string(sprite.texture ? sprite.texture->GetFilePath().c_str() : "No texture");
 			out << YAML::Key << "tiling factor" << YAML::Value << sprite.tilingFactor;
+			if (sprite.subTexture)
+			{
+				out << YAML::Key << "SubTex Min" << YAML::Value << sprite.subTexture->GetMin();
+				out << YAML::Key << "SubTex Max" << YAML::Value << sprite.subTexture->GetMax();
+			}
 			out << YAML::EndMap;
 
 		}
@@ -187,6 +203,14 @@ namespace Brbanje
 						sprite.texture = m_Scene->GetTextureFromTextureMap(spriteNode["texture"].as<std::string>());
 					}
 					sprite.tilingFactor = spriteNode["tiling factor"].as<float>();
+					
+					if (spriteNode["SubTex Min"])
+					{
+						glm::vec2 min = { spriteNode["SubTex Min"][0].as<float>(), spriteNode["SubTex Min"][1].as<float>() };
+						glm::vec2 max = { spriteNode["SubTex Max"][0].as<float>(), spriteNode["SubTex Max"][1].as<float>() };
+
+						sprite.subTexture = std::make_shared<SubTexture2D>(sprite.texture, min, max);
+					}
 
 				}
 
@@ -231,6 +255,9 @@ namespace Brbanje
 		glm::vec4 color;
 		char spritepath[200];
 		float tilingFactor;
+		bool hasSubTex;
+		glm::vec2 subTexMin;
+		glm::vec2 subTexMax;
 		//Camera
 		bool hasCamera;
 		bool isPrimary;
@@ -282,6 +309,17 @@ namespace Brbanje
 				std::string spriteFilePath = sprite.texture ? sprite.texture->GetFilePath() : "no texture";
 				strcpy(data.spritepath, spriteFilePath.c_str());
 				data.tilingFactor = sprite.tilingFactor;
+				data.hasSubTex = (bool)sprite.subTexture;
+				if (data.hasSubTex)
+				{
+					data.subTexMin = sprite.subTexture->GetMin();
+					data.subTexMax = sprite.subTexture->GetMax();
+				}
+				else
+				{
+					data.subTexMin = { 0,0 };
+					data.subTexMax = { 0,0 };
+				}
 
 			}
 			else
@@ -290,6 +328,10 @@ namespace Brbanje
 				data.color = { 0,0,0,0 };
 				strcpy(data.spritepath, "NoSprite");
 				data.tilingFactor = 0;
+				data.hasSubTex = false;
+				data.subTexMin = { 0,0 };
+				data.subTexMax = { 0,0 };
+
 			}
 			if (entity.HasComponent<CameraComponent>())
 			{
@@ -363,7 +405,10 @@ namespace Brbanje
 					sprite.texture = m_Scene->GetTextureFromTextureMap(data.spritepath);
 				}
 				sprite.tilingFactor = data.tilingFactor;
-
+				if (data.hasSubTex)
+				{
+					sprite.subTexture = std::make_shared<SubTexture2D>(sprite.texture, data.subTexMin, data.subTexMax);
+				}
 			}
 			if (data.hasCamera)
 			{
@@ -427,6 +472,17 @@ namespace Brbanje
 				std::string spriteFilePath = sprite.texture ? sprite.texture->GetFilePath() : "no texture";
 				strcpy(data.spritepath, spriteFilePath.c_str());
 				data.tilingFactor = sprite.tilingFactor;
+				data.hasSubTex = (bool)sprite.subTexture;
+				if (data.hasSubTex)
+				{
+					data.subTexMin = sprite.subTexture->GetMin();
+					data.subTexMax = sprite.subTexture->GetMax();
+				}
+				else
+				{
+					data.subTexMin = { 0,0 };
+					data.subTexMax = { 0,0 };
+				}
 			}
 			else
 			{
@@ -434,6 +490,10 @@ namespace Brbanje
 				data.color = { 0,0,0,0 };
 				strcpy(data.spritepath, "NoSprite");
 				data.tilingFactor = 0;
+				data.hasSubTex = false;
+				data.subTexMin = { 0,0 };
+				data.subTexMax = { 0,0 };
+
 			}
 			if (entity.HasComponent<CameraComponent>())
 			{

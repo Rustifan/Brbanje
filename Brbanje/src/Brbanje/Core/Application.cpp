@@ -57,7 +57,7 @@ namespace Brbanje
 			
 		}
 
-		//BR_CORE_TRACE("{0}", e);
+		
 	}
 
 	void Application::Run()

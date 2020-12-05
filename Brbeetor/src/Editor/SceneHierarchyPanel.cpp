@@ -209,6 +209,8 @@ namespace Brbanje
 		ImGui::PopID();
 	}
 
+	
+
 	template<typename T, typename ComponentUIFunction>
 	static void DrawComponent(const std::string& name, Entity entity, ComponentUIFunction compFunc)
 	{

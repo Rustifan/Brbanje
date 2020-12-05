@@ -7,6 +7,9 @@
 #include "Components.h"
 #include "Brbanje/Renderer/RenderCommand.h"
 #include "glm/gtc/type_ptr.hpp"
+#include "imgui/ImGuiDrawFuctions.h"
+#include "Brbanje/Core/Input.h"
+#include "Brbanje/Core/KeyCodes.h"
 
 namespace Brbanje
 {
@@ -20,6 +23,9 @@ namespace Brbanje
 		m_FrameCamera.SetSize(1);
 
 		m_FrameCameraTransform = TransformComponent();
+		
+		
+		
 	}
 
 	void SubTextureEditor::OnImGuiRender()
@@ -33,6 +39,38 @@ namespace Brbanje
 	static bool operator!=(const ImVec2& first, const ImVec2& second)
 	{
 		return first.x != second.x || first.y != second.y;
+	}
+
+	void SubTextureEditor::OnEvent(Event& event)
+	{
+		EventDispacher dispatcher(event);
+		dispatcher.Dispatch<KeyPressedEvent>(BIND_EVENT_FN(SubTextureEditor::OnKeyDown));
+		dispatcher.Dispatch<KeyReleasedEvent>(BIND_EVENT_FN(SubTextureEditor::OnKeyUp));
+
+	}
+
+	bool SubTextureEditor::OnKeyDown(KeyPressedEvent& keyEvent)
+	{
+		if (keyEvent.GetKeyCode() == BR_KEY_LEFT_CONTROL)
+		{
+			m_Clip = true;
+			
+		}
+
+
+		return false;
+	}
+
+	bool SubTextureEditor::OnKeyUp(KeyReleasedEvent& keyEvent)
+	{
+		if (keyEvent.GetKeyCode() == BR_KEY_LEFT_CONTROL)
+		{
+			m_Clip = false;
+			
+		}
+
+
+		return false;
 	}
 
 	void SubTextureEditor::Edit()
@@ -49,17 +87,59 @@ namespace Brbanje
 		}
 
 		ImGui::Image((ImTextureID)m_Framebuffer->GetColorAttachmentId(), m_TextureSize, { 0,1 }, { 1,0 });
-
 		
+		if (IsMouseHovered(m_SubTexPos, m_SubTexSize) && ImGui::IsMouseClicked(0))
+		{
+			
+			m_MoveSelection = true;
+			m_MoveMouseDiff = glm::vec2(GetMousePos().x, GetMousePos().y) - m_SubTexPos;
+		}
+		if (ImGui::IsMouseReleased(0))
+		{
+			m_MoveSelection = false;
+		}
+
+
+		if (m_MoveSelection)
+		{
+			MoveSelection();
+		}
 
 		ImGui::End();
 		ImGui::PopStyleVar();
 		
-		ImGui::Begin("Texture Editor Controlls", &m_Edit);
-		ImGui::DragFloat2("Sub Tex Pos", glm::value_ptr(m_SubTexPos), 1, m_Sprite->texture->GetWidth());
-		ImGui::DragFloat2("Sub Tex Size", (float*)&m_SubTexSize, 1, m_Sprite->texture->GetWidth());
+		// Editor buttons
 
-		if (ImGui::Button("Set "))
+		ImGui::Begin("Texture Editor Controlls", &m_Edit);
+
+
+		ImGuiDrawFunctions::DrawVec2Control("Sub Tex Position", m_SubTexPos,1.0f,0.0f,200.f,"%.0f");
+		//clamp position
+		m_SubTexPos.x = std::max(m_SubTexPos.x, 0.0f);
+		m_SubTexPos.y = std::max(m_SubTexPos.y, 0.0f);
+		if (m_SubTexPos.x + m_SubTexSize.x > m_TextureSizeInPixel.x) m_SubTexPos.x = m_TextureSizeInPixel.x - m_SubTexSize.x;
+		if (m_SubTexPos.y + m_SubTexSize.y > m_TextureSizeInPixel.y) m_SubTexPos.y = m_TextureSizeInPixel.y - m_SubTexSize.y;
+
+		ImGui::SameLine();
+
+		ImGui::Checkbox("Clip (CTRL)", &m_Clip);
+		
+
+		ImGuiDrawFunctions::DrawVec2Control("Sub Tex Size", m_SubTexSize, 1.0f, std::max(m_TextureSizeInPixel.x, m_TextureSizeInPixel.y), 200.f, "%.0f");
+		//clamp size
+
+		if (m_SubTexSize.x > m_TextureSizeInPixel.x) m_SubTexSize.x = m_TextureSizeInPixel.x;
+		if (m_SubTexSize.y > m_TextureSizeInPixel.y) m_SubTexSize.y = m_TextureSizeInPixel.y;
+		m_SubTexSize.x = std::max(m_SubTexSize.x, 0.0f);
+		m_SubTexSize.y = std::max(m_SubTexSize.y, 0.0f);
+
+		ImGui::SameLine();
+
+		ImGui::Text("Texture size: %d * %d", (int)m_TextureSizeInPixel.x, (int)m_TextureSizeInPixel.y);
+
+		ImGui::Spacing();
+
+		if (ImGui::Button("Set Sub texture"))
 		{
 			m_Sprite->subTexture = SubTexture2D::CreateFromPixCoords(m_Sprite->texture, m_SubTexPos,
 				glm::vec2(m_SubTexPos.x + m_SubTexSize.x, m_SubTexPos.y + m_SubTexSize.y));
@@ -67,7 +147,24 @@ namespace Brbanje
 			m_Edit = false;
 		}
 		
-		
+
+		if (ImGui::Button("Use whole Texture"))
+		{
+			m_Sprite->subTexture = nullptr;
+
+			m_Edit = false;
+		}
+
+		ImGui::SameLine();
+
+		ImGui::Dummy(ImVec2(ImGui::GetContentRegionAvailWidth() - 150.0f, 0.0f));
+
+		ImGui::SameLine();
+
+		if (ImGui::Button("Close"))
+		{
+			m_Edit = false;
+		}
 		
 		
 	
@@ -78,7 +175,66 @@ namespace Brbanje
 
 	}
 
-	
+	void SubTextureEditor::MoveSelection()
+	{
+		glm::vec2& pos = m_SubTexPos;
+		glm::vec2& size = m_SubTexSize;
+		
+		if (m_Clip)
+		{
+			int coef = GetMousePos().x  / size.x;
+			pos.x = coef  * size.x;
+
+			coef = GetMousePos().y / size.y;
+			pos.y = coef  * size.y;
+			
+		}
+		else
+		{
+			pos.x = GetMousePos().x - m_MoveMouseDiff.x;
+			pos.y = GetMousePos().y - m_MoveMouseDiff.y;
+		}
+		
+
+
+		//Clamp
+		pos.x = std::max(pos.x, 0.0f);
+		pos.y = std::max(pos.y, 0.0f);
+		if (pos.x + m_SubTexSize.x > m_TextureSizeInPixel.x) pos.x = m_TextureSizeInPixel.x - m_SubTexSize.x;
+		if (pos.y + m_SubTexSize.y > m_TextureSizeInPixel.y) pos.y = m_TextureSizeInPixel.y - m_SubTexSize.y;
+
+
+	}
+
+	ImVec2 SubTextureEditor::GetMousePos()
+	{
+		ImVec2 mousePos = ImGui::GetMousePos();
+		ImVec2 TexPos = ImGui::GetItemRectMin();
+		ImVec2 TexSize = ImGui::GetItemRectSize();
+		mousePos.x -= TexPos.x;
+		mousePos.y -= TexPos.y;
+		mousePos.y = TexSize.y - mousePos.y;
+		//from 0 to  1
+		mousePos.x /= TexSize.x;
+		mousePos.y /= TexSize.y;
+		//Transfer to texture Pixel coordinates
+		mousePos.x *= m_TextureSizeInPixel.x;
+		mousePos.y *= m_TextureSizeInPixel.y;
+
+
+		
+
+		return mousePos;
+	}
+
+	bool SubTextureEditor::IsMouseHovered(const glm::vec2& position, const glm::vec2& size)
+	{
+		glm::vec2 mousePos = *((glm::vec2*)&GetMousePos());
+		return mousePos.x >= position.x && mousePos.x <= position.x + size.x &&
+			mousePos.y >= position.y && mousePos.y <= position.y + size.y;
+		
+	}
+
 	void SubTextureEditor::Update(Timestep ts)
 	{
 		if (m_Entity != m_Scene->m_Panel->m_EntitySelectionContext)
@@ -124,6 +280,7 @@ namespace Brbanje
 			
 			glm::vec2 size = FromPixelToWorld(m_SubTexSize, true);
 
+
 			Renderer2D::DrawQuad({ pos.x+size.x/2, pos.y+size.y/2, 0.01f }, { size.x, size.y }, { 0,1,0,0.5f });
 			
 
@@ -141,6 +298,7 @@ namespace Brbanje
 
 		uint32_t PixW = m_Sprite->texture->GetWidth();
 		uint32_t PixH = m_Sprite->texture->GetHeight();
+		m_TextureSizeInPixel = { (float)PixW, (float)PixH };
 
 		float width = TexAspect;
 		float height = 1;

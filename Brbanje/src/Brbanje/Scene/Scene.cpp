@@ -288,6 +288,7 @@ namespace Brbanje
 	void Scene::OnEvent(Event& event)
 	{
 		m_CameraController.OnEvent(event);
+		m_SubTexEditor.OnEvent(event);
 
 	}
 
