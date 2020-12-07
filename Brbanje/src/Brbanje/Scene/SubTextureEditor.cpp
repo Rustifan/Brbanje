@@ -75,6 +75,31 @@ namespace Brbanje
 
 	void SubTextureEditor::Edit()
 	{
+		if (m_Sprite)
+		{
+			if (m_Texture)
+			{
+				if (m_Texture->GetRendererID() != m_Sprite->texture->GetRendererID())
+				{
+					m_Texture = m_Sprite->texture;
+					m_TextureSizeInPixel = { (float)m_Texture->GetWidth(), (float)m_Texture->GetHeight() };
+					m_SubTexPos = { 0,0 };
+					m_SubTexSize.x = m_Texture->GetWidth() / 10;
+					m_SubTexSize.y = m_Texture->GetWidth() / 10;
+				}
+			}
+			else
+			{
+				m_Texture = m_Sprite->texture;
+				m_TextureSizeInPixel = { (float)m_Texture->GetWidth(), (float)m_Texture->GetHeight() };
+				m_SubTexPos = { 0,0 };
+
+				m_SubTexSize.x = m_Texture->GetWidth() / 10;
+				m_SubTexSize.y = m_Texture->GetWidth() / 10;
+
+			}
+		}
+		
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0, 0));
 
 		ImGui::Begin("Texture Editor", &m_Edit);
@@ -112,6 +137,7 @@ namespace Brbanje
 
 		ImGui::Begin("Texture Editor Controlls", &m_Edit);
 
+		
 
 		ImGuiDrawFunctions::DrawVec2Control("Sub Tex Position", m_SubTexPos,1.0f,0.0f,200.f,"%.0f");
 		//clamp position
@@ -124,14 +150,14 @@ namespace Brbanje
 
 		ImGui::Checkbox("Clip (CTRL)", &m_Clip);
 		
-
+		
 		ImGuiDrawFunctions::DrawVec2Control("Sub Tex Size", m_SubTexSize, 1.0f, std::max(m_TextureSizeInPixel.x, m_TextureSizeInPixel.y), 200.f, "%.0f");
 		//clamp size
-
 		if (m_SubTexSize.x > m_TextureSizeInPixel.x) m_SubTexSize.x = m_TextureSizeInPixel.x;
 		if (m_SubTexSize.y > m_TextureSizeInPixel.y) m_SubTexSize.y = m_TextureSizeInPixel.y;
 		m_SubTexSize.x = std::max(m_SubTexSize.x, 0.0f);
 		m_SubTexSize.y = std::max(m_SubTexSize.y, 0.0f);
+		
 
 		ImGui::SameLine();
 

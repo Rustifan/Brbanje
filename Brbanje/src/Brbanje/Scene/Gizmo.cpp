@@ -144,6 +144,27 @@ namespace Brbanje
 	void Gizmo::OnUpdate(Timestep ts)
 	{
 		BR_PROFILE_FUNCTION;
+		//Fade Speed control
+		
+		if (m_ColorChange >= 0.8f)
+		{
+			if (m_FadeSpeed > 0)
+			{
+				m_FadeSpeed = -m_FadeSpeed;
+			}
+		}
+		else if (m_ColorChange <= 0.3f)
+		{
+			if (m_FadeSpeed < 0)
+			{
+				m_FadeSpeed = -m_FadeSpeed;
+			}
+		}
+
+		m_ColorChange += m_FadeSpeed * ts;
+		m_Color = { m_Color.x, m_Color.y, m_ColorChange, 1.0f };
+
+		
 		if (m_Scene->m_Panel->m_EntitySelectionContext && m_Scene->m_MainCamera)
 		{
 			TransformComponent& transform = m_Scene->m_Panel->m_EntitySelectionContext.GetComponent<TransformComponent>();
@@ -151,30 +172,12 @@ namespace Brbanje
 			m_Size = m_Scene->m_MainCamera->GetSize() * 0.1f * glm::vec2(0.2f, 0.2f);
 			m_ResizeSize = m_Scene->m_MainCamera->GetSize() * 0.1f * 0.05f;
 
-			//Fade Speed control
-			if (m_ColorChange >= 0.8f)
-			{
-				if (m_FadeSpeed > 0)
-				{
-					m_FadeSpeed = -m_FadeSpeed;
-				}
-			}
-			else if (m_ColorChange <= 0.3f)
-			{
-				if (m_FadeSpeed < 0)
-				{
-					m_FadeSpeed = -m_FadeSpeed;
-				}
-			}
-
-			m_ColorChange += m_FadeSpeed * ts;
-			m_Color = { m_Color.x, m_Color.y, m_ColorChange, 1.0f };
-
+			
 
 			//Moving Gizmo Click
 			
 			
-				if (!m_Move)
+				if (!m_Move && m_Scene->IsMouseHovered())
 				{
 					
 					
@@ -196,112 +199,113 @@ namespace Brbanje
 
 			
 			//Resizing
-			
-			if (m_Scene->IsClicked(m_ResizeCornerA.position, m_ResizeCornerA.size, m_Scene->GetSceneMousePos()))
-			{
-				ImGui::SetMouseCursor(ImGuiMouseCursor_ResizeNESW);
-				if (ImGui::IsMouseClicked(0))
+				if (m_Scene->IsMouseHovered())
 				{
-					m_AResizing = true;
-					m_ResizingXStartPos = m_Scene->GetSceneMousePos().x;
-					m_ResizingYStartPos = m_Scene->GetSceneMousePos().y;
-					m_XStartSize = transform.size.x;
-					m_YStartSize = transform.size.y;
-					
+					if (m_Scene->IsClicked(m_ResizeCornerA.position, m_ResizeCornerA.size, m_Scene->GetSceneMousePos()))
+					{
+						ImGui::SetMouseCursor(ImGuiMouseCursor_ResizeNESW);
+						if (ImGui::IsMouseClicked(0))
+						{
+							m_AResizing = true;
+							m_ResizingXStartPos = m_Scene->GetSceneMousePos().x;
+							m_ResizingYStartPos = m_Scene->GetSceneMousePos().y;
+							m_XStartSize = transform.size.x;
+							m_YStartSize = transform.size.y;
+
+						}
+
+					}
+					else if (m_Scene->IsClicked(m_ResizeCornerB.position, m_ResizeCornerB.size, m_Scene->GetSceneMousePos()))
+					{
+						ImGui::SetMouseCursor(ImGuiMouseCursor_ResizeNWSE);
+						if (ImGui::IsMouseClicked(0))
+						{
+							m_BResizing = true;
+							m_ResizingXStartPos = m_Scene->GetSceneMousePos().x;
+							m_ResizingYStartPos = m_Scene->GetSceneMousePos().y;
+							m_XStartSize = transform.size.x;
+							m_YStartSize = transform.size.y;
+
+						}
+					}
+					else if (m_Scene->IsClicked(m_ResizeCornerC.position, m_ResizeCornerC.size, m_Scene->GetSceneMousePos()))
+					{
+						ImGui::SetMouseCursor(ImGuiMouseCursor_ResizeNESW);
+						if (ImGui::IsMouseClicked(0))
+						{
+							m_CResizing = true;
+							m_ResizingXStartPos = m_Scene->GetSceneMousePos().x;
+							m_ResizingYStartPos = m_Scene->GetSceneMousePos().y;
+							m_XStartSize = transform.size.x;
+							m_YStartSize = transform.size.y;
+
+						}
+					}
+					else if (m_Scene->IsClicked(m_ResizeCornerD.position, m_ResizeCornerD.size, m_Scene->GetSceneMousePos()))
+					{
+						ImGui::SetMouseCursor(ImGuiMouseCursor_ResizeNWSE);
+						if (ImGui::IsMouseClicked(0))
+						{
+							m_DResizing = true;
+							m_ResizingXStartPos = m_Scene->GetSceneMousePos().x;
+							m_ResizingYStartPos = m_Scene->GetSceneMousePos().y;
+							m_XStartSize = transform.size.x;
+							m_YStartSize = transform.size.y;
+
+						}
+					}
+					else if (m_Scene->IsClicked(m_LeftResize.position, m_LeftResize.size, m_Scene->GetSceneMousePos()))
+					{
+						ImGui::SetMouseCursor(ImGuiMouseCursor_ResizeEW);
+						if (ImGui::IsMouseClicked(0))
+						{
+
+							m_LeftResizing = true;
+							m_ResizingXStartPos = m_Scene->GetSceneMousePos().x;
+							m_XStartSize = transform.size.x;
+							m_YStartSize = transform.size.y;
+
+						}
+					}
+					else if (m_Scene->IsClicked(m_RightResize.position, m_RightResize.size, m_Scene->GetSceneMousePos()))
+					{
+						ImGui::SetMouseCursor(ImGuiMouseCursor_ResizeEW);
+						if (ImGui::IsMouseClicked(0))
+						{
+
+							m_RightResizing = true;
+							m_ResizingXStartPos = m_Scene->GetSceneMousePos().x;
+							m_XStartSize = transform.size.x;
+							m_YStartSize = transform.size.y;
+						}
+
+					}
+					else if (m_Scene->IsClicked(m_UpResize.position, m_UpResize.size, m_Scene->GetSceneMousePos()))
+					{
+						ImGui::SetMouseCursor(ImGuiMouseCursor_ResizeNS);
+						if (ImGui::IsMouseClicked(0))
+						{
+
+							m_UpResizing = true;
+							m_ResizingYStartPos = m_Scene->GetSceneMousePos().y;
+							m_XStartSize = transform.size.x;
+							m_YStartSize = transform.size.y;
+						}
+
+					}
+					else if (m_Scene->IsClicked(m_DownResize.position, m_DownResize.size, m_Scene->GetSceneMousePos()))
+					{
+						ImGui::SetMouseCursor(ImGuiMouseCursor_ResizeNS);
+						if (ImGui::IsMouseClicked(0))
+						{
+
+							m_DownResizing = true;
+							m_ResizingYStartPos = m_Scene->GetSceneMousePos().y;
+							m_XStartSize = transform.size.x;
+							m_YStartSize = transform.size.y;
+						}
+					}
 				}
-
-			}
-			else if (m_Scene->IsClicked(m_ResizeCornerB.position, m_ResizeCornerB.size, m_Scene->GetSceneMousePos()))
-			{
-				ImGui::SetMouseCursor(ImGuiMouseCursor_ResizeNWSE);
-				if (ImGui::IsMouseClicked(0))
-				{
-					m_BResizing = true;
-					m_ResizingXStartPos = m_Scene->GetSceneMousePos().x;
-					m_ResizingYStartPos = m_Scene->GetSceneMousePos().y;
-					m_XStartSize = transform.size.x;
-					m_YStartSize = transform.size.y;
-
-				}
-			}
-			else if (m_Scene->IsClicked(m_ResizeCornerC.position, m_ResizeCornerC.size, m_Scene->GetSceneMousePos()))
-			{	
-				ImGui::SetMouseCursor(ImGuiMouseCursor_ResizeNESW);
-				if (ImGui::IsMouseClicked(0))
-				{
-					m_CResizing = true;
-					m_ResizingXStartPos = m_Scene->GetSceneMousePos().x;
-					m_ResizingYStartPos = m_Scene->GetSceneMousePos().y;
-					m_XStartSize = transform.size.x;
-					m_YStartSize = transform.size.y;
-
-				}
-			}
-			else if (m_Scene->IsClicked(m_ResizeCornerD.position, m_ResizeCornerD.size, m_Scene->GetSceneMousePos()))
-			{
-				ImGui::SetMouseCursor(ImGuiMouseCursor_ResizeNWSE);
-				if (ImGui::IsMouseClicked(0))
-				{
-					m_DResizing = true;
-					m_ResizingXStartPos = m_Scene->GetSceneMousePos().x;
-					m_ResizingYStartPos = m_Scene->GetSceneMousePos().y;
-					m_XStartSize = transform.size.x;
-					m_YStartSize = transform.size.y;
-
-				}
-			}
-			else if (m_Scene->IsClicked(m_LeftResize.position, m_LeftResize.size, m_Scene->GetSceneMousePos()))
-			{
-				ImGui::SetMouseCursor(ImGuiMouseCursor_ResizeEW);
-				if (ImGui::IsMouseClicked(0))
-				{
-					
-					m_LeftResizing = true;
-					m_ResizingXStartPos = m_Scene->GetSceneMousePos().x;
-					m_XStartSize = transform.size.x;
-					m_YStartSize = transform.size.y;
-					
-				}
-			}
-			else if (m_Scene->IsClicked(m_RightResize.position, m_RightResize.size, m_Scene->GetSceneMousePos()))
-			{
-				ImGui::SetMouseCursor(ImGuiMouseCursor_ResizeEW);
-				if (ImGui::IsMouseClicked(0))
-				{
-
-					m_RightResizing = true;
-					m_ResizingXStartPos = m_Scene->GetSceneMousePos().x;
-					m_XStartSize = transform.size.x;
-					m_YStartSize = transform.size.y;
-				} 
-
-			}
-			else if (m_Scene->IsClicked(m_UpResize.position, m_UpResize.size, m_Scene->GetSceneMousePos()))
-			{
-				ImGui::SetMouseCursor(ImGuiMouseCursor_ResizeNS);
-				if (ImGui::IsMouseClicked(0))
-				{
-
-					m_UpResizing = true;
-					m_ResizingYStartPos = m_Scene->GetSceneMousePos().y;
-					m_XStartSize = transform.size.x;
-					m_YStartSize = transform.size.y;
-				}
-
-			}
-			else if (m_Scene->IsClicked(m_DownResize.position, m_DownResize.size, m_Scene->GetSceneMousePos()))
-			{
-				ImGui::SetMouseCursor(ImGuiMouseCursor_ResizeNS);
-				if (ImGui::IsMouseClicked(0))
-				{
-
-					m_DownResizing = true;
-					m_ResizingYStartPos = m_Scene->GetSceneMousePos().y;
-					m_XStartSize = transform.size.x;
-					m_YStartSize = transform.size.y;
-				}
-			}
-			
 
 
 			if (ImGui::IsMouseReleased(0))

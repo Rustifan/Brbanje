@@ -55,7 +55,7 @@ namespace Brbanje
 		void Update(Timestep ts);
 		void SetEdit(bool edit) { m_Edit = edit; }
 		void OnEvent(Event& event);
-
+		bool IsEditing() { return m_Edit; }
 	};
 
 }

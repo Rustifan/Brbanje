@@ -152,7 +152,7 @@ namespace Brbanje
 
 		if (s_Data.Stats.QuadNumber > 0)
 		{
-			BR_TRACE(s_Data.TextureSlotIndex);
+			
 			uint32_t dataSize = (uint8_t*)s_Data.QuadVertexBufferPointer - (uint8_t*)s_Data.QuadVertexBufferBase;
 			s_Data.QuadVertexBuffer->SetData(s_Data.QuadVertexBufferBase, dataSize);
 			
@@ -188,7 +188,7 @@ namespace Brbanje
 	{
 		BR_PROFILE_FUNCTION;
 		
-		if (s_Data.QuadIndexCount >= s_Data.MAX_QUAD_INDICES)
+		if (s_Data.QuadIndexCount >= s_Data.MAX_QUAD_INDICES || s_Data.TextureSlotIndex >= s_Data.MAX_TEXTURE_SLOTS)
 		{
 			FlushAndReset();
 		}
@@ -212,7 +212,7 @@ namespace Brbanje
 	{
 		BR_PROFILE_FUNCTION;
 
-		if (s_Data.QuadIndexCount >= s_Data.MAX_QUAD_INDICES)
+		if (s_Data.QuadIndexCount >= s_Data.MAX_QUAD_INDICES || s_Data.TextureSlotIndex >= s_Data.MAX_TEXTURE_SLOTS)
 		{
 			FlushAndReset();
 		}
@@ -259,7 +259,7 @@ namespace Brbanje
 	{
 		BR_PROFILE_FUNCTION;
 
-		if (s_Data.QuadIndexCount >= s_Data.MAX_QUAD_INDICES)
+		if (s_Data.QuadIndexCount >= s_Data.MAX_QUAD_INDICES || s_Data.TextureSlotIndex >= s_Data.MAX_TEXTURE_SLOTS)
 		{
 			FlushAndReset();
 		}
@@ -282,7 +282,7 @@ namespace Brbanje
 	{
 		BR_PROFILE_FUNCTION;
 		
-		if (s_Data.QuadIndexCount >= s_Data.MAX_QUAD_INDICES)
+		if (s_Data.QuadIndexCount >= s_Data.MAX_QUAD_INDICES || s_Data.TextureSlotIndex >= s_Data.MAX_TEXTURE_SLOTS)
 		{
 			FlushAndReset();
 		}
@@ -329,7 +329,7 @@ namespace Brbanje
 	{
 		BR_PROFILE_FUNCTION;
 
-		if (s_Data.QuadIndexCount >= s_Data.MAX_QUAD_INDICES)
+		if (s_Data.QuadIndexCount >= s_Data.MAX_QUAD_INDICES || s_Data.TextureSlotIndex >= s_Data.MAX_TEXTURE_SLOTS)
 		{
 			FlushAndReset();
 		}
@@ -379,7 +379,7 @@ namespace Brbanje
 	{
 		BR_PROFILE_FUNCTION;
 
-		if (s_Data.QuadIndexCount >= s_Data.MAX_QUAD_INDICES)
+		if (s_Data.QuadIndexCount >= s_Data.MAX_QUAD_INDICES || s_Data.TextureSlotIndex >= s_Data.MAX_TEXTURE_SLOTS)
 		{
 			FlushAndReset();
 		}
@@ -391,8 +391,11 @@ namespace Brbanje
 		for (uint32_t i = 1; i < s_Data.TextureSlotIndex; ++i)
 		{
 			if (*s_Data.TextureSlots[i].get() == *texture.get())
+			{
 				textureIndex = (float)i;
-			break;
+				break;
+
+			}
 		}
 
 
@@ -429,7 +432,7 @@ namespace Brbanje
 	{
 		BR_PROFILE_FUNCTION;
 
-		if (s_Data.QuadIndexCount >= s_Data.MAX_QUAD_INDICES)
+		if (s_Data.QuadIndexCount >= s_Data.MAX_QUAD_INDICES || s_Data.TextureSlotIndex >= s_Data.MAX_TEXTURE_SLOTS)
 		{
 			FlushAndReset();
 		}
@@ -445,7 +448,7 @@ namespace Brbanje
 	{
 		BR_PROFILE_FUNCTION;
 
-		if (s_Data.QuadIndexCount >= s_Data.MAX_QUAD_INDICES)
+		if (s_Data.QuadIndexCount >= s_Data.MAX_QUAD_INDICES || s_Data.TextureSlotIndex >= s_Data.MAX_TEXTURE_SLOTS)
 		{
 			FlushAndReset();
 		}

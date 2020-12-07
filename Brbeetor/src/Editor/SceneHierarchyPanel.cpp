@@ -482,6 +482,7 @@ namespace Brbanje
 					if (TextureFilePath)
 					{
 						sprite.texture = m_Scene->GetTextureFromTextureMap(TextureFilePath.value());
+						sprite.subTexture = nullptr;
 					}
 
 

@@ -7,6 +7,7 @@
 #include "Components.h"
 #include "Brbanje/Core/Input.h"
 #include "../../Brbeetor/src/Editor/GizmoLayer.h"
+#include "Brbanje/Core/KeyCodes.h"
 
 namespace Brbanje
 {
@@ -93,10 +94,12 @@ namespace Brbanje
 
 			auto group = m_Registry.group<TransformComponent>(entt::get<SpriteComponent>);
 			
-			
+			//is something selected
+			bool Selected = false;
 
 			for (auto entity : group)
 			{
+				
 				if (m_Registry.has<SpriteComponent>(entity))
 				{
 					auto [transform, sprite] = group.get<TransformComponent, SpriteComponent>(entity);
@@ -105,13 +108,13 @@ namespace Brbanje
 					//Selection 
 					if (ImGui::IsMouseClicked(0) && m_MouseHoveredOnVIewport && !m_Gizmo->isWorking())
 					{
-
+						
 						
 							glm::vec2 mousePos = GetSceneMousePos();
 							if (IsClicked(transform, mousePos))
 							{
 								
-								
+								Selected = true;
 								
 									if (m_Panel->m_EntitySelectionContext)
 									{
@@ -121,18 +124,21 @@ namespace Brbanje
 											m_Panel->m_EntitySelectionContext = Entity(entity, this);
 
 										}
+										
 									}
 									else
 									{
 										m_Panel->m_EntitySelectionContext = Entity(entity, this);
-
+										
 									}
 
 								
 							
 
 							}
-						
+							
+
+							
 					}
 
 					//Sprite
@@ -161,10 +167,15 @@ namespace Brbanje
 
 				}
 
-			
 				
 			}
 
+			//Deselect Entity
+
+			if (ImGui::IsMouseClicked(0) && !Selected && !m_Gizmo->isWorking() && m_MouseHoveredOnVIewport || Input::IsKeyPressed(BR_KEY_ESCAPE))
+			{
+				m_Panel->m_EntitySelectionContext = {};
+			}
 			
 
 			
