@@ -34,6 +34,7 @@ namespace Brbanje
 		SubTextureEditor m_SubTexEditor;
 		bool m_EditorView = true;
 		
+		
 	public:
 		Scene();
 		~Scene();

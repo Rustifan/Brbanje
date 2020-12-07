@@ -8,6 +8,7 @@
 #include "Brbanje/Core/Input.h"
 #include "../../Brbeetor/src/Editor/GizmoLayer.h"
 #include "Brbanje/Core/KeyCodes.h"
+#include "ZSorter2D.h"
 
 namespace Brbanje
 {
@@ -77,7 +78,7 @@ namespace Brbanje
 			}
 			
 
-			Renderer2D::BeginScene(m_MainCamera->GetProjection(), m_MainCameraTransform->GetTransform());
+			
 			
 			
 			
@@ -96,6 +97,8 @@ namespace Brbanje
 			
 			//is something selected
 			bool Selected = false;
+			ZSorter2D zSorter(&group);
+
 
 			for (auto entity : group)
 			{
@@ -104,7 +107,10 @@ namespace Brbanje
 				{
 					auto [transform, sprite] = group.get<TransformComponent, SpriteComponent>(entity);
 
-					
+					//Sort by Z coordinate
+
+					zSorter.InsertEntity(transform.position.z, Entity(entity, this));
+
 					//Selection 
 					if (ImGui::IsMouseClicked(0) && m_MouseHoveredOnVIewport && !m_Gizmo->isWorking())
 					{
@@ -142,24 +148,9 @@ namespace Brbanje
 					}
 
 					//Sprite
+
+
 					
-					if (sprite.texture)
-					{
-						if (!sprite.subTexture)
-						{
-							Renderer2D::DrawQuad(transform.GetTransform(), sprite.texture, sprite.tilingFactor, sprite.color);
-
-						}
-						else
-						{
-							Renderer2D::DrawRotatedQuad(transform.position, transform.size, transform.rotation.z, sprite.subTexture);
-						}
-					}
-					else
-					{
-						Renderer2D::DrawQuad(transform.GetTransform(), sprite);
-
-					}
 					
 					
 					
@@ -170,6 +161,9 @@ namespace Brbanje
 				
 			}
 
+			zSorter.RenderEntitiesByZ(m_MainCamera, m_MainCameraTransform);
+
+
 			//Deselect Entity
 
 			if (ImGui::IsMouseClicked(0) && !Selected && !m_Gizmo->isWorking() && m_MouseHoveredOnVIewport || Input::IsKeyPressed(BR_KEY_ESCAPE))
@@ -179,7 +173,7 @@ namespace Brbanje
 			
 
 			
-			Renderer2D::EndScene();
+			
 		}
 		
 		
