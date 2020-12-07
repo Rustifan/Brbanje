@@ -147,19 +147,13 @@ namespace Brbanje
 							
 					}
 
-					//Sprite
-
-
 					
 					
-					
-					
-					
-
 				}
 
 				
 			}
+			//Render sorted by z coordinates
 
 			zSorter.RenderEntitiesByZ(m_MainCamera, m_MainCameraTransform);
 

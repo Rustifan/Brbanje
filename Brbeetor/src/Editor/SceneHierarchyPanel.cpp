@@ -89,9 +89,15 @@ namespace Brbanje
 
 		bool opened = ImGui::TreeNodeEx((void*)(uint64_t)(uint32_t)entity, flags, tag.c_str());
 		bool isDeleted = false;
-
+		bool isDuplicated = false;
 		if (ImGui::BeginPopupContextItem())
 		{
+			if (ImGui::MenuItem("Duplicate entity"))
+			{
+				isDuplicated = true;
+			}
+
+
 			if (ImGui::MenuItem("Delete entity"))
 			{
 				isDeleted = true;
@@ -119,6 +125,41 @@ namespace Brbanje
 			
 			m_Scene->DestroyEntity(entity);
 			
+		}
+
+		if (isDuplicated)
+		{
+			Entity duplicated = m_Scene->CreateEntity();
+			duplicated.GetComponent<TagComponent>().tag = entity.GetComponent<TagComponent>().tag;
+			TransformComponent newTc = entity.GetComponent<TransformComponent>();
+			TransformComponent& tc = duplicated.GetComponent<TransformComponent>();
+			tc.position = newTc.position;
+			tc.rotation = newTc.rotation;
+			tc.size = newTc.size;
+			
+			if (entity.HasComponent<SpriteComponent>())
+			{
+				SpriteComponent& newSc = duplicated.AddComponent<SpriteComponent>();
+				SpriteComponent& oldSc = entity.GetComponent<SpriteComponent>();
+				newSc.color = oldSc.color;
+				newSc.texture = oldSc.texture;
+				newSc.subTexture = oldSc.subTexture;
+				newSc.tilingFactor = oldSc.tilingFactor;
+
+
+			}
+
+			if (entity.HasComponent<CameraComponent>())
+			{
+				CameraComponent& newCc = duplicated.AddComponent<CameraComponent>();
+				CameraComponent& oldCc = entity.GetComponent<CameraComponent>();
+
+				newCc.camera = oldCc.camera;
+				newCc.fixedAspectRatio = oldCc.fixedAspectRatio;
+				newCc.primary = oldCc.primary;
+			}
+
+			m_EntitySelectionContext = duplicated;
 		}
 	}
 

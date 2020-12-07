@@ -1,68 +1,20 @@
 Scene: TheScene
 Entities:
   - Entity:
-      Name: new Entity
+      Name: Background
       Components:
         transform component:
           position:
-            - 0
-            - 0
-            - 0
+            - -0.158924311
+            - 0.403422713
+            - -0.400000006
           rotation:
             - 0
             - 0
             - 0
           size:
-            - 3.24938869
-            - 3.95843506
-            - 1
-        sprite component:
-          color:
-            - 1
-            - 1
-            - 1
-            - 1
-          texture: C:\dev\Brbanje\Brbeetor\Assets\Textures\zeldusana.png
-          tiling factor: 1
-  - Entity:
-      Name: new Entity
-      Components:
-        transform component:
-          position:
-            - 3.2151587
-            - -0.892420411
-            - 0
-          rotation:
-            - 0
-            - 0
-            - 0
-          size:
-            - 2.83374023
-            - 3.90953469
-            - 1
-        sprite component:
-          color:
-            - 1
-            - 1
-            - 1
-            - 1
-          texture: C:\dev\Brbanje\Brbeetor\Assets\Textures\beer.png
-          tiling factor: 1
-  - Entity:
-      Name: Box
-      Components:
-        transform component:
-          position:
-            - -2.88508558
-            - -0.892420411
-            - 0
-          rotation:
-            - 0
-            - 0
-            - 0
-          size:
-            - 3.69918871
-            - 5.45076227
+            - 9.5985918
+            - 10.6349754
             - 1
         sprite component:
           color:
@@ -73,41 +25,11 @@ Entities:
           texture: C:\dev\Brbanje\Brbeetor\Assets\game\Spritesheet\spriteSheet.png
           tiling factor: 1
           SubTex Min:
-            - 0
-            - 0.0756062344
+            - 0.674017251
+            - 0.883542955
           SubTex Max:
-            - 0.0500000007
-            - 0.229452386
-  - Entity:
-      Name: Barrel
-      Components:
-        transform component:
-          position:
-            - -2.65281177
-            - 2.40831327
-            - 0.400000006
-          rotation:
-            - 0
-            - 0
-            - 0
-          size:
-            - 1.76259553
-            - 1.99522865
-            - 1
-        sprite component:
-          color:
-            - 1
-            - 1
-            - 1
-            - 1
-          texture: C:\dev\Brbanje\Brbeetor\Assets\game\Spritesheet\spriteSheet.png
-          tiling factor: 1
-          SubTex Min:
-            - 0.449999988
-            - 0.692307711
-          SubTex Max:
-            - 0.5
-            - 0.769230783
+            - 0.724017262
+            - 0.960466027
   - Entity:
       Name: Kuca
       Components:
@@ -139,20 +61,20 @@ Entities:
             - 0.548524916
             - 0.150501207
   - Entity:
-      Name: Background
+      Name: Barrel
       Components:
         transform component:
           position:
-            - -0.158924311
-            - 0.403422713
-            - -0.400000006
+            - -2.65281177
+            - 2.40831327
+            - 0.400000006
           rotation:
             - 0
             - 0
             - 0
           size:
-            - 9.5985918
-            - 10.6349754
+            - 1.76259553
+            - 1.99522865
             - 1
         sprite component:
           color:
@@ -163,8 +85,86 @@ Entities:
           texture: C:\dev\Brbanje\Brbeetor\Assets\game\Spritesheet\spriteSheet.png
           tiling factor: 1
           SubTex Min:
-            - 0.674017251
-            - 0.883542955
+            - 0.449999988
+            - 0.692307711
           SubTex Max:
-            - 0.724017262
-            - 0.960466027
+            - 0.5
+            - 0.769230783
+  - Entity:
+      Name: Box
+      Components:
+        transform component:
+          position:
+            - -2.88508558
+            - -0.892420411
+            - 0
+          rotation:
+            - 0
+            - 0
+            - 0
+          size:
+            - 3.69918871
+            - 5.45076227
+            - 1
+        sprite component:
+          color:
+            - 1
+            - 1
+            - 1
+            - 1
+          texture: C:\dev\Brbanje\Brbeetor\Assets\game\Spritesheet\spriteSheet.png
+          tiling factor: 1
+          SubTex Min:
+            - 0
+            - 0.0756062344
+          SubTex Max:
+            - 0.0500000007
+            - 0.229452386
+  - Entity:
+      Name: new Entity
+      Components:
+        transform component:
+          position:
+            - 3.2151587
+            - -0.892420411
+            - 0
+          rotation:
+            - 0
+            - 0
+            - 0
+          size:
+            - 2.83374023
+            - 3.90953469
+            - 1
+        sprite component:
+          color:
+            - 1
+            - 1
+            - 1
+            - 1
+          texture: C:\dev\Brbanje\Brbeetor\Assets\Textures\beer.png
+          tiling factor: 1
+  - Entity:
+      Name: new Entity
+      Components:
+        transform component:
+          position:
+            - 0.48899731
+            - 0.0488996506
+            - 0
+          rotation:
+            - 0
+            - 0
+            - 0
+          size:
+            - 3.24938869
+            - 3.95843506
+            - 1
+        sprite component:
+          color:
+            - 1
+            - 1
+            - 1
+            - 1
+          texture: C:\dev\Brbanje\Brbeetor\Assets\Textures\zeldusana.png
+          tiling factor: 1
